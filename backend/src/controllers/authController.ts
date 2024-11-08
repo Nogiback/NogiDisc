@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import prisma from "../db/prisma.js";
@@ -54,9 +54,9 @@ export const signup = [
       } else {
         const newUser = await prisma.user.create({
           data: {
-            email: req.body.email,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            email,
+            firstName,
+            lastName,
             password: hashedPassword,
           },
         });
@@ -79,8 +79,9 @@ export const signup = [
 // LOGIN FUNCTION
 
 export const login = [
-  body("username", "Username must not be empty.")
+  body("email", "Email must not be empty.")
     .trim()
+    .isEmail()
     .isLength({ min: 1 })
     .escape(),
   body("password", "Password must not be empty.")
@@ -88,7 +89,7 @@ export const login = [
     .isLength({ min: 1 })
     .escape(),
 
-  asyncHandler(async (req: Request, res: Response, next) => {
+  asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -98,11 +99,12 @@ export const login = [
       });
       return;
     }
-
-    const user = await prisma.user.findUnique({ where: req.body.username });
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return res.status(401).json({ message: "No user found." });
+      res.status(401).json({ message: "No user found." });
+      return;
     }
 
     const isValidPassword = await bcrypt.compare(
@@ -111,15 +113,14 @@ export const login = [
     );
 
     if (!isValidPassword) {
-      return res
-        .status(401)
-        .json({ message: "Incorrect username or password." });
+      res.status(401).json({ message: "Incorrect password." });
+      return;
     }
 
     generateToken(user.id, res);
 
     res.status(200).json({
-      _id: user.id,
+      id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -130,4 +131,27 @@ export const login = [
 
 // LOGOUT FUNCTION
 
-export const logout = async (req: Request, res: Response) => {};
+export const logout = (req: Request, res: Response, next: NextFunction) => {
+  res.cookie("jwt", "", { maxAge: 0 });
+  res.status(200).json({ message: "User logged out successfully." });
+};
+
+// GET USER FUNCTION
+
+export const getUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
+  }
+);
