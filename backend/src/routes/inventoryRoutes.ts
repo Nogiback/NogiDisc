@@ -3,8 +3,10 @@ import verifyUser from "../middleware/verifyUser.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Inventory route");
-});
+router.get("/", verifyUser, getAllDiscs);
+
+router.post("/create", verifyUser, createDisc);
+router.patch("/edit/discID", verifyUser, editDisc);
+router.delete("/delete/discID", verifyUser, deleteDisc);
 
 export default router;
