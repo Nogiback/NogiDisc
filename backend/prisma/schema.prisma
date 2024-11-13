@@ -27,20 +27,20 @@ model User {
 }
 
 model Disc {
-  id           String       @id @unique @default(cuid())
-  user         User         @relation(fields: [userID], references: [id])
-  bag          Bag?         @relation(fields: [bagID], references: [id])
+  id           String    @id @unique @default(cuid())
+  user         User      @relation(fields: [userID], references: [id])
+  bag          Bag?      @relation(fields: [bagID], references: [id])
   manufacturer String
   name         String
   weight       Int
-  category     discCategory
-  colour       String?
-  speed        Int
-  glide        Int
-  turn         Int
-  fade         Int
-  createdAt    DateTime?    @default(now())
-  updatedAt    DateTime?    @default(now()) @updatedAt
+  category     String
+  colour       String?   @default("#FFFFFF")
+  speed        Float
+  glide        Float
+  turn         Float
+  fade         Float
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now()) @updatedAt
   userID       String
   bagID        String?
 }
@@ -53,11 +53,4 @@ model Bag {
   updatedAt DateTime? @default(now()) @updatedAt
   User      User?     @relation(fields: [userID], references: [id])
   userID    String?
-}
-
-enum discCategory {
-  PUTT_AND_APPROACH
-  MIDRANGE
-  FAIRWAY_DRIVER
-  DISTANCE_DRIVER
 }

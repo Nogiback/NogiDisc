@@ -14,6 +14,7 @@ export const editBag = asyncHandler(
     // check if bag exists
     // if not, return error
     // if yes, sanitize/check form data
+    // if removing disc, also remove bag from disc entity
     // if no errors, update bag
   }
 );
@@ -22,7 +23,8 @@ export const deleteBag = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // check if bag exists
     // if not, return error
-    // if yes, sanitize/check form data
-    // if no errors, update bag
+    // if yes, check bag for discs
+    // if discs exist, update discs to remove bag id
+    // delete bag
   }
 );
