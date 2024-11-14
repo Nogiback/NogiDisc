@@ -100,7 +100,16 @@ export const login = [
       return;
     }
     const { email } = req.body;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        password: true,
+      },
+      where: { email },
+    });
 
     if (!user) {
       res.status(401).json({ message: "No user found." });
