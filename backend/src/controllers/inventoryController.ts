@@ -34,7 +34,7 @@ export const createDisc = [
     .isFloat({ min: 1, max: 7 }),
   body("turn", "Turn cannot be empty.").notEmpty().isFloat({ min: -7, max: 0 }),
   body("fade", "Fade cannot be empty.").notEmpty().isFloat({ min: 0, max: 5 }),
-  body("bag"),
+  body("bagID").isString().optional({ values: "falsy" }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -56,7 +56,7 @@ export const createDisc = [
     const glide = req.body.glide;
     const turn = req.body.turn;
     const fade = req.body.fade;
-    const bag = req.body.bag;
+    const bagID = req.body.bagID;
 
     const newDisc = await prisma.disc.create({
       data: {
@@ -70,7 +70,7 @@ export const createDisc = [
         turn,
         fade,
         userID: req.user.id,
-        bagID: bag ? bag : null,
+        bagID: bagID ? bagID : null,
       },
     });
 

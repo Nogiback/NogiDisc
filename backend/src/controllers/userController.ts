@@ -21,20 +21,52 @@ export const getUser = asyncHandler(
 export const getUserInventory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
+    const currentUserID = req.user.id;
+    const currentUser = await prisma.user.findUnique({
+      where: { id: currentUserID },
+    });
+
     // if no user, send error
+    if (!currentUser) {
+      res.status(404).json({ message: "Error: No user found." });
+      return;
+    }
+
     // lookup all user's discs
-    // if no discs, send no discs message
-    // if discs, return all discs
+    const discs = await prisma.disc.findMany({
+      where: {
+        userID: currentUserID,
+      },
+    });
+
+    // return all discs
+    res.status(200).json(discs);
   }
 );
 
 export const getAllUserBags = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
+    const currentUserID = req.user.id;
+    const currentUser = await prisma.user.findUnique({
+      where: { id: currentUserID },
+    });
+
     // if no user, send error
+    if (!currentUser) {
+      res.status(404).json({ message: "Error: No user found." });
+      return;
+    }
+
     // lookup all user's bags
-    // if no bags, send no discs message
-    // if bags, return all bags
+    const bags = await prisma.bag.findMany({
+      where: {
+        userID: currentUserID,
+      },
+    });
+
+    // return all bags
+    res.status(200).json(bags);
   }
 );
 
