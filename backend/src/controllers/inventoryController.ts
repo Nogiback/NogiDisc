@@ -68,6 +68,7 @@ export const createDisc = [
         turn,
         fade,
         userID: req.user.id,
+        bagID: "cm3hz8f0g0001o1zmncnlfoh9",
       },
     });
 
@@ -88,9 +89,21 @@ export const editDisc = asyncHandler(
 export const deleteDisc = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // check if disc exists
+    const discToDelete = await prisma.disc.findUnique({
+      where: { id: req.params.discID },
+    });
+
     // if not, return error
-    // if yes, check if discs are in a bag
-    // if yes, remove disc from bag on db
-    // delete bag
+    if (!discToDelete) {
+      res.status(404).json({ message: "Error: Disc not found." });
+      return;
+    }
+
+    // delete disc
+    await prisma.disc.delete({
+      where: { id: discToDelete.id },
+    });
+
+    res.status(200).json({ message: "Disc successfully deleted." });
   }
 );

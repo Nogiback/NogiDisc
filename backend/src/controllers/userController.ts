@@ -7,9 +7,6 @@ export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const currentUserID = req.user.id;
     const currentUser = await prisma.user.findUnique({
-      omit: {
-        password: true,
-      },
       where: { id: currentUserID },
     });
 
@@ -38,16 +35,6 @@ export const getAllUserBags = asyncHandler(
     // lookup all user's bags
     // if no bags, send no discs message
     // if bags, return all bags
-  }
-);
-
-export const getUserBag = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    // lookup user
-    // if no user, send error
-    // lookup user's bag
-    // if no bag found, send error
-    // if bag found, return bag
   }
 );
 

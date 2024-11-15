@@ -3,6 +3,21 @@ import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import prisma from "../db/prisma.js";
 
+export const getBag = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const bagID = req.params.bagID;
+    const bag = await prisma.bag.findUnique({
+      where: { id: bagID },
+    });
+
+    if (!bag) {
+      res.status(404).json({ message: "Error: No bag found." });
+      return;
+    }
+    res.status(200).json(bag);
+  }
+);
+
 export const createBag = [
   body("name", "Name cannot be empty.").trim().isLength({ min: 1 }),
 
@@ -43,9 +58,21 @@ export const editBag = asyncHandler(
 export const deleteBag = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // check if bag exists
+    const bagToDelete = await prisma.bag.findUnique({
+      where: { id: req.params.bagID },
+    });
+
     // if not, return error
-    // if yes, check bag for discs
-    // if discs exist, update discs to remove bag id
+    if (!bagToDelete) {
+      res.status(404).json({ message: "Error: Disc not found." });
+      return;
+    }
+
     // delete bag
+    await prisma.bag.delete({
+      where: { id: bagToDelete.id },
+    });
+
+    res.status(200).json({ message: "Bag successfully deleted." });
   }
 );
