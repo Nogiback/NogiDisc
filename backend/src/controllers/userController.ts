@@ -132,9 +132,56 @@ export const updateUser = [
 export const deleteUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
+    const currentUserID = req.user.id;
+    const currentUser = await prisma.user.findUnique({
+      where: { id: currentUserID },
+    });
+
     // if no user, send error
+    if (!currentUser) {
+      res.status(404).json({ message: "Error: No user found." });
+      return;
+    }
+
     // if user, check for bags and discs
+    const userDiscs = await prisma.disc.findMany({
+      where: {
+        userID: currentUserID,
+      },
+    });
+
+    const userBags = await prisma.bag.findMany({
+      where: {
+        userID: currentUserID,
+      },
+    });
+
     // if bags and discs, delete discs then delete bags
+    if (userDiscs) {
+      await prisma.disc.deleteMany({
+        where: {
+          userID: currentUserID,
+        },
+      });
+    }
+
+    if (userBags) {
+      await prisma.bag.deleteMany({
+        where: {
+          userID: currentUserID,
+        },
+      });
+    }
+
     // delete user and return 200
+    await prisma.user.delete({
+      where: {
+        id: currentUserID,
+      },
+    });
+
+    res.status(200).json({
+      message: "User successfully deleted.",
+    });
   }
 );

@@ -8,13 +8,19 @@ import generateToken from "../utils/generateToken.js";
 // SIGN UP FUNCTION
 
 export const signup = [
-  body("email", "Email must not be empty.")
+  body("email", "Invalid email.")
     .trim()
     .isEmail()
     .isLength({ min: 1 })
     .escape(),
-  body("firstName", "First Name must not be empty.").trim().escape(),
-  body("lastName", "Last Name must not be empty.").trim().escape(),
+  body("firstName", "First Name must not be empty.")
+    .trim()
+    .escape()
+    .isLength({ min: 1 }),
+  body("lastName", "Last Name must not be empty.")
+    .trim()
+    .escape()
+    .isLength({ min: 1 }),
   body("password", "Password must not be empty.")
     .trim()
     .isLength({ min: 1 })

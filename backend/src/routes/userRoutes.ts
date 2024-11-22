@@ -15,6 +15,6 @@ router.get("/:userID/inventory", verifyUser, getUserInventory);
 router.get("/:userID/bags", verifyUser, getAllUserBags);
 
 router.patch("/:userID/update", verifyUser, updateUser);
-router.delete("/:userID/update", verifyUser, deleteUser);
+router.delete("/:userID/delete", verifyUser, deleteUser);
 
 export default router;
