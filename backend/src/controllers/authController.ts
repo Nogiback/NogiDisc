@@ -107,6 +107,7 @@ export const login = [
     }
     const { email } = req.body;
     const user = await prisma.user.findUnique({
+      where: { email },
       select: {
         id: true,
         email: true,
@@ -114,7 +115,6 @@ export const login = [
         lastName: true,
         password: true,
       },
-      where: { email },
     });
 
     if (!user) {

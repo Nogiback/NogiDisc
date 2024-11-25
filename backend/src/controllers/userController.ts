@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
+import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
+import generateToken from "../utils/generateToken.js";
 
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -126,6 +128,89 @@ export const updateUser = [
     });
 
     res.status(200).json(updatedUser);
+  }),
+];
+
+export const updatePassword = [
+  body("currentPassword", "Current password must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("newPassword", "New password must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("confirmNewPassword", "Passwords must match.")
+    .custom((value, { req }) => value === req.body.newPassword)
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(400).json({
+        errors: errors.array(),
+        message: "Error: Sign up failure.",
+      });
+      return;
+    }
+
+    // check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        password: true,
+      },
+    });
+
+    // if not, return error
+    if (!user) {
+      res.status(401).json({ message: "No user found." });
+      return;
+    }
+
+    // check if the current password is valid
+    const isValidPassword = await bcrypt.compare(
+      req.body.currentPassword,
+      user.password
+    );
+
+    // if not, return error
+    if (!isValidPassword) {
+      res.status(401).json({ message: "Incorrect password." });
+      return;
+    }
+
+    // if yes, hash the new password
+
+    bcrypt.hash(req.body.newPassword, 10, async (err, hashedPassword) => {
+      if (err) {
+        res.status(500).json({ err });
+        return;
+      } else {
+        const updatedUser = await prisma.user.update({
+          where: { id: req.user.id },
+          data: {
+            password: hashedPassword,
+          },
+        });
+
+        // Generating token for auth
+        generateToken(updatedUser.id, res);
+
+        res.status(201).json({
+          id: updatedUser.id,
+          email: updatedUser.email,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          message: "User updated password successfully.",
+        });
+      }
+    });
   }),
 ];
 
