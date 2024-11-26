@@ -30,10 +30,6 @@ export const signup = [
     .escape(),
 
   asyncHandler(async (req, res, next) => {
-    const { email, firstName, lastName, password, confirmPassword } = req.body;
-    const duplicateUser = await prisma.user.findUnique({
-      where: { email },
-    });
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -44,6 +40,11 @@ export const signup = [
       return;
     }
 
+    const { email, firstName, lastName, password } = req.body;
+    const duplicateUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
     if (duplicateUser) {
       res.status(409).json({
         message: "Error: User already exists.",
@@ -53,7 +54,7 @@ export const signup = [
 
     // Hashing Password
 
-    bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+    bcrypt.hash(password, 10, async (err, hashedPassword) => {
       if (err) {
         res.status(500).json({ err });
         return;
@@ -75,6 +76,7 @@ export const signup = [
           email: newUser.email,
           firstName: newUser.firstName,
           lastName: newUser.lastName,
+          profilePic: newUser.profilePic,
           message: "New user created successfully.",
         });
       }
@@ -114,6 +116,7 @@ export const login = [
         firstName: true,
         lastName: true,
         password: true,
+        profilePic: true,
       },
     });
 
@@ -139,6 +142,7 @@ export const login = [
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      profilePic: user.profilePic,
       message: "User successfully logged in.",
     });
   }),
@@ -167,6 +171,90 @@ export const getUser = asyncHandler(
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      profilePic: user.profilePic,
     });
   }
 );
+
+// GOOGLE LOGIN / SIGNUP FUNCTION
+
+export const googleAuth = [
+  body("email", "Invalid email.")
+    .trim()
+    .isEmail()
+    .isLength({ min: 1 })
+    .escape(),
+  body("firstName", "First Name must not be empty.")
+    .trim()
+    .escape()
+    .isLength({ min: 1 }),
+  body("lastName", "Last Name must not be empty.")
+    .trim()
+    .escape()
+    .isLength({ min: 1 }),
+  body("profilePic").optional().isString(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(400).json({
+        errors: errors.array(),
+        message: "Error: Sign up failure.",
+      });
+      return;
+    }
+
+    const { email, firstName, lastName, profilePic } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    // if a user exists with the google email, log them in
+    if (user) {
+      generateToken(user.id, res);
+      res.status(200).json({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profilePic: user.profilePic,
+        message: "User successfully logged in.",
+      });
+      return;
+    }
+
+    // if no user exists, create one with the google info and log them in
+    if (!user) {
+      const generatedPassword = Math.random().toString(36).slice(-8);
+      bcrypt.hash(generatedPassword, 10, async (err, hashedPassword) => {
+        if (err) {
+          res.status(500).json({ err });
+          return;
+        } else {
+          const newUser = await prisma.user.create({
+            data: {
+              email,
+              firstName,
+              lastName,
+              profilePic,
+              password: hashedPassword,
+            },
+          });
+
+          // Generating token for auth
+          generateToken(newUser.id, res);
+
+          res.status(201).json({
+            id: newUser.id,
+            email: newUser.email,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            profilePic: newUser.profilePic,
+            message: "New Google user created successfully.",
+          });
+        }
+      });
+    }
+  }),
+];
