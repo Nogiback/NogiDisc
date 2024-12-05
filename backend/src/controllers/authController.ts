@@ -3,7 +3,13 @@ import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import prisma from "../db/prisma.js";
 import bcrypt from "bcryptjs";
-import generateToken from "../utils/generateToken.js";
+import { OAuth2Client, TokenPayload } from "google-auth-library";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateTokens.js";
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // SIGN UP FUNCTION
 
@@ -68,8 +74,24 @@ export const signup = [
           },
         });
 
-        // Generating token for auth
-        generateToken(newUser.id, res);
+        // Generating tokens for auth
+        const accessToken = generateAccessToken(newUser.id);
+        const refreshToken = generateRefreshToken(newUser.id);
+
+        await prisma.refreshToken.create({
+          data: {
+            token: refreshToken,
+            userID: newUser.id,
+            expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+          },
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+          maxAge: 15 * 24 * 60 * 60 * 1000, // in milliseconds
+          httpOnly: true, // prevent XSS attacks cross-site scripting attacks,
+          sameSite: "strict", // CSRF attacks cross-site request forgery attacks
+          secure: process.env.NODE_ENV !== "development",
+        });
 
         res.status(201).json({
           id: newUser.id,
@@ -77,6 +99,7 @@ export const signup = [
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           profilePic: newUser.profilePic,
+          accessToken: accessToken,
           message: "New user created successfully.",
         });
       }
@@ -135,7 +158,24 @@ export const login = [
       return;
     }
 
-    generateToken(user.id, res);
+    // Generating tokens for auth
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userID: user.id,
+        expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+      },
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 15 * 24 * 60 * 60 * 1000, // in milliseconds
+      httpOnly: true, // prevent XSS attacks cross-site scripting attacks,
+      sameSite: "strict", // CSRF attacks cross-site request forgery attacks
+      secure: process.env.NODE_ENV !== "development",
+    });
 
     res.status(200).json({
       id: user.id,
@@ -143,6 +183,7 @@ export const login = [
       firstName: user.firstName,
       lastName: user.lastName,
       profilePic: user.profilePic,
+      accessToken: accessToken,
       message: "User successfully logged in.",
     });
   }),
@@ -150,16 +191,46 @@ export const login = [
 
 // LOGOUT FUNCTION
 
-export const logout = (req: Request, res: Response, next: NextFunction) => {
-  res.cookie("jwt", "", { maxAge: 0 });
-  res.status(200).json({ message: "User logged out successfully." });
-};
+export const logout = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(401).json({
+        errors: errors.array(),
+        message: "Error: Logout Failure.",
+      });
+      return;
+    }
+
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      res.status(400).json({ message: "Error: No token provided." });
+      return;
+    }
+
+    await prisma.refreshToken.delete({
+      where: {
+        token: refreshToken,
+      },
+    });
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "strict",
+    });
+
+    res.status(200).json({ message: "User successfully logged out." });
+  }
+);
 
 // GET USER FUNCTION
 
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const user = await prisma.user.findUnique({ where: { id: req.userID } });
 
     if (!user) {
       res.status(404).json({ message: "User not found." });
@@ -178,53 +249,49 @@ export const getUser = asyncHandler(
 
 // GOOGLE LOGIN / SIGNUP FUNCTION
 
-export const googleAuth = [
-  body("email", "Invalid email.")
-    .trim()
-    .isEmail()
-    .isLength({ min: 1 })
-    .escape(),
-  body("firstName", "First Name must not be empty.")
-    .trim()
-    .escape()
-    .isLength({ min: 1 }),
-  body("lastName", "Last Name must not be empty.")
-    .trim()
-    .escape()
-    .isLength({ min: 1 }),
-  body("profilePic").optional().isString(),
-
-  asyncHandler(async (req, res, next) => {
+export const googleAuth = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       res.status(400).json({
         errors: errors.array(),
-        message: "Error: Sign up failure.",
+        message: "Error: Google sign up failure.",
       });
       return;
     }
 
-    const { email, firstName, lastName, profilePic } = req.body;
-    const user = await prisma.user.findUnique({
-      where: { email },
+    const { token } = req.body;
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
-    // if a user exists with the google email, log them in
-    if (user) {
-      generateToken(user.id, res);
-      res.status(200).json({
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        profilePic: user.profilePic,
-        message: "User successfully logged in.",
+    const payload = ticket.getPayload() as TokenPayload;
+
+    if (!payload) {
+      res.status(400).json({ message: "Error: Invalid Google token payload." });
+      return;
+    }
+
+    const {
+      sub: googleID,
+      given_name: firstName,
+      family_name: lastName,
+      picture: profilePic,
+      email,
+    } = payload;
+
+    if (!email || !firstName || !lastName) {
+      res.status(400).json({
+        message:
+          "Error: Email and full name is required for Google authentication.",
       });
       return;
     }
 
-    // if no user exists, create one with the google info and log them in
+    let user = await prisma.user.findUnique({ where: { email } });
+
     if (!user) {
       const generatedPassword = Math.random().toString(36).slice(2);
       bcrypt.hash(generatedPassword, 10, async (err, hashedPassword) => {
@@ -232,29 +299,46 @@ export const googleAuth = [
           res.status(500).json({ err });
           return;
         } else {
-          const newUser = await prisma.user.create({
+          user = await prisma.user.create({
             data: {
               email,
               firstName,
               lastName,
               profilePic,
+              googleID,
               password: hashedPassword,
             },
-          });
-
-          // Generating token for auth
-          generateToken(newUser.id, res);
-
-          res.status(201).json({
-            id: newUser.id,
-            email: newUser.email,
-            firstName: newUser.firstName,
-            lastName: newUser.lastName,
-            profilePic: newUser.profilePic,
-            message: "New Google user created successfully.",
           });
         }
       });
     }
-  }),
-];
+
+    const accessToken = generateAccessToken(user!.id);
+    const refreshToken = generateRefreshToken(user!.id);
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userID: user!.id,
+        expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+      },
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "strict",
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      id: user!.id,
+      email: user!.email,
+      firstName: user!.firstName,
+      lastName: user!.lastName,
+      profilePic: user!.profilePic,
+      accessToken: accessToken,
+      message: "User successfully logged in via Google.",
+    });
+  }
+);

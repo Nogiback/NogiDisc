@@ -52,7 +52,7 @@ export const createBag = [
     const newBag = await prisma.bag.create({
       data: {
         name: bagName,
-        userID: req.user.id,
+        userID: req.userID,
       },
     });
 

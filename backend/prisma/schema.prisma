@@ -15,16 +15,18 @@ datasource db {
 }
 
 model User {
-  id         String    @id @unique @default(cuid())
-  firstName  String
-  lastName   String
-  profilePic String?   @default("https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868853.jpg")
-  password   String
-  email      String    @unique
-  inventory  Disc[]
-  bags       Bag[]
-  createdAt  DateTime? @default(now())
-  updatedAt  DateTime? @default(now()) @updatedAt
+  id           String         @id @unique @default(cuid())
+  firstName    String
+  lastName     String
+  profilePic   String?        @default("https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868853.jpg")
+  password     String
+  email        String         @unique
+  googleID     String?        @unique
+  inventory    Disc[]
+  bags         Bag[]
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now()) @updatedAt
+  RefreshToken RefreshToken[]
 }
 
 model Disc {
@@ -54,4 +56,12 @@ model Bag {
   updatedAt DateTime? @default(now()) @updatedAt
   User      User?     @relation(fields: [userID], references: [id])
   userID    String?
+}
+
+model RefreshToken {
+  id        String   @id @unique @default(cuid())
+  token     String   @unique
+  userID    String
+  user      User     @relation(fields: [userID], references: [id])
+  expiresAt DateTime
 }

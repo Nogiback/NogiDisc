@@ -73,7 +73,7 @@ export const createDisc = [
         glide,
         turn,
         fade,
-        userID: req.user.id,
+        userID: req.userID,
         bagID: bagID ? bagID : null,
       },
     });
@@ -152,7 +152,7 @@ export const editDisc = [
         glide,
         turn,
         fade,
-        userID: req.user.id,
+        userID: req.userID,
         bagID: bagID ? bagID : null,
       },
     });

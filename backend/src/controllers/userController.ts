@@ -3,11 +3,14 @@ import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import prisma from "../db/prisma.js";
-import generateToken from "../utils/generateToken.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateTokens.js";
 
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const currentUserID = req.user.id;
+    const currentUserID = req.userID;
     const currentUser = await prisma.user.findUnique({
       where: { id: currentUserID },
     });
@@ -23,7 +26,7 @@ export const getUser = asyncHandler(
 export const getUserInventory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
-    const currentUserID = req.user.id;
+    const currentUserID = req.userID;
     const currentUser = await prisma.user.findUnique({
       where: { id: currentUserID },
     });
@@ -49,7 +52,7 @@ export const getUserInventory = asyncHandler(
 export const getAllUserBags = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
-    const currentUserID = req.user.id;
+    const currentUserID = req.userID;
     const currentUser = await prisma.user.findUnique({
       where: { id: currentUserID },
     });
@@ -84,7 +87,7 @@ export const updateUser = [
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
-    const currentUserID = req.user.id;
+    const currentUserID = req.userID;
     const currentUser = await prisma.user.findUnique({
       where: { id: currentUserID },
     });
@@ -159,7 +162,7 @@ export const updatePassword = [
 
     // check if user exists
     const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
+      where: { id: req.userID },
       select: {
         id: true,
         email: true,
@@ -188,27 +191,51 @@ export const updatePassword = [
     }
 
     // if yes, hash the new password
-
     bcrypt.hash(req.body.newPassword, 10, async (err, hashedPassword) => {
       if (err) {
         res.status(500).json({ err });
         return;
       } else {
+        const { refreshToken } = req.cookies;
         const updatedUser = await prisma.user.update({
-          where: { id: req.user.id },
+          where: { id: req.userID },
           data: {
             password: hashedPassword,
           },
         });
 
-        // Generating token for auth
-        generateToken(updatedUser.id, res);
+        if (!refreshToken) {
+          res.status(400).json({ message: "Error: No token provided." });
+          return;
+        }
+
+        // Clearing old tokens from storage/cookies/db
+        await prisma.refreshToken.delete({ where: { token: refreshToken } });
+        res.clearCookie("refreshToken", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+        });
+
+        // Generating new tokens for auth
+        const newAccessToken = generateAccessToken(user.id);
+        const newRefreshToken = generateRefreshToken(user.id);
+
+        await prisma.refreshToken.create({
+          data: {
+            token: newRefreshToken,
+            userID: user.id,
+            expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+          },
+        });
 
         res.status(201).json({
           id: updatedUser.id,
           email: updatedUser.email,
           firstName: updatedUser.firstName,
           lastName: updatedUser.lastName,
+          profilePic: updatedUser.profilePic,
+          accessToken: newAccessToken,
           message: "User updated password successfully.",
         });
       }
@@ -219,7 +246,7 @@ export const updatePassword = [
 export const deleteUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
-    const currentUserID = req.user.id;
+    const currentUserID = req.userID;
     const currentUser = await prisma.user.findUnique({
       where: { id: currentUserID },
     });
