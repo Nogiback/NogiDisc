@@ -5,6 +5,7 @@ import {
   logout,
   getUser,
   googleAuth,
+  getRefreshToken,
 } from "../controllers/authController.js";
 import verifyUser from "../middleware/verifyUser.js";
 
@@ -15,5 +16,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/google", googleAuth);
+router.post("/refresh", getRefreshToken);
 
 export default router;

@@ -3,11 +3,13 @@ import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import prisma from "../db/prisma.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
 import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/generateTokens.js";
+import { JwtPayloadWithID } from "../types/types.js";
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -144,7 +146,7 @@ export const login = [
     });
 
     if (!user) {
-      res.status(401).json({ message: "No user found." });
+      res.status(401).json({ message: "Error: No user found." });
       return;
     }
 
@@ -154,7 +156,7 @@ export const login = [
     );
 
     if (!isValidPassword) {
-      res.status(401).json({ message: "Incorrect password." });
+      res.status(401).json({ message: "Error: Incorrect password." });
       return;
     }
 
@@ -233,7 +235,7 @@ export const getUser = asyncHandler(
     const user = await prisma.user.findUnique({ where: { id: req.userID } });
 
     if (!user) {
-      res.status(404).json({ message: "User not found." });
+      res.status(404).json({ message: "Error: User not found." });
       return;
     }
 
@@ -340,5 +342,40 @@ export const googleAuth = asyncHandler(
       accessToken: accessToken,
       message: "User successfully logged in via Google.",
     });
+  }
+);
+
+// GET NEW ACCESS TOKEN FROM REFRESH TOKEN
+
+export const getRefreshToken = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      res.status(401).json({ message: "Error: No authorized token found." });
+      return;
+    }
+
+    const payload = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as JwtPayloadWithID;
+
+    const verifyToken = await prisma.refreshToken.findUnique({
+      where: { token: refreshToken },
+    });
+
+    if (!payload.id) {
+      res.status(403).json({ message: "Error: Invalid token payload." });
+    }
+
+    if (!verifyToken) {
+      res.status(403).json({ message: "Error: Invalid token." });
+      return;
+    }
+
+    const newAccessToken = generateAccessToken(payload.id);
+
+    res.status(200).json({ accessToken: newAccessToken });
   }
 );
