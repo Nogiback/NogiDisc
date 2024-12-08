@@ -27,6 +27,7 @@ export function GoogleLoginButton() {
         onError={() => {
           console.error('Google Login Failed');
         }}
+        shape='pill'
       />
     </div>
   );

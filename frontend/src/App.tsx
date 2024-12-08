@@ -1,13 +1,21 @@
-import { LoginForm } from './components/LoginForm';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import Homepage from './pages/Homepage';
+import Dashboard from './pages/Dashboard';
 
 function App() {
+  const isUserLoggedIn = false;
+
   return (
-    <div className='h-screen w-screen'>
-      <div className='flex min-h-screen flex-col items-center justify-center gap-4'>
-        <h1 className='text-3xl font-bold'>NogiDisc</h1>
-        <LoginForm />
-      </div>
-    </div>
+    <Routes>
+      <Route
+        path='/'
+        element={isUserLoggedIn ? <Navigate to='/dashboard' /> : <Homepage />}
+      />
+      <Route
+        path='/dashboard'
+        element={isUserLoggedIn ? <Dashboard /> : <Navigate to='/' />}
+      />
+    </Routes>
   );
 }
 
