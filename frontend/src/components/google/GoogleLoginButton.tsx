@@ -1,34 +1,36 @@
-import { GoogleLogin, GoogleCredentialResponse } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import { Button } from '../ui/button';
+import { useCallback } from 'react';
 
 export function GoogleLoginButton() {
-  const handleGoogleLoginSuccess = async (
-    response: GoogleCredentialResponse,
-  ) => {
-    try {
-      // Send the Google token to your backend
-      const { data } = await axios.post('/api/auth/google', {
-        token: response.credential,
-      });
+  const handleGoogleLoginClick = useCallback(() => {
+    handleGoogleLogin(); // Call the original function
+  }, []);
 
-      // Save the JWT token in localStorage or context
-      localStorage.setItem('token', data.token);
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Send the token to the backend
+        const { data } = await axios.post('/api/auth/google', {
+          token: tokenResponse.access_token,
+        });
+        console.log('Access Token:', data.accessToken);
 
-      console.log('Logged in user:', data.user);
-    } catch (error) {
-      console.error('Google Login Error:', error);
-    }
-  };
+        // Store access token (and optionally refresh token)
+        localStorage.setItem('accessToken', data.accessToken);
+      } catch (error) {
+        console.error('Error during Google login:', error);
+      }
+    },
+    onError: (error) => {
+      console.error('Google Login Failed:', error);
+    },
+  });
 
   return (
-    <div>
-      <GoogleLogin
-        onSuccess={handleGoogleLoginSuccess}
-        onError={() => {
-          console.error('Google Login Failed');
-        }}
-        shape='pill'
-      />
-    </div>
+    <Button onClick={handleGoogleLoginClick} className='w-full'>
+      Login with Google
+    </Button>
   );
 }

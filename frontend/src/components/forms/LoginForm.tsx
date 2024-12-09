@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { GoogleLoginButton } from '../google/GoogleLoginButton';
 
 // const signUpFormSchema = z.object({
 //   username: z
@@ -84,7 +85,10 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type='submit'>Login</Button>
+        <Button className='w-full' type='submit'>
+          Login
+        </Button>
+        <GoogleLoginButton />
       </form>
     </Form>
   );
