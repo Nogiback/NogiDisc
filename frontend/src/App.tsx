@@ -3,6 +3,7 @@ import Homepage from './pages/Homepage';
 import Dashboard from './pages/Dashboard';
 
 function App() {
+  //! used for testing, REMOVE later
   const isUserLoggedIn = false;
 
   return (

@@ -13,22 +13,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { GoogleLoginButton } from '../google/GoogleLoginButton';
 
-// const signUpFormSchema = z.object({
-//   username: z
-//     .string()
-//     .min(3, { message: 'Username must be at least 3 characters' }),
-//   email: z
-//     .string()
-//     .min(1, { message: 'Email is required' })
-//     .email('Invalid email address'),
-//   password: z
-//     .string()
-//     .min(6, { message: 'Password must be at least 6 characters' }),
-//   confirmPassword: z
-//     .string()
-//     .min(6, { message: 'Password must be at least 6 characters' }),
-// });
-
 const loginFormSchema = z.object({
   email: z
     .string()
@@ -36,7 +20,7 @@ const loginFormSchema = z.object({
     .email('Invalid email address'),
   password: z
     .string()
-    .min(6, { message: 'Password must be at least 6 characters' }),
+    .min(8, { message: 'Password must be at least 8 characters' }),
 });
 
 export function LoginForm() {
@@ -58,7 +42,10 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='flex w-full flex-col gap-6'
+      >
         <FormField
           control={form.control}
           name='email'
@@ -88,8 +75,8 @@ export function LoginForm() {
         <Button className='w-full' type='submit'>
           Login
         </Button>
-        <GoogleLoginButton />
       </form>
+      <GoogleLoginButton />
     </Form>
   );
 }

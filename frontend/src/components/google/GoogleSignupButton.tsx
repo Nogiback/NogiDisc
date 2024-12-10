@@ -2,7 +2,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { Button } from '../ui/button';
 
-export function GoogleLoginButton() {
+export function GoogleSignupButton() {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -25,7 +25,7 @@ export function GoogleLoginButton() {
 
   return (
     <Button onClick={() => handleGoogleLogin()} className='w-full'>
-      Login with Google
+      Sign up with Google
     </Button>
   );
 }
