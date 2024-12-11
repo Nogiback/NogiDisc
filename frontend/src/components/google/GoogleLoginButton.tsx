@@ -1,6 +1,7 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { Button } from '../ui/button';
+import GoogleIcon from '@/assets/googleIcon.png';
 
 export function GoogleLoginButton() {
   const handleGoogleLogin = useGoogleLogin({
@@ -24,8 +25,9 @@ export function GoogleLoginButton() {
   });
 
   return (
-    <Button onClick={() => handleGoogleLogin()} className='w-full'>
-      Login with Google
+    <Button onClick={() => handleGoogleLogin()} className='flex w-full gap-1'>
+      <img className='w-5' src={GoogleIcon} />
+      <span>Login with Google</span>
     </Button>
   );
 }

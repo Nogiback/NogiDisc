@@ -1,20 +1,19 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './hooks/ProtectedRoute';
 
 function App() {
-  //! used for testing, REMOVE later
-  const isUserLoggedIn = false;
-
   return (
     <Routes>
-      <Route
-        path='/'
-        element={isUserLoggedIn ? <Navigate to='/dashboard' /> : <Homepage />}
-      />
+      <Route path='/' element={<Homepage />} />
       <Route
         path='/dashboard'
-        element={isUserLoggedIn ? <Dashboard /> : <Navigate to='/' />}
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   );
