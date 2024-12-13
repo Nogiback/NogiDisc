@@ -1,10 +1,15 @@
 import { LoginForm } from '@/components/forms/LoginForm';
 import { SignupForm } from '@/components/forms/SignupForm';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { LoaderPinwheel } from 'lucide-react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from '@/context/AuthContext';
 
 export default function Homepage() {
   const [formToggle, setFormToggle] = useState(true);
+  const { authUser } = useContext(AuthContext);
+
+  if (authUser) return <Navigate to='/dashboard' replace />;
 
   return (
     <div className='flex h-screen w-screen items-center justify-center'>

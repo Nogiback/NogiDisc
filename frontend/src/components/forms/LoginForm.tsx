@@ -12,6 +12,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { GoogleLoginButton } from '../google/GoogleLoginButton';
+import useLogin from '@/hooks/useLogin';
+import { Spinner } from '@/components/ui/spinner';
 
 const loginFormSchema = z.object({
   email: z
@@ -24,7 +26,8 @@ const loginFormSchema = z.object({
 });
 
 export function LoginForm() {
-  // 1. Define your form.
+  const { isLoading, login } = useLogin();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -33,11 +36,8 @@ export function LoginForm() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    await login(values);
   }
 
   return (
@@ -53,7 +53,11 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='johndoe@mail.com' {...field} />
+                <Input
+                  placeholder='johndoe@mail.com'
+                  autoComplete='email'
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -66,14 +70,19 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type='password' placeholder='' {...field} />
+                <Input
+                  type='password'
+                  placeholder=''
+                  autoComplete='current-password'
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit'>
-          Login
+        <Button className='w-full' type='submit' disabled={isLoading}>
+          {isLoading ? <Spinner /> : 'Login'}
         </Button>
       </form>
       <GoogleLoginButton />

@@ -22,7 +22,7 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
     ) as DecodedToken;
 
     if (!decodedToken) {
-      res.status(403).json({ message: "Error: Token expired or invalid." });
+      res.status(401).json({ message: "Error: Token expired or invalid." });
       return;
     }
 

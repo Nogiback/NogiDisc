@@ -9,7 +9,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/generateTokens.js";
-import { JwtPayloadWithID } from "../types/types.js";
+import { JwtPayloadWithUserID } from "../types/types.js";
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -95,7 +95,7 @@ export const signup = [
           secure: process.env.NODE_ENV !== "development",
         });
 
-        res.status(201).json({
+        res.status(200).json({
           id: newUser.id,
           email: newUser.email,
           firstName: newUser.firstName,
@@ -126,7 +126,7 @@ export const login = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(401).json({
+      res.status(400).json({
         errors: errors.array(),
         message: "Error: Login Failure.",
       });
@@ -198,7 +198,7 @@ export const logout = asyncHandler(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(401).json({
+      res.status(400).json({
         errors: errors.array(),
         message: "Error: Logout Failure.",
       });
@@ -208,7 +208,7 @@ export const logout = asyncHandler(
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
-      res.status(400).json({ message: "Error: No token provided." });
+      res.status(401).json({ message: "Error: No token provided." });
       return;
     }
 
@@ -272,7 +272,7 @@ export const googleAuth = asyncHandler(
     const payload = ticket.getPayload() as TokenPayload;
 
     if (!payload) {
-      res.status(400).json({ message: "Error: Invalid Google token payload." });
+      res.status(401).json({ message: "Error: Invalid Google token payload." });
       return;
     }
 
@@ -285,7 +285,7 @@ export const googleAuth = asyncHandler(
     } = payload;
 
     if (!email || !firstName || !lastName) {
-      res.status(400).json({
+      res.status(401).json({
         message:
           "Error: Email and full name is required for Google authentication.",
       });
@@ -349,32 +349,28 @@ export const googleAuth = asyncHandler(
 
 export const getRefreshToken = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { refreshToken } = req.cookies;
+    const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
       res.status(401).json({ message: "Error: No authorized token found." });
       return;
     }
 
-    const payload = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET!
-    ) as JwtPayloadWithID;
-
-    const verifyToken = await prisma.refreshToken.findUnique({
+    const tokenData = await prisma.refreshToken.findUnique({
       where: { token: refreshToken },
     });
 
-    if (!payload.id) {
-      res.status(403).json({ message: "Error: Invalid token payload." });
-    }
-
-    if (!verifyToken) {
-      res.status(403).json({ message: "Error: Invalid token." });
+    if (!tokenData) {
+      res.status(403).json({ message: "Invalid refresh token" });
       return;
     }
 
-    const newAccessToken = generateAccessToken(payload.id);
+    const payload = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as JwtPayloadWithUserID;
+
+    const newAccessToken = generateAccessToken(payload.userID);
 
     res.status(200).json({ accessToken: newAccessToken });
   }

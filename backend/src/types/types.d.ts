@@ -8,6 +8,6 @@ declare global {
   }
 }
 
-interface JwtPayloadWithID extends jwt.JwtPayload {
-  id: string;
+interface JwtPayloadWithUserID extends jwt.JwtPayload {
+  userID: string;
 }

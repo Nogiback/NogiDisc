@@ -2,9 +2,9 @@ import { ReactNode } from 'react';
 
 export type AuthContextType = {
   authUser: AuthUser | null;
-  loading: boolean;
-  login: (userData: AuthUser) => void;
-  logout: () => void;
+  setAuthUser: (user: AuthUser | null) => void;
+  accessToken: string | null;
+  setAccessToken: (token: string | null) => void;
 };
 
 export type AuthUser = {
@@ -23,4 +23,9 @@ export type AuthProviderProp = {
 
 export type ProtectedRouteProp = {
   children: ReactNode;
+};
+
+export type LoginFormData = {
+  email: string;
+  password: string;
 };
