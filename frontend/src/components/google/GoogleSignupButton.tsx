@@ -1,23 +1,17 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
 import { Button } from '../ui/button';
 import GoogleIcon from '@/assets/googleIcon.png';
+import useGoogleAuth from '@/hooks/google/useGoogleAuth';
+import { Spinner } from '../ui/spinner';
 
 export function GoogleSignupButton() {
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        // Send the token to the backend
-        const { data } = await axios.post('/api/auth/google', {
-          token: tokenResponse.access_token,
-        });
-        console.log('Access Token:', data.accessToken);
+  const { isLoading, googleSignup } = useGoogleAuth();
 
-        // Store access token (and optionally refresh token)
-        localStorage.setItem('accessToken', data.accessToken);
-      } catch (error) {
-        console.error('Error during Google login:', error);
-      }
+  const handleGoogleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    redirect_uri: 'postmessage',
+    onSuccess: async ({ code }) => {
+      await googleSignup(code);
     },
     onError: (error) => {
       console.error('Google Login Failed:', error);
@@ -25,9 +19,19 @@ export function GoogleSignupButton() {
   });
 
   return (
-    <Button onClick={() => handleGoogleLogin()} className='flex w-full gap-1'>
-      <img className='w-5' src={GoogleIcon} />
-      <span>Sign up with Google</span>
+    <Button
+      onClick={() => handleGoogleLogin()}
+      className='flex w-full gap-1'
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <img className='w-5' src={GoogleIcon} />
+          <span>Sign up with Google</span>
+        </>
+      )}
     </Button>
   );
 }

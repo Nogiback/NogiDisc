@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
@@ -11,7 +13,11 @@ import {
 } from "../utils/generateTokens.js";
 import { JwtPayloadWithUserID } from "../types/types.js";
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  "postmessage"
+);
 
 // SIGN UP FUNCTION
 
@@ -263,9 +269,15 @@ export const googleAuth = asyncHandler(
       return;
     }
 
-    const { token } = req.body;
+    const { tokens } = await googleClient.getToken(req.body.code);
+
+    if (!tokens.id_token) {
+      res.status(401).json({ message: "Error: No tokens found." });
+      return;
+    }
+
     const ticket = await googleClient.verifyIdToken({
-      idToken: token,
+      idToken: tokens.id_token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
 
@@ -292,29 +304,59 @@ export const googleAuth = asyncHandler(
       return;
     }
 
-    let user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email } });
 
+    // if no user is found on db, hash a password and create a new user and login
     if (!user) {
       const generatedPassword = Math.random().toString(36).slice(2);
       bcrypt.hash(generatedPassword, 10, async (err, hashedPassword) => {
         if (err) {
           res.status(500).json({ err });
           return;
-        } else {
-          user = await prisma.user.create({
-            data: {
-              email,
-              firstName,
-              lastName,
-              profilePic,
-              googleID,
-              password: hashedPassword,
-            },
-          });
         }
+        const newUser = await prisma.user.create({
+          data: {
+            email,
+            firstName,
+            lastName,
+            profilePic,
+            googleID,
+            password: hashedPassword,
+          },
+        });
+
+        const accessToken = generateAccessToken(newUser.id);
+        const refreshToken = generateRefreshToken(newUser.id);
+
+        await prisma.refreshToken.create({
+          data: {
+            token: refreshToken,
+            userID: user!.id,
+            expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+          },
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+          maxAge: 15 * 24 * 60 * 60 * 1000,
+        });
+
+        res.status(200).json({
+          id: newUser.id,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          profilePic: newUser.profilePic,
+          accessToken: accessToken,
+          message: "User successfully logged in via Google.",
+        });
+        return;
       });
     }
 
+    // If a user is found, generate tokens and return user
     const accessToken = generateAccessToken(user!.id);
     const refreshToken = generateRefreshToken(user!.id);
 
