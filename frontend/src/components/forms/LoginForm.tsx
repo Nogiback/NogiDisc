@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { GoogleLoginButton } from '../google/GoogleLoginButton';
-import useLogin from '@/hooks/useLogin';
+import useLogin from '@/hooks/auth/useLogin';
 import { Spinner } from '@/components/ui/spinner';
 
 const loginFormSchema = z.object({

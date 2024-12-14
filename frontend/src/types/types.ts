@@ -5,6 +5,7 @@ export type AuthContextType = {
   setAuthUser: (user: AuthUser | null) => void;
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
+  isLoading: boolean;
 };
 
 export type AuthUser = {

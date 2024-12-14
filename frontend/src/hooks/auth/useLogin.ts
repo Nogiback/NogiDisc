@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { LoginFormData } from '@/types/types';
 import { useAuth } from '@/context/useAuth';
-import useAxiosInstance from '@/api/api';
+import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 
 export default function useLogin() {
   const api = useAxiosInstance();

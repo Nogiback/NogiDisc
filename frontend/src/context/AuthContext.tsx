@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import useAxiosInstance from '@/api/api';
+import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 import { AuthContextType, AuthUser, AuthProviderProp } from '@/types/types';
 import axios from 'axios';
 
@@ -8,6 +8,7 @@ const defaultContextValue: AuthContextType = {
   setAuthUser: () => {},
   accessToken: null,
   setAccessToken: () => {},
+  isLoading: true,
 };
 
 export const AuthContext = createContext<AuthContextType>(defaultContextValue);
@@ -16,6 +17,7 @@ export function AuthProvider({ children }: AuthProviderProp) {
   const api = useAxiosInstance();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Check if user is already logged in on initial load
   useEffect(() => {
@@ -38,6 +40,8 @@ export function AuthProvider({ children }: AuthProviderProp) {
             setAuthUser(null);
           }
         }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchUser();
@@ -46,7 +50,7 @@ export function AuthProvider({ children }: AuthProviderProp) {
 
   return (
     <AuthContext.Provider
-      value={{ accessToken, setAccessToken, authUser, setAuthUser }}
+      value={{ accessToken, setAccessToken, authUser, setAuthUser, isLoading }}
     >
       {children}
     </AuthContext.Provider>

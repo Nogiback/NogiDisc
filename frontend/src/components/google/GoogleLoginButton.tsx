@@ -1,14 +1,16 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
 import { Button } from '../ui/button';
 import GoogleIcon from '@/assets/googleIcon.png';
+import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 
 export function GoogleLoginButton() {
+  const api = useAxiosInstance();
+
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
         // Send the token to the backend
-        const { data } = await axios.post('/api/auth/google', {
+        const { data } = await api.post('/api/auth/google', {
           token: tokenResponse.access_token,
         });
         console.log('Access Token:', data.accessToken);

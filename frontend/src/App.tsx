@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Dashboard from './pages/Dashboard';
-import { ProtectedRoute } from './hooks/ProtectedRoute';
+import { ProtectedRoute } from './pages/ProtectedRoute';
 import { Toaster } from 'sonner';
 
 function App() {

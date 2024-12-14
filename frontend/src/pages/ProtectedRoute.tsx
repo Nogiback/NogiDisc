@@ -1,11 +1,19 @@
 import { Navigate } from 'react-router-dom';
 import { ProtectedRouteProp } from '@/types/types';
 import { useAuth } from '@/context/useAuth';
+import { Spinner } from '@/components/ui/spinner';
 
 export function ProtectedRoute({ children }: ProtectedRouteProp) {
-  const { authUser } = useAuth();
+  const { authUser, isLoading } = useAuth();
 
-  if (!authUser) {
+  if (isLoading)
+    return (
+      <div className='flex h-screen w-screen items-center justify-center'>
+        <Spinner />
+      </div>
+    );
+
+  if (!authUser && !isLoading) {
     return <Navigate to='/' replace />; // Redirect to homepage if not logged in
   }
 

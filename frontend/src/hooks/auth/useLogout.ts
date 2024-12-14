@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/useAuth';
 import { useState } from 'react';
-import useAxiosInstance from '@/api/api';
+import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 
 export default function useLogout() {
   const api = useAxiosInstance();
