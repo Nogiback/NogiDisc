@@ -19,7 +19,6 @@ export function AuthProvider({ children }: AuthProviderProp) {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is already logged in on initial load
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -28,14 +27,19 @@ export function AuthProvider({ children }: AuthProviderProp) {
         });
         setAccessToken(res.data.accessToken);
 
-        const user = await api.get('/api/auth/verify', {
-          headers: { Authorization: `Bearer ${res.data.accessToken}` },
-        });
-        setAuthUser(user.data);
+        if (res.data.accessToken) {
+          const user = await api.get('/api/auth/verify', {
+            headers: { Authorization: `Bearer ${res.data.accessToken}` },
+          });
+          setAuthUser(user.data);
+        }
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          if (error.response?.status === 401) {
-            console.log('User is not authenticated. Redirecting to login.');
+          if (
+            error.response?.status === 401 ||
+            error.response?.status === 204
+          ) {
+            console.warn('User is not authenticated. Redirecting to login.');
             setAccessToken(null);
             setAuthUser(null);
           }

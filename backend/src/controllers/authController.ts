@@ -331,7 +331,7 @@ export const googleAuth = asyncHandler(
         await prisma.refreshToken.create({
           data: {
             token: refreshToken,
-            userID: user!.id,
+            userID: newUser.id,
             expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
           },
         });
@@ -350,10 +350,10 @@ export const googleAuth = asyncHandler(
           lastName: newUser.lastName,
           profilePic: newUser.profilePic,
           accessToken: accessToken,
-          message: "User successfully logged in via Google.",
+          message: "User successfully signed up via Google.",
         });
-        return;
       });
+      return;
     }
 
     // If a user is found, generate tokens and return user
@@ -394,7 +394,7 @@ export const getRefreshToken = asyncHandler(
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      res.status(401).json({ message: "Error: No authorized token found." });
+      res.status(204).send();
       return;
     }
 
@@ -403,7 +403,7 @@ export const getRefreshToken = asyncHandler(
     });
 
     if (!tokenData) {
-      res.status(403).json({ message: "Invalid refresh token" });
+      res.status(403).json({ message: "Error: Invalid refresh token" });
       return;
     }
 
