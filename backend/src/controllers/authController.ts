@@ -314,12 +314,19 @@ export const googleAuth = asyncHandler(
           res.status(500).json({ err });
           return;
         }
+
+        // Removing Google's profile picture sizing constraint
+        let cleanURL;
+        if (profilePic?.includes("=")) {
+          cleanURL = profilePic.split("=")[0];
+        }
+
         const newUser = await prisma.user.create({
           data: {
             email,
             firstName,
             lastName,
-            profilePic,
+            profilePic: cleanURL,
             googleID,
             password: hashedPassword,
           },
