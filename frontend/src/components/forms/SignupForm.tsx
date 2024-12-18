@@ -13,8 +13,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { GoogleSignupButton } from '../google/GoogleSignupButton';
 import { signupFormSchema } from '@/lib/formSchemas';
+import useSignup from '@/hooks/auth/useSignup';
+import { useLoginContext } from '@/context/useLoginContext';
 
 export function SignupForm() {
+  const { signup } = useSignup();
+  const { isSubmitting } = useLoginContext();
+
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -26,11 +31,8 @@ export function SignupForm() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof signupFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof signupFormSchema>) {
+    await signup(values);
   }
 
   return (
@@ -120,7 +122,7 @@ export function SignupForm() {
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit'>
+        <Button className='w-full' type='submit' disabled={isSubmitting}>
           Signup
         </Button>
       </form>
