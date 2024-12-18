@@ -1,19 +1,19 @@
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { LoginFormData } from '@/types/types';
 import { useAuth } from '@/context/useAuth';
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
+import { useLoginContext } from '@/context/useLoginContext';
 
 export default function useLogin() {
   const api = useAxiosInstance();
-  const [isLoading, setIsLoading] = useState(false);
   const { setAuthUser, setAccessToken } = useAuth();
+  const { setIsSubmitting } = useLoginContext();
 
   async function login(formData: LoginFormData) {
     const isValid = handleInputErrors(formData);
     if (!isValid) return;
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       const res = await api.post('/api/auth/login', formData);
@@ -32,11 +32,11 @@ export default function useLogin() {
         toast.error(err.message);
       }
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   }
 
-  return { isLoading, login };
+  return { login };
 }
 
 function handleInputErrors({ email, password }: LoginFormData) {

@@ -1,16 +1,16 @@
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { useAuth } from '@/context/useAuth';
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
+import { useLoginContext } from '@/context/useLoginContext';
 
 export default function useGoogleAuth() {
   const api = useAxiosInstance();
-  const [isLoading, setIsLoading] = useState(false);
   const { setAuthUser, setAccessToken } = useAuth();
+  const { setIsSubmitting } = useLoginContext();
 
   async function googleLogin(code: string) {
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       const res = await api.post('/api/auth/google', {
@@ -31,12 +31,12 @@ export default function useGoogleAuth() {
         toast.error(err.message);
       }
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   }
 
   async function googleSignup(code: string) {
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       const res = await api.post('/api/auth/google', {
@@ -57,9 +57,9 @@ export default function useGoogleAuth() {
         toast.error(err.message);
       }
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   }
 
-  return { isLoading, googleLogin, googleSignup };
+  return { googleLogin, googleSignup };
 }

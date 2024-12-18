@@ -2,10 +2,11 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { Button } from '../ui/button';
 import GoogleIcon from '@/assets/googleIcon.png';
 import useGoogleAuth from '@/hooks/google/useGoogleAuth';
-import { Spinner } from '../ui/spinner';
+import { useLoginContext } from '@/context/useLoginContext';
 
 export function GoogleSignupButton() {
-  const { isLoading, googleSignup } = useGoogleAuth();
+  const { googleSignup } = useGoogleAuth();
+  const { isSubmitting } = useLoginContext();
 
   const handleGoogleLogin = useGoogleLogin({
     flow: 'auth-code',
@@ -22,16 +23,10 @@ export function GoogleSignupButton() {
     <Button
       onClick={() => handleGoogleLogin()}
       className='flex w-full gap-1'
-      disabled={isLoading}
+      disabled={isSubmitting}
     >
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          <img className='w-5' src={GoogleIcon} />
-          <span>Sign up with Google</span>
-        </>
-      )}
+      <img className='w-5' src={GoogleIcon} />
+      <span>Sign up with Google</span>
     </Button>
   );
 }

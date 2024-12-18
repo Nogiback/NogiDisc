@@ -8,6 +8,11 @@ export type AuthContextType = {
   isLoading: boolean;
 };
 
+export type LoginContextType = {
+  isSubmitting: boolean;
+  setIsSubmitting: (value: boolean) => void;
+};
+
 export type AuthUser = {
   id: string;
   firstName: string;
@@ -19,6 +24,10 @@ export type AuthUser = {
 };
 
 export type AuthProviderProp = {
+  children: ReactNode;
+};
+
+export type LoginProviderProp = {
   children: ReactNode;
 };
 

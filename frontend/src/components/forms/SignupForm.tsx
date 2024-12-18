@@ -12,33 +12,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { GoogleSignupButton } from '../google/GoogleSignupButton';
+import { signupFormSchema } from '@/lib/formSchemas';
 
-const signupFormSchema = z
-  .object({
-    firstName: z.string().min(1, { message: 'First name is required' }),
-    lastName: z.string().min(1, { message: 'Last name is required' }),
-    email: z
-      .string()
-      .min(1, { message: 'Email is required' })
-      .email('Invalid email address'),
-    password: z
-      .string()
-      .min(8, { message: 'Password must be at least 8 characters' }),
-    confirmPassword: z.string(),
-  })
-  .superRefine((val, ctx) => {
-    if (val.password !== val.confirmPassword) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Passwords do not match',
-        path: ['confirmPassword'],
-      });
-    }
-  });
-
-//
 export function SignupForm() {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {

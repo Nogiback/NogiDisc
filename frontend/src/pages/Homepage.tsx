@@ -9,7 +9,7 @@ export default function Homepage() {
   const [formToggle, setFormToggle] = useState(true);
   const { authUser } = useContext(AuthContext);
 
-  if (authUser) return <Navigate to='/dashboard' replace />;
+  if (authUser) return <Navigate to='/dashboard' />;
 
   return (
     <div className='flex h-screen w-screen items-center justify-center'>
