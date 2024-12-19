@@ -2,10 +2,11 @@ import { DarkModeToggle } from '@/components/DarkModeToggle';
 import LogoutButton from '@/components/LogoutButton';
 import { useAuth } from '@/context/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DialogDemo } from '@/components/disc/AddDiscModal';
 
 export default function Dashboard() {
   const { authUser } = useAuth();
-  console.log(authUser?.profilePic);
+
   return (
     <div className='flex h-screen w-screen flex-col items-center justify-center gap-4'>
       <h1>Dashboard</h1>
@@ -18,6 +19,7 @@ export default function Dashboard() {
 
       <LogoutButton />
       <DarkModeToggle />
+      <DialogDemo />
     </div>
   );
 }
