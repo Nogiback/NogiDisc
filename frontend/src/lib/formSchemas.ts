@@ -32,3 +32,28 @@ export const signupFormSchema = z
       });
     }
   });
+
+export const addDiscFormSchema = z.object({
+  manufacturer: z.string().min(1, { message: 'Disc manufacturer is required' }),
+  name: z.string().min(1, { message: 'Disc name is required' }),
+  weight: z.number().int(),
+  category: z.string().min(1, { message: 'Disc category is required' }),
+  colour: z.string().min(1, { message: 'Disc colour is required' }),
+  speed: z
+    .number()
+    .min(1, { message: 'Disc speed must be greater than 1' })
+    .max(14.5, { message: 'Disc speed must be less than 14.5' }),
+  glide: z
+    .number()
+    .min(1, { message: 'Disc glide must be greater than 1' })
+    .max(7, { message: 'Disc glide must be less than 7' }),
+  turn: z
+    .number()
+    .min(-7, { message: 'Disc turn must be greater than -7' })
+    .max(0, { message: 'Disc turn must be less than 0' }),
+  fade: z
+    .number()
+    .min(0, { message: 'Disc fade must be greater than 0' })
+    .max(5, { message: 'Disc fade must be less than 5' }),
+  bagID: z.string().optional(),
+});

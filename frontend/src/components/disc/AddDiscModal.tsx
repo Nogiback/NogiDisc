@@ -3,14 +3,15 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
+  // DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+// import { Input } from '@/components/ui/input';
+// import { Label } from '@/components/ui/label';
 import { CirclePlus } from 'lucide-react';
+import { AddDiscForm } from '../forms/AddDiscForm';
 
 export function DialogDemo() {
   return (
@@ -23,7 +24,7 @@ export function DialogDemo() {
           <CirclePlus size={24} /> Add Disc
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className=''>
         <DialogHeader>
           <DialogTitle>Add a Disc</DialogTitle>
           <DialogDescription>
@@ -31,7 +32,8 @@ export function DialogDemo() {
             done.
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
+        <AddDiscForm />
+        {/* <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='discManufacturer' className='text-right'>
               Manufacturer
@@ -55,7 +57,7 @@ export function DialogDemo() {
         </div>
         <DialogFooter>
           <Button type='submit'>Save changes</Button>
-        </DialogFooter>
+        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

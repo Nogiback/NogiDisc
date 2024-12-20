@@ -26,7 +26,7 @@ function App() {
           }
         />
       </Routes>
-      <Toaster richColors />
+      <Toaster richColors position='bottom-center' />
     </>
   );
 }

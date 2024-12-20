@@ -107,6 +107,9 @@ export const signup = [
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           profilePic: newUser.profilePic,
+          googleID: newUser.googleID,
+          createdAt: newUser.createdAt,
+          updatedAt: newUser.updatedAt,
           accessToken: accessToken,
           message: "New user created successfully.",
         });
@@ -147,7 +150,12 @@ export const login = [
         firstName: true,
         lastName: true,
         password: true,
+        googleID: true,
         profilePic: true,
+        createdAt: true,
+        updatedAt: true,
+        bags: true,
+        inventory: true,
       },
     });
 
@@ -191,6 +199,11 @@ export const login = [
       firstName: user.firstName,
       lastName: user.lastName,
       profilePic: user.profilePic,
+      googleID: user.googleID,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      bags: user.bags,
+      inventory: user.inventory,
       accessToken: accessToken,
       message: "User successfully logged in.",
     });
@@ -238,7 +251,21 @@ export const logout = asyncHandler(
 
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await prisma.user.findUnique({ where: { id: req.userID } });
+    const user = await prisma.user.findUnique({
+      where: { id: req.userID },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        googleID: true,
+        profilePic: true,
+        createdAt: true,
+        updatedAt: true,
+        bags: true,
+        inventory: true,
+      },
+    });
 
     if (!user) {
       res.status(404).json({ message: "Error: User not found." });
@@ -251,6 +278,11 @@ export const getUser = asyncHandler(
       firstName: user.firstName,
       lastName: user.lastName,
       profilePic: user.profilePic,
+      googleID: user.googleID,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      bags: user.bags,
+      inventory: user.inventory,
     });
   }
 );
@@ -304,7 +336,21 @@ export const googleAuth = asyncHandler(
       return;
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        googleID: true,
+        profilePic: true,
+        createdAt: true,
+        updatedAt: true,
+        bags: true,
+        inventory: true,
+      },
+    });
 
     // if no user is found on db, hash a password and create a new user and login
     if (!user) {
@@ -356,6 +402,9 @@ export const googleAuth = asyncHandler(
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           profilePic: newUser.profilePic,
+          googleID: newUser.googleID,
+          createdAt: newUser.createdAt,
+          updatedAt: newUser.updatedAt,
           accessToken: accessToken,
           message: "User successfully signed up via Google.",
         });
@@ -383,11 +432,16 @@ export const googleAuth = asyncHandler(
     });
 
     res.status(200).json({
-      id: user!.id,
-      email: user!.email,
-      firstName: user!.firstName,
-      lastName: user!.lastName,
-      profilePic: user!.profilePic,
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      profilePic: user.profilePic,
+      googleID: user.googleID,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      bags: user.bags,
+      inventory: user.inventory,
       accessToken: accessToken,
       message: "User successfully logged in via Google.",
     });
