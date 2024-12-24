@@ -159,7 +159,7 @@ export function AddDiscForm() {
           name='weight'
           render={({ field: { value, onChange } }) => (
             <FormItem>
-              <FormLabel>{`Weight (g) - ${value}`}</FormLabel>
+              <FormLabel>{`Weight (${value}g)`}</FormLabel>
               <FormControl>
                 <Slider
                   min={0}
@@ -178,7 +178,7 @@ export function AddDiscForm() {
           name='speed'
           render={({ field: { value, onChange } }) => (
             <FormItem>
-              <FormLabel>{`Speed - ${value}`}</FormLabel>
+              <FormLabel>{`Speed: (${value})`}</FormLabel>
               <FormControl>
                 <Slider
                   min={1}
@@ -197,7 +197,7 @@ export function AddDiscForm() {
           name='glide'
           render={({ field: { value, onChange } }) => (
             <FormItem>
-              <FormLabel>{`Glide - ${value}`}</FormLabel>
+              <FormLabel>{`Glide: (${value})`}</FormLabel>
               <FormControl>
                 <Slider
                   min={1}
@@ -216,7 +216,7 @@ export function AddDiscForm() {
           name='turn'
           render={({ field: { value, onChange } }) => (
             <FormItem>
-              <FormLabel>{`Turn - ${value}`}</FormLabel>
+              <FormLabel>{`Turn: (${value})`}</FormLabel>
               <FormControl>
                 <Slider
                   min={-7}
@@ -235,7 +235,7 @@ export function AddDiscForm() {
           name='fade'
           render={({ field: { value, onChange } }) => (
             <FormItem>
-              <FormLabel>{`Turn - ${value}`}</FormLabel>
+              <FormLabel>{`Fade: (${value})`}</FormLabel>
               <FormControl>
                 <Slider
                   min={0}

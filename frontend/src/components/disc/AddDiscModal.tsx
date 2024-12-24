@@ -3,13 +3,10 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  // DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-// import { Input } from '@/components/ui/input';
-// import { Label } from '@/components/ui/label';
 import { CirclePlus } from 'lucide-react';
 import { AddDiscForm } from '../forms/AddDiscForm';
 
@@ -28,36 +25,10 @@ export function DialogDemo() {
         <DialogHeader>
           <DialogTitle>Add a Disc</DialogTitle>
           <DialogDescription>
-            Add a disc to your inventory or bag here. Click save when you're
-            done.
+            Add a disc to your inventory or bag here.
           </DialogDescription>
         </DialogHeader>
         <AddDiscForm />
-        {/* <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='discManufacturer' className='text-right'>
-              Manufacturer
-            </Label>
-            <Input
-              id='discManufacturer'
-              defaultValue='Innova'
-              className='col-span-3'
-            />
-          </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='discName' className='text-right'>
-              Disc Name
-            </Label>
-            <Input
-              id='discName'
-              defaultValue='Destroyer'
-              className='col-span-3'
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type='submit'>Save changes</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );
