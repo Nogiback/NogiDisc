@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { addDiscFormData } from '@/types/types';
+import { AddDiscFormData } from '@/types/types';
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 
 export default function useAddDisc() {
   const api = useAxiosInstance();
   const [isLoading, setIsLoading] = useState(false);
 
-  async function addDisc(formData: addDiscFormData) {
+  async function addDisc(formData: AddDiscFormData) {
     const isValid = handleInputErrors(formData);
     if (!isValid) return;
     setIsLoading(true);
@@ -44,7 +44,7 @@ function handleInputErrors({
   glide,
   turn,
   fade,
-}: addDiscFormData) {
+}: AddDiscFormData) {
   if (
     !manufacturer ||
     !name ||

@@ -85,7 +85,7 @@ export type SignupFormData = {
   confirmPassword: string;
 };
 
-export type addDiscFormData = {
+export type AddDiscFormData = {
   manufacturer: string;
   name: string;
   weight: number;
@@ -96,4 +96,23 @@ export type addDiscFormData = {
   turn: number;
   fade: number;
   bagID?: string;
+};
+
+// TODO: May need to remove this type if not used
+export type SearchDiscFormData = {
+  mold: string;
+};
+
+export type SearchedDisc = {
+  id: string;
+  name: string;
+  brand: string;
+  speed: string;
+  glide: string;
+  turn: string;
+  fade: string;
+};
+
+export type SearchResponse = {
+  searchedDiscs: SearchedDisc[];
 };

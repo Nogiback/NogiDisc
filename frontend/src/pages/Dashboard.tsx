@@ -1,9 +1,8 @@
-import { DarkModeToggle } from '@/components/DarkModeToggle';
-import LogoutButton from '@/components/LogoutButton';
 import { useAuth } from '@/context/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { DialogDemo } from '@/components/disc/AddDiscModal';
+import { AddDiscModal } from '@/components/disc/AddDiscModal';
 import { NavBar } from '@/components/dashboard/Navbar';
+import { SearchDiscComboBox } from '@/components/forms/SearchDiscComboBox';
 
 export default function Dashboard() {
   const { authUser } = useAuth();
@@ -22,10 +21,10 @@ export default function Dashboard() {
           />
           <AvatarFallback>{`${authUser?.firstName[0]}${authUser?.lastName[0]}`}</AvatarFallback>
         </Avatar>
-
-        <LogoutButton />
-        <DarkModeToggle />
-        <DialogDemo />
+        <div>
+          <SearchDiscComboBox />
+        </div>
+        <AddDiscModal />
       </div>
     </>
   );

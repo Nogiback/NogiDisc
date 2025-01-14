@@ -7,10 +7,10 @@ import {
 import { LoaderPinwheel } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/context/useAuth';
 import { Link } from 'react-router-dom';
+import LogoutButton from '../LogoutButton';
 
 export function NavBar() {
   const { authUser } = useAuth();
@@ -36,18 +36,22 @@ export function NavBar() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
             <DropdownMenuItem>
-              <Link to='#profile'>Profile</Link>
+              <Link to='#profile' className='text-primary'>
+                Profile
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to='#bags'>Bags</Link>
+              <Link to='#bags' className='text-primary'>
+                Bags
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to='#discs'>Discs</Link>
+              <Link to='#discs' className='text-primary'>
+                Discs
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Button variant='default' className='w-full text-sm'>
-                Logout
-              </Button>
+            <DropdownMenuItem className='flex items-center justify-center'>
+              <LogoutButton />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

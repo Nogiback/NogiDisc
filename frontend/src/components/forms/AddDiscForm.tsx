@@ -46,7 +46,6 @@ export function AddDiscForm() {
 
   async function onSubmit(values: z.infer<typeof addDiscFormSchema>) {
     await addDisc(values);
-    console.log(values);
   }
 
   return (
