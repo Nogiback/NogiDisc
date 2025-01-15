@@ -57,7 +57,3 @@ export const addDiscFormSchema = z.object({
     .max(5, { message: 'Disc fade must be less than 5' }),
   bagID: z.string().optional(),
 });
-
-export const searchDiscFormSchema = z.object({
-  mold: z.string().min(1, { message: 'Disc mold is required' }),
-});

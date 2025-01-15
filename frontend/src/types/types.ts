@@ -103,6 +103,7 @@ export type SearchDiscFormData = {
   mold: string;
 };
 
+// TODO: May need to remove this type if not used
 export type SearchedDisc = {
   id: string;
   name: string;
@@ -113,6 +114,7 @@ export type SearchedDisc = {
   fade: string;
 };
 
+// TODO: May need to remove this type if not used
 export type SearchResponse = {
   searchedDiscs: SearchedDisc[];
 };

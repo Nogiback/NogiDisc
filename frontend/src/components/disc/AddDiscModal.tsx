@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -8,9 +9,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
-import { AddDiscForm } from '../forms/AddDiscForm';
+import { SearchDiscForm } from '../forms/SearchDiscForm';
+// import { AddDiscForm } from '../forms/AddDiscForm';
 
 export function AddDiscModal() {
+  const [searchedDisc, setSearchedDisc] = useState<string | null>('');
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -28,7 +32,9 @@ export function AddDiscModal() {
             Add a disc to your inventory or bag here.
           </DialogDescription>
         </DialogHeader>
-        <AddDiscForm />
+        <SearchDiscForm setSearchedDisc={setSearchedDisc} />
+        {/* <AddDiscForm /> */}
+        {searchedDisc}
       </DialogContent>
     </Dialog>
   );

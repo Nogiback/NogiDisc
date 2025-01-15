@@ -1,122 +1,48 @@
 import { useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import { useQuery } from '@tanstack/react-query';
-import {
-  Command,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import type { SearchedDisc, SearchResponse } from '@/types/types';
-import { Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import axios from 'axios';
+import AsyncSelect from 'react-select/async';
+import makeAnimated from 'react-select/animated';
 
-interface SearchProps {
-  selectedResult?: SearchedDisc;
-  onSelectResult: (searchedDisc: SearchedDisc) => void;
+interface DiscOption {
+  name: string;
+  id: string; // Adjust based on your API's response
 }
 
-export function SearchDiscForm({
-  selectedResult,
-  onSelectResult,
-}: SearchProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+interface SearchDiscFormProps {
+  setSearchedDisc: (value: string | null) => void;
+}
 
-  const handleSelectResult = (searchedDisc: SearchedDisc) => {
-    onSelectResult(searchedDisc);
-    setSearchQuery('');
+export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const animatedComponents = makeAnimated();
+
+  // Function to fetch and transform API data into the expected format
+  const loadOptions = async (): Promise<DiscOption[]> => {
+    try {
+      const response = await fetch(
+        `https://discit-api.fly.dev/disc?name=${searchQuery}`,
+      );
+      const data = await response.json();
+
+      // Ensure data is an array of objects with a 'name' field
+      return data.map((item: DiscOption) => ({
+        name: item.name,
+        id: item.id, // Adjust based on your API's response structure
+      }));
+    } catch (error) {
+      console.error('Error fetching options:', error);
+      return [];
+    }
   };
 
   return (
-    <>
-      <Command
-        shouldFilter={false}
-        className='h-auto rounded-lg border border-b-0 shadow-md'
-      >
-        <CommandInput
-          value={searchQuery}
-          onValueChange={setSearchQuery}
-          placeholder='Search for disc'
-        />
-
-        <SearchResults
-          query={searchQuery}
-          selectedResult={selectedResult}
-          onSelectResult={handleSelectResult}
-        />
-      </Command>
-    </>
-  );
-}
-
-interface SearchResultsProps {
-  query: string;
-  selectedResult: SearchProps['selectedResult'];
-  onSelectResult: SearchProps['onSelectResult'];
-}
-
-function SearchResults({
-  query,
-  selectedResult,
-  onSelectResult,
-}: SearchResultsProps) {
-  const [debouncedSearchQuery] = useDebounce(query, 500);
-
-  const enabled = !!debouncedSearchQuery;
-
-  const {
-    data,
-    isLoading: isLoadingOrig,
-    isError,
-  } = useQuery<SearchResponse>({
-    queryKey: ['search', debouncedSearchQuery],
-    queryFn: async () => {
-      const res: SearchResponse = await axios.get(
-        `https://discit-api.fly.dev/disc?name=${debouncedSearchQuery}`,
-      );
-      return res;
-    },
-    enabled,
-  });
-
-  const isLoading = enabled && isLoadingOrig;
-
-  if (!enabled) return null;
-
-  return (
-    <CommandList>
-      {isLoading && (
-        <div role='alert' aria-busy='true' className='p-4 text-sm'>
-          Searching...
-        </div>
-      )}
-      {!isError && !isLoading && !data?.searchedDiscs.length && (
-        <div className='p-4 text-sm'>No products found</div>
-      )}
-      {isError && <div className='p-4 text-sm'>Something went wrong</div>}
-
-      {data?.searchedDiscs.map(
-        ({ id, name, brand, speed, glide, turn, fade }) => {
-          return (
-            <CommandItem
-              key={id}
-              onSelect={() =>
-                onSelectResult({ id, name, brand, speed, glide, turn, fade })
-              }
-              value={name}
-            >
-              <Check
-                className={cn(
-                  'mr-2 h-4 w-4',
-                  selectedResult?.id === id ? 'opacity-100' : 'opacity-0',
-                )}
-              />
-              {name}
-            </CommandItem>
-          );
-        },
-      )}
-    </CommandList>
+    <AsyncSelect<DiscOption>
+      cacheOptions
+      components={animatedComponents}
+      loadOptions={loadOptions}
+      getOptionLabel={(option) => option?.name}
+      getOptionValue={(option) => option?.name}
+      onInputChange={(value) => setSearchQuery(value)}
+      onChange={(option) => setSearchedDisc(option ? option.name : null)}
+    />
   );
 }
