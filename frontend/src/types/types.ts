@@ -98,12 +98,6 @@ export type AddDiscFormData = {
   bagID?: string;
 };
 
-// TODO: May need to remove this type if not used
-export type SearchDiscFormData = {
-  mold: string;
-};
-
-// TODO: May need to remove this type if not used
 export type SearchedDisc = {
   id: string;
   name: string;
@@ -112,9 +106,4 @@ export type SearchedDisc = {
   glide: string;
   turn: string;
   fade: string;
-};
-
-// TODO: May need to remove this type if not used
-export type SearchResponse = {
-  searchedDiscs: SearchedDisc[];
 };

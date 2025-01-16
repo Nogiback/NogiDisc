@@ -1,21 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import makeAnimated from 'react-select/animated';
+import { SearchedDisc } from '@/types/types';
 
 interface DiscOption {
   name: string;
-  id: string; // Adjust based on your API's response
+  id: string;
+  brand: string;
+  speed: string;
+  glide: string;
+  turn: string;
+  fade: string;
 }
 
 interface SearchDiscFormProps {
-  setSearchedDisc: (value: string | null) => void;
+  setSearchedDisc: (value: SearchedDisc | null) => void;
 }
 
 export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const animatedComponents = makeAnimated();
 
-  // Function to fetch and transform API data into the expected format
+  const selectStyles = {
+    control: (styles: any) => ({
+      ...styles,
+      color: 'black dark:white !important',
+      backgroundColor: 'white',
+    }),
+    singleValue: (styles: any) => ({ ...styles, color: 'black' }),
+    input: (styles: any) => ({ ...styles, color: 'black' }),
+    option: (styles: any) => ({
+      ...styles,
+      backgroundColor: 'white',
+      color: 'black',
+    }),
+  };
+
   const loadOptions = async (): Promise<DiscOption[]> => {
     try {
       const response = await fetch(
@@ -26,7 +47,12 @@ export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
       // Ensure data is an array of objects with a 'name' field
       return data.map((item: DiscOption) => ({
         name: item.name,
-        id: item.id, // Adjust based on your API's response structure
+        id: item.id,
+        brand: item.brand,
+        speed: item.speed,
+        glide: item.glide,
+        turn: item.turn,
+        fade: item.fade,
       }));
     } catch (error) {
       console.error('Error fetching options:', error);
@@ -39,10 +65,14 @@ export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
       cacheOptions
       components={animatedComponents}
       loadOptions={loadOptions}
-      getOptionLabel={(option) => option?.name}
-      getOptionValue={(option) => option?.name}
+      getOptionLabel={(option) =>
+        `${option?.name} (${option.speed}/${option.glide}/${option.turn}/${option.fade})`
+      }
       onInputChange={(value) => setSearchQuery(value)}
-      onChange={(option) => setSearchedDisc(option ? option.name : null)}
+      onChange={(option) => setSearchedDisc(option ? option : null)}
+      placeholder='Search for a disc...'
+      styles={selectStyles}
+      noOptionsMessage={() => 'No discs found'}
     />
   );
 }

@@ -10,10 +10,11 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { SearchDiscForm } from '../forms/SearchDiscForm';
+import { SearchedDisc } from '@/types/types';
 // import { AddDiscForm } from '../forms/AddDiscForm';
 
 export function AddDiscModal() {
-  const [searchedDisc, setSearchedDisc] = useState<string | null>('');
+  const [searchedDisc, setSearchedDisc] = useState<SearchedDisc | null>(null);
 
   return (
     <Dialog>
@@ -33,8 +34,7 @@ export function AddDiscModal() {
           </DialogDescription>
         </DialogHeader>
         <SearchDiscForm setSearchedDisc={setSearchedDisc} />
-        {/* <AddDiscForm /> */}
-        {searchedDisc}
+        {`${searchedDisc?.name} ${searchedDisc?.brand} (${searchedDisc?.speed}/${searchedDisc?.glide}/${searchedDisc?.turn}/${searchedDisc?.fade})`}
       </DialogContent>
     </Dialog>
   );
