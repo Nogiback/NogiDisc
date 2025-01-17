@@ -20,7 +20,6 @@ export default function Dashboard() {
           />
           <AvatarFallback>{`${authUser?.firstName[0]}${authUser?.lastName[0]}`}</AvatarFallback>
         </Avatar>
-
         <AddDiscModal />
       </div>
     </>

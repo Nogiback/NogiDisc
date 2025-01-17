@@ -4,14 +4,15 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { CirclePlus } from 'lucide-react';
+import { CirclePlus, CircleArrowRight } from 'lucide-react';
 import { SearchDiscForm } from '../forms/SearchDiscForm';
 import { SearchedDisc } from '@/types/types';
-// import { AddDiscForm } from '../forms/AddDiscForm';
+import { AddDiscForm } from '../forms/AddDiscForm';
 
 export function AddDiscModal() {
   const [searchedDisc, setSearchedDisc] = useState<SearchedDisc | null>(null);
@@ -34,7 +35,25 @@ export function AddDiscModal() {
           </DialogDescription>
         </DialogHeader>
         <SearchDiscForm setSearchedDisc={setSearchedDisc} />
-        {`${searchedDisc?.name} ${searchedDisc?.brand} (${searchedDisc?.speed}/${searchedDisc?.glide}/${searchedDisc?.turn}/${searchedDisc?.fade})`}
+        <DialogFooter>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button aria-label='add disc button' className='w-full'>
+                Continue
+                <CircleArrowRight size={24} />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add a Disc</DialogTitle>
+                <DialogDescription>
+                  Add a disc to your inventory or bag here.
+                </DialogDescription>
+              </DialogHeader>
+              <AddDiscForm searchedDisc={searchedDisc} />
+            </DialogContent>
+          </Dialog>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

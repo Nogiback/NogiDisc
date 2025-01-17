@@ -23,23 +23,28 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { SearchedDisc } from '@/types/types';
 
-export function AddDiscForm() {
+interface AddDiscFormProps {
+  searchedDisc: SearchedDisc | null;
+}
+
+export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
   const { addDisc, isLoading } = useAddDisc();
   const { authUser } = useAuth();
 
   const form = useForm<z.infer<typeof addDiscFormSchema>>({
     resolver: zodResolver(addDiscFormSchema),
     defaultValues: {
-      manufacturer: '',
-      name: '',
-      category: '',
+      manufacturer: searchedDisc?.brand || '',
+      name: searchedDisc?.name || '',
+      category: searchedDisc?.category || '',
       colour: '',
-      weight: 0,
-      speed: 0,
-      glide: 0,
-      turn: 0,
-      fade: 0,
+      weight: 175,
+      speed: Number(searchedDisc?.speed) || 0,
+      glide: Number(searchedDisc?.glide) || 0,
+      turn: Number(searchedDisc?.turn) || 0,
+      fade: Number(searchedDisc?.fade) || 0,
       bagID: '',
     },
   });
@@ -97,13 +102,13 @@ export function AddDiscForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value='Putt and Approach'>
-                      Putt & Approach
-                    </SelectItem>
+                    <SelectItem value='Putter'>Putter</SelectItem>
+                    <SelectItem value='Approach'>Approach</SelectItem>
                     <SelectItem value='Midrange'>Midrange</SelectItem>
-                    <SelectItem value='Fairway Driver'>
-                      Fairway Driver
+                    <SelectItem value='Control Driver'>
+                      Control Driver
                     </SelectItem>
+                    <SelectItem value='Hybrid Driver'>Hybrid Driver</SelectItem>
                     <SelectItem value='Distance Driver'>
                       Distance Driver
                     </SelectItem>

@@ -102,6 +102,7 @@ export type SearchedDisc = {
   id: string;
   name: string;
   brand: string;
+  category: string;
   speed: string;
   glide: string;
   turn: string;

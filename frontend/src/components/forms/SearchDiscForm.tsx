@@ -8,6 +8,7 @@ interface DiscOption {
   name: string;
   id: string;
   brand: string;
+  category: string;
   speed: string;
   glide: string;
   turn: string;
@@ -49,6 +50,7 @@ export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
         name: item.name,
         id: item.id,
         brand: item.brand,
+        category: item.category,
         speed: item.speed,
         glide: item.glide,
         turn: item.turn,
