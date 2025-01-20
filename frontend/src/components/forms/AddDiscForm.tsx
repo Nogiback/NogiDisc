@@ -39,6 +39,7 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
       manufacturer: searchedDisc?.brand || '',
       name: searchedDisc?.name || '',
       category: searchedDisc?.category || '',
+      plastic: '',
       colour: '',
       weight: 175,
       speed: Number(searchedDisc?.speed) || 0,
@@ -57,11 +58,12 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='flex w-full flex-col gap-6'
+        className='flex w-full flex-col gap-4'
       >
-        <div className='grid grid-flow-col grid-cols-2 grid-rows-2 gap-4'>
+        <div className='grid grid-flow-col grid-cols-2 grid-rows-3 gap-4'>
           <FormField
             control={form.control}
+            defaultValue={searchedDisc?.brand ? searchedDisc.brand : ''}
             name='manufacturer'
             render={({ field }) => (
               <FormItem>
@@ -75,6 +77,20 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
           />
           <FormField
             control={form.control}
+            name='plastic'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Plastic Type</FormLabel>
+                <FormControl>
+                  <Input placeholder='' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            defaultValue={searchedDisc?.name ? searchedDisc.name : ''}
             name='name'
             render={({ field }) => (
               <FormItem>
@@ -88,7 +104,21 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
           />
           <FormField
             control={form.control}
+            name='colour'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Colour</FormLabel>
+                <FormControl>
+                  <Input type='color' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name='category'
+            defaultValue={searchedDisc?.category ? searchedDisc.category : ''}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
@@ -120,44 +150,34 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
           />
           <FormField
             control={form.control}
-            name='colour'
+            name='bagID'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Colour</FormLabel>
-                <FormControl>
-                  <Input type='color' {...field} />
-                </FormControl>
+                <FormLabel>Bag</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Select Bag...' />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {authUser?.bags?.length
+                      ? authUser?.bags?.map((bag) => (
+                          <SelectItem key={bag.id} value={bag.id}>
+                            {bag.name}
+                          </SelectItem>
+                        ))
+                      : null}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name='bagID'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bag</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select Bag...' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {authUser?.bags?.length
-                    ? authUser?.bags?.map((bag) => (
-                        <SelectItem key={bag.id} value={bag.id}>
-                          {bag.name}
-                        </SelectItem>
-                      ))
-                    : null}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name='weight'
@@ -179,6 +199,7 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
         />
         <FormField
           control={form.control}
+          defaultValue={searchedDisc?.speed ? Number(searchedDisc.speed) : 1}
           name='speed'
           render={({ field: { value, onChange } }) => (
             <FormItem>
@@ -198,6 +219,7 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
         />
         <FormField
           control={form.control}
+          defaultValue={searchedDisc?.glide ? Number(searchedDisc.glide) : 1}
           name='glide'
           render={({ field: { value, onChange } }) => (
             <FormItem>
@@ -217,6 +239,7 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
         />
         <FormField
           control={form.control}
+          defaultValue={searchedDisc?.turn ? Number(searchedDisc.turn) : -7}
           name='turn'
           render={({ field: { value, onChange } }) => (
             <FormItem>
@@ -236,9 +259,10 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
         />
         <FormField
           control={form.control}
+          defaultValue={searchedDisc?.fade ? Number(searchedDisc.fade) : 0}
           name='fade'
           render={({ field: { value, onChange } }) => (
-            <FormItem>
+            <FormItem className='mb-6'>
               <FormLabel>{`Fade: (${value})`}</FormLabel>
               <FormControl>
                 <Slider

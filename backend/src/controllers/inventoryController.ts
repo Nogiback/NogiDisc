@@ -29,6 +29,7 @@ export const createDisc = [
   body("name", "Name cannot be empty.").trim().isLength({ min: 1 }),
   body("weight", "Weight cannot be empty.").notEmpty().isInt(),
   body("category", "Category cannot be empty.").notEmpty().isString(),
+  body("plastic", "Plastic type cannot be empty.").notEmpty().isString(),
   body("colour").isString(),
   body("speed", "Speed cannot be empty.")
     .notEmpty()
@@ -55,6 +56,7 @@ export const createDisc = [
     const name = req.body.name;
     const weight = req.body.weight;
     const category = req.body.category;
+    const plastic = req.body.plastic;
     const colour = req.body.colour;
     const speed = req.body.speed;
     const glide = req.body.glide;
@@ -68,6 +70,7 @@ export const createDisc = [
         name,
         weight,
         category,
+        plastic,
         colour,
         speed,
         glide,
@@ -91,6 +94,7 @@ export const editDisc = [
   body("name", "Name cannot be empty.").trim().isLength({ min: 1 }),
   body("weight", "Weight cannot be empty.").notEmpty().isInt(),
   body("category", "Category cannot be empty.").notEmpty().isString(),
+  body("plastic", "Plastic type cannot be empty.").notEmpty().isString(),
   body("colour").isString(),
   body("speed", "Speed cannot be empty.")
     .notEmpty()
@@ -130,6 +134,7 @@ export const editDisc = [
     const name = req.body.name;
     const weight = req.body.weight;
     const category = req.body.category;
+    const plastic = req.body.plastic;
     const colour = req.body.colour;
     const speed = req.body.speed;
     const glide = req.body.glide;
@@ -147,6 +152,7 @@ export const editDisc = [
         name,
         weight,
         category,
+        plastic,
         colour,
         speed,
         glide,

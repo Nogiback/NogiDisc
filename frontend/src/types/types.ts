@@ -49,6 +49,7 @@ export type Disc = {
   name: string;
   weight: number;
   category: string;
+  plastic: string;
   colour: string;
   speed: number;
   glide: number;
@@ -90,6 +91,7 @@ export type AddDiscFormData = {
   name: string;
   weight: number;
   category: string;
+  plastic: string;
   colour: string;
   speed: number;
   glide: number;

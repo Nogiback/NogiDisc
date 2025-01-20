@@ -39,23 +39,10 @@ function handleInputErrors({
   name,
   weight,
   category,
+  plastic,
   colour,
-  speed,
-  glide,
-  turn,
-  fade,
 }: AddDiscFormData) {
-  if (
-    !manufacturer ||
-    !name ||
-    !weight ||
-    !category ||
-    !colour ||
-    !speed ||
-    !glide ||
-    !turn ||
-    !fade
-  ) {
+  if (!manufacturer || !name || !weight || !category || !plastic || !colour) {
     toast.error('Please fill out all fields.');
     return false;
   } else {

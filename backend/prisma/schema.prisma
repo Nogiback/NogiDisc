@@ -37,6 +37,7 @@ model Disc {
   name         String
   weight       Int
   category     String
+  plastic      String
   colour       String?   @default("#FFFFFF")
   speed        Float
   glide        Float

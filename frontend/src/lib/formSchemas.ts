@@ -38,6 +38,7 @@ export const addDiscFormSchema = z.object({
   name: z.string().min(1, { message: 'Disc name is required' }),
   weight: z.number().int(),
   category: z.string().min(1, { message: 'Disc category is required' }),
+  plastic: z.string().min(1, { message: 'Disc plastic type is required' }),
   colour: z.string().min(1, { message: 'Disc colour is required' }),
   speed: z
     .number()
