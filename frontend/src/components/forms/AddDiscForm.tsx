@@ -4,7 +4,7 @@ import { z } from 'zod';
 import useAddDisc from '@/hooks/api/useAddDisc';
 import { useAuth } from '@/context/useAuth';
 import { addDiscFormSchema } from '@/lib/formSchemas';
-import { DialogFooter } from '../ui/dialog';
+import { DialogClose, DialogFooter } from '../ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -278,9 +278,11 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
           )}
         />
         <DialogFooter>
-          <Button className='w-full' type='submit' disabled={isLoading}>
-            Add Disc
-          </Button>
+          <DialogClose asChild>
+            <Button className='w-full' type='submit' disabled={isLoading}>
+              Add Disc
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </form>
     </Form>
