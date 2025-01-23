@@ -45,7 +45,7 @@ export type Disc = {
   id: string;
   user: User;
   bag?: Bag;
-  manufacturer: string;
+  brand: string;
   name: string;
   weight: number;
   category: string;
@@ -87,7 +87,7 @@ export type SignupFormData = {
 };
 
 export type AddDiscFormData = {
-  manufacturer: string;
+  brand: string;
   name: string;
   weight: number;
   category: string;
@@ -99,6 +99,21 @@ export type AddDiscFormData = {
   fade: number;
   bagID?: string;
 };
+
+export interface SearchDiscFormProps {
+  setSearchedDisc: (value: SearchedDisc | null) => void;
+}
+
+export interface DiscOption {
+  name: string;
+  id: string;
+  brand: string;
+  category: string;
+  speed: string;
+  glide: string;
+  turn: string;
+  fade: string;
+}
 
 export type SearchedDisc = {
   id: string;

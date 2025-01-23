@@ -30,23 +30,23 @@ model User {
 }
 
 model Disc {
-  id           String    @id @unique @default(cuid())
-  user         User      @relation(fields: [userID], references: [id])
-  bag          Bag?      @relation(fields: [bagID], references: [id])
-  manufacturer String
-  name         String
-  weight       Int
-  category     String
-  plastic      String
-  colour       String?   @default("#FFFFFF")
-  speed        Float
-  glide        Float
-  turn         Float
-  fade         Float
-  createdAt    DateTime? @default(now())
-  updatedAt    DateTime? @default(now()) @updatedAt
-  userID       String
-  bagID        String?
+  id        String    @id @unique @default(cuid())
+  user      User      @relation(fields: [userID], references: [id])
+  bag       Bag?      @relation(fields: [bagID], references: [id])
+  brand     String
+  name      String
+  weight    Int
+  category  String
+  plastic   String
+  colour    String?   @default("#FFFFFF")
+  speed     Float
+  glide     Float
+  turn      Float
+  fade      Float
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+  userID    String
+  bagID     String?
 }
 
 model Bag {

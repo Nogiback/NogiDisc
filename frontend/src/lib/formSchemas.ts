@@ -34,7 +34,7 @@ export const signupFormSchema = z
   });
 
 export const addDiscFormSchema = z.object({
-  manufacturer: z.string().min(1, { message: 'Disc manufacturer is required' }),
+  brand: z.string().min(1, { message: 'Disc brand is required' }),
   name: z.string().min(1, { message: 'Disc name is required' }),
   weight: z.number().int(),
   category: z.string().min(1, { message: 'Disc category is required' }),

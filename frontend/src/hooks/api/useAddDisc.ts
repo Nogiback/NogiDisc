@@ -35,14 +35,14 @@ export default function useAddDisc() {
 }
 
 function handleInputErrors({
-  manufacturer,
+  brand,
   name,
   weight,
   category,
   plastic,
   colour,
 }: AddDiscFormData) {
-  if (!manufacturer || !name || !weight || !category || !plastic || !colour) {
+  if (!brand || !name || !weight || !category || !plastic || !colour) {
     toast.error('Please fill out all fields.');
     return false;
   } else {

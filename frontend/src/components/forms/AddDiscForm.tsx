@@ -36,7 +36,7 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
   const form = useForm<z.infer<typeof addDiscFormSchema>>({
     resolver: zodResolver(addDiscFormSchema),
     defaultValues: {
-      manufacturer: searchedDisc?.brand || '',
+      brand: searchedDisc?.brand || '',
       name: searchedDisc?.name || '',
       category: searchedDisc?.category || '',
       plastic: '',
@@ -64,10 +64,10 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
           <FormField
             control={form.control}
             defaultValue={searchedDisc?.brand ? searchedDisc.brand : ''}
-            name='manufacturer'
+            name='brand'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Manufacturer</FormLabel>
+                <FormLabel>Brand</FormLabel>
                 <FormControl>
                   <Input placeholder='' {...field} />
                 </FormControl>

@@ -1,7 +1,6 @@
 import { useAuth } from '@/context/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AddDiscModal } from '@/components/disc/AddDiscModal';
-// import { NavBar } from '@/components/dashboard/Navbar';
 import { AppSidebar } from '@/components/dashboard/AppSidebar';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -14,7 +13,7 @@ export default function Dashboard() {
   const { authUser } = useAuth();
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className='flex h-screen w-screen'>
       <AppSidebar />
       <SidebarInset>
         <header className='flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'>
@@ -24,7 +23,7 @@ export default function Dashboard() {
             <h1 className='text-xl font-bold'>Dashboard</h1>
           </div>
         </header>
-        {/* <div className='flex h-screen w-screen flex-col items-center justify-center gap-4'>
+        <div className='flex h-full w-full flex-col items-center justify-center gap-4'>
           <h1>Dashboard</h1>
           <p>{`Hello, ${authUser?.firstName}!`}</p>
           <p>{authUser?.email}</p>
@@ -36,15 +35,15 @@ export default function Dashboard() {
             <AvatarFallback>{`${authUser?.firstName[0]}${authUser?.lastName[0]}`}</AvatarFallback>
           </Avatar>
           <AddDiscModal />
-        </div> */}
-        <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
+        </div>
+        {/* <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
           <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
             <div className='aspect-video rounded-xl bg-muted/50' />
             <div className='aspect-video rounded-xl bg-muted/50' />
             <div className='aspect-video rounded-xl bg-muted/50' />
           </div>
           <div className='min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min' />
-        </div>
+        </div> */}
       </SidebarInset>
     </SidebarProvider>
   );

@@ -2,22 +2,7 @@
 import { useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import makeAnimated from 'react-select/animated';
-import { SearchedDisc } from '@/types/types';
-
-interface DiscOption {
-  name: string;
-  id: string;
-  brand: string;
-  category: string;
-  speed: string;
-  glide: string;
-  turn: string;
-  fade: string;
-}
-
-interface SearchDiscFormProps {
-  setSearchedDisc: (value: SearchedDisc | null) => void;
-}
+import { DiscOption, SearchDiscFormProps } from '@/types/types';
 
 export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
   const [searchQuery, setSearchQuery] = useState('');

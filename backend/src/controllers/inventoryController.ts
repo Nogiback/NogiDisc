@@ -23,9 +23,7 @@ export const getDisc = asyncHandler(
 // CREATE NEW DISC
 
 export const createDisc = [
-  body("manufacturer", "Manufacturer cannot be empty.")
-    .trim()
-    .isLength({ min: 1 }),
+  body("brand", "Brand cannot be empty.").trim().isLength({ min: 1 }),
   body("name", "Name cannot be empty.").trim().isLength({ min: 1 }),
   body("weight", "Weight cannot be empty.").notEmpty().isInt(),
   body("category", "Category cannot be empty.").notEmpty().isString(),
@@ -52,7 +50,7 @@ export const createDisc = [
       return;
     }
 
-    const manufacturer = req.body.manufacturer;
+    const brand = req.body.brand;
     const name = req.body.name;
     const weight = req.body.weight;
     const category = req.body.category;
@@ -66,7 +64,7 @@ export const createDisc = [
 
     const newDisc = await prisma.disc.create({
       data: {
-        manufacturer,
+        brand,
         name,
         weight,
         category,
@@ -88,9 +86,7 @@ export const createDisc = [
 // UPDATE DISC BY ID
 
 export const editDisc = [
-  body("manufacturer", "Manufacturer cannot be empty.")
-    .trim()
-    .isLength({ min: 1 }),
+  body("brand", "Brand cannot be empty.").trim().isLength({ min: 1 }),
   body("name", "Name cannot be empty.").trim().isLength({ min: 1 }),
   body("weight", "Weight cannot be empty.").notEmpty().isInt(),
   body("category", "Category cannot be empty.").notEmpty().isString(),
@@ -130,7 +126,7 @@ export const editDisc = [
     }
 
     // if yes, sanitize/check form data
-    const manufacturer = req.body.manufacturer;
+    const brand = req.body.brand;
     const name = req.body.name;
     const weight = req.body.weight;
     const category = req.body.category;
@@ -148,7 +144,7 @@ export const editDisc = [
         id: discID,
       },
       data: {
-        manufacturer,
+        brand,
         name,
         weight,
         category,
