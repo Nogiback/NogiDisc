@@ -8,6 +8,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import LogoutButton from '@/components/LogoutButton';
 
 export default function Dashboard() {
   const { authUser } = useAuth();
@@ -23,6 +24,7 @@ export default function Dashboard() {
             <h1 className='text-xl font-bold'>Dashboard</h1>
           </div>
         </header>
+        <Separator orientation='horizontal' className='h-[1px] w-full' />
         <div className='flex h-full w-full flex-col items-center justify-center gap-4'>
           <h1>Dashboard</h1>
           <p>{`Hello, ${authUser?.firstName}!`}</p>
@@ -34,16 +36,9 @@ export default function Dashboard() {
             />
             <AvatarFallback>{`${authUser?.firstName[0]}${authUser?.lastName[0]}`}</AvatarFallback>
           </Avatar>
+          <LogoutButton />
           <AddDiscModal />
         </div>
-        {/* <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
-            <div className='aspect-video rounded-xl bg-muted/50' />
-            <div className='aspect-video rounded-xl bg-muted/50' />
-            <div className='aspect-video rounded-xl bg-muted/50' />
-          </div>
-          <div className='min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min' />
-        </div> */}
       </SidebarInset>
     </SidebarProvider>
   );

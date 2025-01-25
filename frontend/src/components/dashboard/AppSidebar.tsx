@@ -9,15 +9,18 @@ import {
   GalleryVerticalEnd,
   Settings2,
   SquareTerminal,
+  LoaderPinwheel,
 } from 'lucide-react';
 import { NavMain } from '@/components/dashboard/nav-main';
 import { NavUser } from '@/components/dashboard/NavUser';
-import { TeamSwitcher } from '@/components/dashboard/team-switcher';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
 } from '@/components/ui/sidebar';
 
 // This is sample data.
@@ -132,7 +135,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size='lg' asChild>
+              <div>
+                <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+                  <LoaderPinwheel className='size-4' />
+                </div>
+                <h1 className='py-4 text-center text-xl font-bold'>NogiDisc</h1>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

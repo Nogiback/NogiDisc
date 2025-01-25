@@ -5,7 +5,7 @@ export default function LogoutButton() {
   const { isLoading, logout } = useLogout();
 
   return (
-    <Button onClick={logout} disabled={isLoading} className='w-full'>
+    <Button onClick={logout} disabled={isLoading} className=''>
       Logout
     </Button>
   );
