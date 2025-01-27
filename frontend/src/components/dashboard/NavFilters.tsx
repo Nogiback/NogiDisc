@@ -1,4 +1,3 @@
-'use client';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
 import {
   Collapsible,
@@ -12,10 +11,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-export function NavMain({
+import { Checkbox } from '../ui/checkbox';
+
+export function NavFilters({
   items,
 }: {
   items: {
@@ -31,7 +31,7 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Inventory</SidebarGroupLabel>
+      <SidebarGroupLabel>Filters</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -49,14 +49,20 @@ export function NavMain({
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <SidebarMenuSub>
+                <SidebarMenuSub className='space-y-2'>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
+                      <div className='items-top flex space-x-2'>
+                        <Checkbox id={subItem.title} />
+                        <div className='leading-none'>
+                          <label
+                            htmlFor={subItem.title}
+                            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+                          >
+                            {subItem.title}
+                          </label>
+                        </div>
+                      </div>
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub>

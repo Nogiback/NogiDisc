@@ -1,17 +1,13 @@
-'use client';
-
 import * as React from 'react';
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
-  Command,
-  GalleryVerticalEnd,
   Settings2,
   SquareTerminal,
   LoaderPinwheel,
 } from 'lucide-react';
-import { NavMain } from '@/components/dashboard/nav-main';
+import { NavBags } from './NavBags';
+import { NavFilters } from '@/components/dashboard/NavFilters';
 import { NavUser } from '@/components/dashboard/NavUser';
 import {
   Sidebar,
@@ -21,109 +17,105 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from '@/components/ui/sidebar';
+import { Link } from 'react-router-dom';
 
 // This is sample data.
 const data = {
-  teams: [
+  navBags: [
     {
-      name: 'Acme Inc',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
+      title: 'Bag 1',
     },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
+    { title: 'Bag 2' },
+    { title: 'Bag 3' },
   ],
   navMain: [
     {
-      title: 'Playground',
+      title: 'Brand',
       url: '#',
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: 'History',
+          title: 'MVP',
           url: '#',
         },
         {
-          title: 'Starred',
+          title: 'Innova',
           url: '#',
         },
         {
-          title: 'Settings',
+          title: 'Discmania',
           url: '#',
         },
       ],
     },
     {
-      title: 'Models',
+      title: 'Molds',
       url: '#',
       icon: Bot,
       items: [
         {
-          title: 'Genesis',
+          title: 'Destroyer',
           url: '#',
         },
         {
-          title: 'Explorer',
+          title: 'Hex',
           url: '#',
         },
         {
-          title: 'Quantum',
+          title: 'Buzzz',
           url: '#',
         },
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Category',
       url: '#',
       icon: BookOpen,
       items: [
         {
-          title: 'Introduction',
+          title: 'Putter',
           url: '#',
         },
         {
-          title: 'Get Started',
+          title: 'Midrange',
           url: '#',
         },
         {
-          title: 'Tutorials',
+          title: 'Fairway Driver',
           url: '#',
         },
         {
-          title: 'Changelog',
+          title: 'Distance Driver',
           url: '#',
         },
       ],
     },
     {
-      title: 'Settings',
+      title: 'Speed',
       url: '#',
       icon: Settings2,
       items: [
         {
-          title: 'General',
+          title: '1',
           url: '#',
         },
         {
-          title: 'Team',
+          title: '2',
           url: '#',
         },
         {
-          title: 'Billing',
+          title: '3',
           url: '#',
         },
         {
-          title: 'Limits',
+          title: '4',
+          url: '#',
+        },
+        {
+          title: '5',
           url: '#',
         },
       ],
@@ -132,24 +124,31 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { open } = useSidebar();
+
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size='lg' asChild>
-              <div>
+              <Link to='/' className='text-primary'>
                 <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
                   <LoaderPinwheel className='size-4' />
                 </div>
-                <h1 className='py-4 text-center text-xl font-bold'>NogiDisc</h1>
-              </div>
+                {open ? (
+                  <h1 className='py-4 text-center text-xl font-bold'>
+                    NogiDisc
+                  </h1>
+                ) : null}
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavBags items={data.navBags} />
+        <NavFilters items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
