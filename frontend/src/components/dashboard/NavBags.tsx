@@ -2,10 +2,12 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { Checkbox } from '../ui/checkbox';
+import { CirclePlusIcon } from 'lucide-react';
 
 export function NavBags({
   items,
@@ -17,7 +19,7 @@ export function NavBags({
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Bags</SidebarGroupLabel>
-      <SidebarMenu>
+      <SidebarMenu className='space-y-2'>
         {items.map((item) => (
           <SidebarMenuSub className='space-y-2'>
             <SidebarMenuSubItem key={item.title}>
@@ -35,6 +37,15 @@ export function NavBags({
             </SidebarMenuSubItem>
           </SidebarMenuSub>
         ))}
+        <SidebarMenuSubItem className='space-y-2'>
+          <SidebarMenuButton
+            variant='default'
+            className='bg-primary text-secondary'
+          >
+            <CirclePlusIcon />
+            Create New Bag
+          </SidebarMenuButton>
+        </SidebarMenuSubItem>
       </SidebarMenu>
     </SidebarGroup>
   );
