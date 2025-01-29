@@ -100,6 +100,10 @@ export type AddDiscFormData = {
   bagID?: string;
 };
 
+export type AddBagFormData = {
+  name: string;
+};
+
 export interface SearchDiscFormProps {
   setSearchedDisc: (value: SearchedDisc | null) => void;
 }
