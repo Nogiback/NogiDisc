@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import useAddDisc from '@/hooks/api/useAddDisc';
-import { useAuth } from '@/context/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 import { addDiscFormSchema } from '@/lib/formSchemas';
 import { DialogClose, DialogFooter } from '../ui/dialog';
 import { Button } from '@/components/ui/button';

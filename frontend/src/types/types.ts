@@ -13,7 +13,7 @@ export type LoginContextType = {
   setIsSubmitting: (value: boolean) => void;
 };
 
-export interface User {
+export type User = {
   id: string;
   firstName: string;
   lastName: string;
@@ -24,7 +24,7 @@ export interface User {
   updatedAt?: string;
   inventory?: Disc[];
   bags?: Bag[];
-}
+};
 
 export interface AuthUser extends User {
   accessToken?: string;
@@ -104,11 +104,11 @@ export type AddBagFormData = {
   name: string;
 };
 
-export interface SearchDiscFormProps {
+export type SearchDiscFormProps = {
   setSearchedDisc: (value: SearchedDisc | null) => void;
-}
+};
 
-export interface DiscOption {
+export type DiscOption = {
   name: string;
   id: string;
   brand: string;
@@ -117,7 +117,7 @@ export interface DiscOption {
   glide: string;
   turn: string;
   fade: string;
-}
+};
 
 export type SearchedDisc = {
   id: string;

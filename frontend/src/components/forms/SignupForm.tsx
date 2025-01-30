@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { GoogleSignupButton } from '../google/GoogleSignupButton';
 import { signupFormSchema } from '@/lib/formSchemas';
 import useSignup from '@/hooks/auth/useSignup';
-import { useLoginContext } from '@/context/useLoginContext';
+import { useLoginContext } from '@/hooks/auth/useLoginContext';
 
 export function SignupForm() {
   const { signup } = useSignup();

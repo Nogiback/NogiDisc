@@ -1,4 +1,4 @@
-import { useAuth } from '@/context/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 import { useState } from 'react';
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 

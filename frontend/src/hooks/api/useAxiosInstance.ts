@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuth } from '@/context/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 
 const useAxiosInstance = () => {
   const { accessToken, setAccessToken } = useAuth();

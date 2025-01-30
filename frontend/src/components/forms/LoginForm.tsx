@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { GoogleLoginButton } from '../google/GoogleLoginButton';
 import useLogin from '@/hooks/auth/useLogin';
 import { loginFormSchema } from '@/lib/formSchemas';
-import { useLoginContext } from '@/context/useLoginContext';
+import { useLoginContext } from '@/hooks/auth/useLoginContext';
 
 export function LoginForm() {
   const { login } = useLogin();

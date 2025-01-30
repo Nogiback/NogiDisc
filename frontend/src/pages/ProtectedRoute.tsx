@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { ProtectedRouteProp } from '@/types/types';
-import { useAuth } from '@/context/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 import { Spinner } from '@/components/ui/spinner';
 
 export function ProtectedRoute({ children }: ProtectedRouteProp) {

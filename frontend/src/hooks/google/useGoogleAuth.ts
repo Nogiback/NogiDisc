@@ -1,8 +1,8 @@
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { useAuth } from '@/context/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
-import { useLoginContext } from '@/context/useLoginContext';
+import { useLoginContext } from '@/hooks/auth/useLoginContext';
 
 export default function useGoogleAuth() {
   const api = useAxiosInstance();

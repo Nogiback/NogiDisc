@@ -1,4 +1,4 @@
-import { useAuth } from '@/context/useAuth';
+import { useAuth } from '@/hooks/auth/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AddDiscModal } from '@/components/disc/AddDiscModal';
 import { AppSidebar } from '@/components/dashboard/AppSidebar';
@@ -9,6 +9,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import LogoutButton from '@/components/LogoutButton';
+import { DarkModeToggle } from '@/components/DarkModeToggle';
 
 export default function Dashboard() {
   const { authUser } = useAuth();
@@ -18,10 +19,13 @@ export default function Dashboard() {
       <AppSidebar />
       <SidebarInset>
         <header className='flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'>
-          <div className='flex items-center gap-2 px-4'>
-            <SidebarTrigger className='-ml-1' />
-            <Separator orientation='vertical' className='mr-2 h-4' />
-            <h1 className='text-xl font-bold'>Dashboard</h1>
+          <div className='flex w-full justify-between px-4'>
+            <div className='flex items-center gap-2'>
+              <SidebarTrigger className='-ml-1' />
+              <Separator orientation='vertical' className='mr-2 h-4' />
+              <h1 className='text-xl font-bold'>Dashboard</h1>
+            </div>
+            <DarkModeToggle />
           </div>
         </header>
         <Separator orientation='horizontal' className='h-[1px] w-full' />
