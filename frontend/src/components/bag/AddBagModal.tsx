@@ -17,7 +17,10 @@ export function AddBagModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <SidebarMenuButton aria-label='add bag button' className=''>
+        <SidebarMenuButton
+          aria-label='add bag button'
+          className='bg-primary text-secondary'
+        >
           <CirclePlus size={24} /> Add Bag
         </SidebarMenuButton>
       </DialogTrigger>
