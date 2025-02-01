@@ -86,6 +86,11 @@ export type SignupFormData = {
   confirmPassword: string;
 };
 
+export type AddDiscFormProps = {
+  searchedDisc: SearchedDisc | null;
+  setOpen: (open: boolean) => void;
+};
+
 export type AddDiscFormData = {
   brand: string;
   name: string;
@@ -106,6 +111,10 @@ export type AddBagFormData = {
 
 export type SearchDiscFormProps = {
   setSearchedDisc: (value: SearchedDisc | null) => void;
+};
+
+export type AddBagFormProps = {
+  setOpen: (open: boolean) => void;
 };
 
 export type DiscOption = {

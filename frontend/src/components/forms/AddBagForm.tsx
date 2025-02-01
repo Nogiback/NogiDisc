@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import useAddBag from '@/hooks/api/useAddBag';
 import { addBagFormSchema } from '@/lib/formSchemas';
-import { DialogClose, DialogFooter } from '../ui/dialog';
+import { DialogFooter } from '../ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -14,9 +14,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { AddBagFormProps } from '@/types/types';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 
-export function AddBagForm() {
-  const { addBag, isLoading } = useAddBag();
+export function AddBagForm({ setOpen }: AddBagFormProps) {
+  const { addBag } = useAddBag();
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof addBagFormSchema>>({
     resolver: zodResolver(addBagFormSchema),
@@ -25,8 +28,18 @@ export function AddBagForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addBagFormSchema>) {
-    await addBag(values);
+  // React-Query mutation hook to add bag
+  const { mutate, isPending } = useMutation({
+    mutationFn: addBag,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bags'] });
+      setOpen(false);
+    },
+  });
+
+  // Function to handle form submission
+  function onSubmit(values: z.infer<typeof addBagFormSchema>) {
+    mutate(values);
   }
 
   return (
@@ -50,11 +63,9 @@ export function AddBagForm() {
           )}
         />
         <DialogFooter>
-          <DialogClose asChild>
-            <Button className='w-full' type='submit' disabled={isLoading}>
-              Add Bag
-            </Button>
-          </DialogClose>
+          <Button className='w-full' type='submit' disabled={isPending}>
+            Add Bag
+          </Button>
         </DialogFooter>
       </form>
     </Form>

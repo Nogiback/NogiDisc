@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { AddBagFormData } from '@/types/types';
@@ -6,12 +5,10 @@ import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 
 export default function useAddBag() {
   const api = useAxiosInstance();
-  const [isLoading, setIsLoading] = useState(false);
 
   async function addBag(formData: AddBagFormData) {
     const isValid = handleInputErrors(formData);
     if (!isValid) return;
-    setIsLoading(true);
 
     try {
       const res = await api.post('/api/bag/create', formData);
@@ -26,12 +23,10 @@ export default function useAddBag() {
       if (err instanceof AxiosError) {
         toast.error(err.message);
       }
-    } finally {
-      setIsLoading(false);
     }
   }
 
-  return { addBag, isLoading };
+  return { addBag };
 }
 
 function handleInputErrors({ name }: AddBagFormData) {

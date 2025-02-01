@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { AddDiscFormData } from '@/types/types';
@@ -6,12 +5,10 @@ import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 
 export default function useAddDisc() {
   const api = useAxiosInstance();
-  const [isLoading, setIsLoading] = useState(false);
 
   async function addDisc(formData: AddDiscFormData) {
     const isValid = handleInputErrors(formData);
     if (!isValid) return;
-    setIsLoading(true);
 
     try {
       const res = await api.post('/api/inventory/create', formData);
@@ -26,12 +23,10 @@ export default function useAddDisc() {
       if (err instanceof AxiosError) {
         toast.error(err.message);
       }
-    } finally {
-      setIsLoading(false);
     }
   }
 
-  return { addDisc, isLoading };
+  return { addDisc };
 }
 
 function handleInputErrors({

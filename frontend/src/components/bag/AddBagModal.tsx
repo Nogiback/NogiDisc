@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +12,10 @@ import { AddBagForm } from '../forms/AddBagForm';
 import { SidebarMenuButton } from '../ui/sidebar';
 
 export function AddBagModal() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <SidebarMenuButton aria-label='add bag button' className=''>
           <CirclePlus size={24} /> Add Bag
@@ -25,7 +28,7 @@ export function AddBagModal() {
             Add a new bag to your inventory here.
           </DialogDescription>
         </DialogHeader>
-        <AddBagForm />
+        <AddBagForm setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );

@@ -2,9 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import useAddDisc from '@/hooks/api/useAddDisc';
-import { useAuth } from '@/hooks/auth/useAuth';
 import { addDiscFormSchema } from '@/lib/formSchemas';
-import { DialogClose, DialogFooter } from '../ui/dialog';
+import { DialogFooter } from '../ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -23,16 +22,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { SearchedDisc } from '@/types/types';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { AddDiscFormProps } from '@/types/types';
+import useGetBags from '@/hooks/api/useGetBags';
 
-interface AddDiscFormProps {
-  searchedDisc: SearchedDisc | null;
-}
+export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
+  const { addDisc } = useAddDisc();
+  const queryClient = useQueryClient();
+  const { data: bags } = useGetBags();
 
-export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
-  const { addDisc, isLoading } = useAddDisc();
-  const { authUser } = useAuth();
-
+  // Setting up initial form state values
   const form = useForm<z.infer<typeof addDiscFormSchema>>({
     resolver: zodResolver(addDiscFormSchema),
     defaultValues: {
@@ -50,8 +49,18 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof addDiscFormSchema>) {
-    await addDisc(values);
+  // React-Query mutation hook to add disc
+  const { mutate, isPending } = useMutation({
+    mutationFn: addDisc,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['discs'] });
+      setOpen(false);
+    },
+  });
+
+  // Function to handle form submission
+  function onSubmit(values: z.infer<typeof addDiscFormSchema>) {
+    mutate(values);
   }
 
   return (
@@ -164,8 +173,8 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {authUser?.bags?.length
-                      ? authUser?.bags?.map((bag) => (
+                    {bags?.length
+                      ? bags?.map((bag) => (
                           <SelectItem key={bag.id} value={bag.id}>
                             {bag.name}
                           </SelectItem>
@@ -247,7 +256,7 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
               <FormControl>
                 <Slider
                   min={-7}
-                  max={0}
+                  max={1}
                   step={0.5}
                   defaultValue={[value]}
                   onValueChange={(v) => onChange(v[0])}
@@ -278,11 +287,9 @@ export function AddDiscForm({ searchedDisc }: AddDiscFormProps) {
           )}
         />
         <DialogFooter>
-          <DialogClose asChild>
-            <Button className='w-full' type='submit' disabled={isLoading}>
-              Add Disc
-            </Button>
-          </DialogClose>
+          <Button className='w-full' type='submit' disabled={isPending}>
+            Add Disc
+          </Button>
         </DialogFooter>
       </form>
     </Form>

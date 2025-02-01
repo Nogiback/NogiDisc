@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
 import AsyncSelect from 'react-select/async';
 import makeAnimated from 'react-select/animated';
 import { DiscOption, SearchDiscFormProps } from '@/types/types';
+import axios from 'axios';
+import { useCallback } from 'react';
+import { debounce } from 'lodash';
 
 export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
-  const [searchQuery, setSearchQuery] = useState('');
   const animatedComponents = makeAnimated();
 
   const selectStyles = {
@@ -23,14 +24,14 @@ export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
     }),
   };
 
-  const loadOptions = async (): Promise<DiscOption[]> => {
+  const loadOptions = async (inputValue: string): Promise<DiscOption[]> => {
+    if (!inputValue) return [];
     try {
-      const response = await fetch(
-        `https://discit-api.fly.dev/disc?name=${searchQuery}`,
+      const response = await axios.get(
+        `https://discit-api.fly.dev/disc?name=${inputValue}`,
       );
-      const data = await response.json();
+      const data = await response.data;
 
-      // Ensure data is an array of objects with a 'name' field
       return data.map((item: DiscOption) => ({
         name: item.name,
         id: item.id,
@@ -47,15 +48,21 @@ export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
     }
   };
 
+  const debouncedLoadOptions = useCallback(
+    debounce((inputValue: string, callback) => {
+      loadOptions(inputValue).then(callback);
+    }, 300),
+    [],
+  );
+
   return (
     <AsyncSelect<DiscOption>
       cacheOptions
       components={animatedComponents}
-      loadOptions={loadOptions}
+      loadOptions={debouncedLoadOptions}
       getOptionLabel={(option) =>
         `${option?.name} (${option.speed}/${option.glide}/${option.turn}/${option.fade})`
       }
-      onInputChange={(value) => setSearchQuery(value)}
       onChange={(option) => setSearchedDisc(option ? option : null)}
       placeholder='Search for a disc...'
       styles={selectStyles}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAuth } from '@/hooks/auth/useAuth';
 
-const useAxiosInstance = () => {
+export default function useAxiosInstance() {
   const { accessToken, setAccessToken } = useAuth();
 
   const api = axios.create({
@@ -45,6 +45,4 @@ const useAxiosInstance = () => {
   );
 
   return api;
-};
-
-export default useAxiosInstance;
+}

@@ -16,6 +16,7 @@ import { AddDiscForm } from '../forms/AddDiscForm';
 
 export function AddDiscModal() {
   const [searchedDisc, setSearchedDisc] = useState<SearchedDisc | null>(null);
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog>
@@ -36,7 +37,7 @@ export function AddDiscModal() {
         </DialogHeader>
         <SearchDiscForm setSearchedDisc={setSearchedDisc} />
         <DialogFooter>
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button aria-label='add disc button' className='w-full'>
                 Continue
@@ -50,7 +51,7 @@ export function AddDiscModal() {
                   Add a disc to your inventory or bag here.
                 </DialogDescription>
               </DialogHeader>
-              <AddDiscForm searchedDisc={searchedDisc} />
+              <AddDiscForm searchedDisc={searchedDisc} setOpen={setOpen} />
             </DialogContent>
           </Dialog>
         </DialogFooter>

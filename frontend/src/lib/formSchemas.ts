@@ -42,20 +42,20 @@ export const addDiscFormSchema = z.object({
   colour: z.string().min(1, { message: 'Disc colour is required' }),
   speed: z
     .number()
-    .min(1, { message: 'Disc speed must be greater than 1' })
-    .max(14.5, { message: 'Disc speed must be less than 14.5' }),
+    .min(1, { message: 'Disc speed cannot be less than 1' })
+    .max(14.5, { message: 'Disc speed cannot be more than 14.5' }),
   glide: z
     .number()
-    .min(1, { message: 'Disc glide must be greater than 1' })
-    .max(7, { message: 'Disc glide must be less than 7' }),
+    .min(1, { message: 'Disc glide cannot be less than 1' })
+    .max(7, { message: 'Disc glide cannot be more than 7' }),
   turn: z
     .number()
-    .min(-7, { message: 'Disc turn must be greater than -7' })
-    .max(0, { message: 'Disc turn must be less than 0' }),
+    .min(-7, { message: 'Disc turn cannot be less than -7' })
+    .max(1, { message: 'Disc turn cannot be greater than 1' }),
   fade: z
     .number()
-    .min(0, { message: 'Disc fade must be greater than 0' })
-    .max(5, { message: 'Disc fade must be less than 5' }),
+    .min(0, { message: 'Disc fade cannot be less than 0' })
+    .max(5, { message: 'Disc fade cannot be greater than 5' }),
   bagID: z.string().optional(),
 });
 
