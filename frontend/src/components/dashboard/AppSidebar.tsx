@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   BookOpen,
   Bot,
@@ -23,13 +22,6 @@ import { Link } from 'react-router-dom';
 
 // This is sample data.
 const data = {
-  navBags: [
-    {
-      title: 'Bag 1',
-    },
-    { title: 'Bag 2' },
-    { title: 'Bag 3' },
-  ],
   navMain: [
     {
       title: 'Brand',

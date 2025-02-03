@@ -15,6 +15,8 @@ import {
 } from '@/components/ui/sidebar';
 import { Checkbox } from '../ui/checkbox';
 
+//TODO: FINISH TRUE DISC FILTERING LATER
+
 export function NavFilters({
   items,
 }: {

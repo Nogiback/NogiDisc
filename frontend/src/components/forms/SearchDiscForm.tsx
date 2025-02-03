@@ -48,6 +48,7 @@ export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedLoadOptions = useCallback(
     debounce((inputValue: string, callback) => {
       loadOptions(inputValue).then(callback);

@@ -1,38 +1,64 @@
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { Checkbox } from '../ui/checkbox';
 import { AddBagModal } from '../bag/AddBagModal';
 import useGetBags from '@/hooks/api/useGetBags';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '../ui/collapsible';
+import { ChevronRight, Backpack } from 'lucide-react';
 
 export function NavBags() {
   const { data: bags } = useGetBags();
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Bags</SidebarGroupLabel>
-      <SidebarMenu className='space-y-2'>
-        {bags?.map((bag) => (
-          <SidebarMenuSub key={bag.id} className='space-y-2'>
-            <SidebarMenuSubItem key={bag.id}>
-              <div className='items-top flex space-x-2'>
-                <Checkbox id={bag.name} />
-                <div className='leading-none'>
-                  <label
-                    htmlFor={bag.name}
-                    className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                  >
-                    {bag.name}
-                  </label>
-                </div>
-              </div>
-            </SidebarMenuSubItem>
-          </SidebarMenuSub>
-        ))}
-        <SidebarMenuSubItem className='space-y-2'>
+      <SidebarMenu>
+        <Collapsible asChild defaultOpen={true} className='group/collapsible'>
+          <SidebarMenuItem>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuButton tooltip='Bags'>
+                <Backpack />
+                <span>Bags</span>
+                <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+              </SidebarMenuButton>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub className='space-y-2'>
+                <RadioGroup defaultValue='All Discs'>
+                  <SidebarMenuSubItem>
+                    <div className='flex items-center space-x-2 space-y-2'>
+                      <RadioGroupItem value='All Discs' id='All Discs' />
+                      <Label htmlFor='All Discs'>All Discs</Label>
+                    </div>
+                  </SidebarMenuSubItem>
+                  {bags?.map((bag) => (
+                    <SidebarMenuSubItem key={bag.id}>
+                      <div className='flex items-center space-x-2 space-y-2'>
+                        <RadioGroupItem value={bag.id} id={bag.name} />
+                        <Label
+                          htmlFor={bag.name}
+                          className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+                        >
+                          {bag.name}
+                        </Label>
+                      </div>
+                    </SidebarMenuSubItem>
+                  ))}
+                </RadioGroup>
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </SidebarMenuItem>
+        </Collapsible>
+        <SidebarMenuSubItem className='mt-2 space-y-2'>
           <AddBagModal />
         </SidebarMenuSubItem>
       </SidebarMenu>
