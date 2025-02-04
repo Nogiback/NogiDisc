@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/sidebar';
 import LogoutButton from '@/components/LogoutButton';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
+import DiscCard from '@/components/disc/DiscCard';
 
 export default function Dashboard() {
   const { authUser } = useAuth();
@@ -40,6 +41,7 @@ export default function Dashboard() {
             />
             <AvatarFallback>{`${authUser?.firstName[0]}${authUser?.lastName[0]}`}</AvatarFallback>
           </Avatar>
+          <DiscCard />
           <LogoutButton />
           <AddDiscModal />
         </div>
