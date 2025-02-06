@@ -1,15 +1,17 @@
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { Bag } from '@/types/types';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { Disc } from '@/types/types';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-export default function useGetBags({ bagID }: { bagID: string }) {
+export default function useGetDiscs() {
   const api = useAxiosInstance();
+  const { authUser } = useAuth();
 
-  async function getBag(bagID: string): Promise<Bag | undefined> {
+  async function getDiscs(): Promise<Disc[] | undefined> {
     try {
-      const res = await api.get(`/api/bag/${bagID}`);
+      const res = await api.get(`/api/user/${authUser?.id}/inventory`);
       return res.data;
     } catch (err) {
       if (err instanceof AxiosError && err.response?.status === 401) {
@@ -23,7 +25,7 @@ export default function useGetBags({ bagID }: { bagID: string }) {
   }
 
   return useQuery({
-    queryKey: ['bag', bagID],
-    queryFn: () => getBag(bagID),
+    queryKey: ['discs'],
+    queryFn: getDiscs,
   });
 }

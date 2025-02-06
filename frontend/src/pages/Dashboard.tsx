@@ -33,7 +33,6 @@ export default function Dashboard() {
         <div className='flex h-full w-full flex-col items-center justify-center gap-4'>
           <h1>Dashboard</h1>
           <p>{`Hello, ${authUser?.firstName}!`}</p>
-          <p>{authUser?.email}</p>
           <Avatar>
             <AvatarImage
               src={authUser?.profilePic}
