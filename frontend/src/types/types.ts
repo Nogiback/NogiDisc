@@ -138,3 +138,19 @@ export type SearchedDisc = {
   turn: string;
   fade: string;
 };
+
+export type AppSidebarProps = {
+  setSelectedBag: (selectedBag: string) => void;
+};
+
+export type NavBagsProps = {
+  setSelectedBag: (selectedBag: string) => void;
+};
+
+export type DiscContainerProps = {
+  selectedBag: string;
+};
+
+export type DiscCardProps = {
+  disc: Disc;
+};

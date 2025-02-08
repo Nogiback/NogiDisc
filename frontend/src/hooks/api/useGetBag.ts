@@ -4,7 +4,7 @@ import { Bag } from '@/types/types';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-export default function useGetBags({ bagID }: { bagID: string }) {
+export default function useGetBags(bagID: string) {
   const api = useAxiosInstance();
 
   async function getBag(bagID: string): Promise<Bag | undefined> {

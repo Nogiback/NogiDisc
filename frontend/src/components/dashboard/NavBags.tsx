@@ -16,9 +16,11 @@ import {
   CollapsibleTrigger,
 } from '../ui/collapsible';
 import { ChevronRight, Backpack } from 'lucide-react';
+import { NavBagsProps } from '@/types/types';
 
-export function NavBags() {
+export function NavBags({ setSelectedBag }: NavBagsProps) {
   const { data: bags } = useGetBags();
+
   return (
     <SidebarGroup>
       <SidebarMenu>
@@ -33,10 +35,10 @@ export function NavBags() {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub className='space-y-2'>
-                <RadioGroup defaultValue='All Discs'>
+                <RadioGroup defaultValue='all' onValueChange={setSelectedBag}>
                   <SidebarMenuSubItem>
                     <div className='flex items-center space-x-2 space-y-2'>
-                      <RadioGroupItem value='All Discs' id='All Discs' />
+                      <RadioGroupItem value='all' id='All Discs' />
                       <Label htmlFor='All Discs'>All Discs</Label>
                     </div>
                   </SidebarMenuSubItem>

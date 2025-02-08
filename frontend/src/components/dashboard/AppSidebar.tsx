@@ -19,6 +19,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Link } from 'react-router-dom';
+import { AppSidebarProps } from '@/types/types';
 
 // This is sample data.
 const data = {
@@ -115,11 +116,11 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ setSelectedBag }: AppSidebarProps) {
   const { open } = useSidebar();
 
   return (
-    <Sidebar collapsible='icon' {...props}>
+    <Sidebar collapsible='icon'>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -139,7 +140,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavBags />
+        <NavBags setSelectedBag={setSelectedBag} />
         <NavFilters items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>

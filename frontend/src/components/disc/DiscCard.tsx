@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Card,
   CardContent,
@@ -8,32 +7,21 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
+import { DiscCardProps } from '@/types/types';
 
-export default function DiscCard() {
-  const dummyDisc = {
-    name: 'Disc Name',
-    brand: 'Disc Brand',
-    type: 'Disc Type',
-    colour: '#f542ef',
-    weight: 175,
-    speed: 9,
-    glide: 5,
-    turn: -1,
-    fade: 2,
-  };
-
+export default function DiscCard({ disc }: DiscCardProps) {
   return (
     <Card className='w-72'>
       <CardHeader>
-        <CardTitle className='text-lg'>{dummyDisc.name}</CardTitle>
-        <CardDescription className='text-sm'>{`${dummyDisc.weight}g`}</CardDescription>
+        <CardTitle className='text-lg'>{disc.name}</CardTitle>
+        <CardDescription className='text-sm'>{`${disc.weight}g`}</CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col items-center justify-center'>
         <div
           className='flex h-36 w-36 items-center justify-center rounded-full'
-          style={{ backgroundColor: dummyDisc.colour }}
+          style={{ backgroundColor: disc.colour }}
         >
-          {dummyDisc.brand}
+          {disc.brand}
         </div>
       </CardContent>
       <CardFooter className='flex flex-col items-center justify-center'>
