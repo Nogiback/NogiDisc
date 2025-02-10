@@ -23,7 +23,7 @@ export function AddDiscModal() {
       <DialogTrigger asChild>
         <Button
           aria-label='add disc button'
-          className='fixed bottom-8 right-8 z-[99] flex h-10 w-28 cursor-pointer items-center justify-center bg-primary opacity-50 shadow-md transition duration-300 ease-in-out hover:opacity-100'
+          className='z-[99] flex h-9 w-28 cursor-pointer items-center justify-center bg-primary'
         >
           <CirclePlus size={24} /> Add Disc
         </Button>

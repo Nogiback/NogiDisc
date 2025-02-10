@@ -5,7 +5,7 @@ import { Disc } from '@/types/types';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-export default function useGetDiscs() {
+export default function useGetDiscs({ enabled }: { enabled: boolean }) {
   const api = useAxiosInstance();
   const { authUser } = useAuth();
 
@@ -27,5 +27,6 @@ export default function useGetDiscs() {
   return useQuery({
     queryKey: ['discs'],
     queryFn: getDiscs,
+    enabled: enabled,
   });
 }

@@ -10,6 +10,9 @@ export const getBag = asyncHandler(
     const bagID = req.params.bagID;
     const bag = await prisma.bag.findUnique({
       where: { id: bagID },
+      include: {
+        discs: true,
+      },
     });
 
     if (!bag) {

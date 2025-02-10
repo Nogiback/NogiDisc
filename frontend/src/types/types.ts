@@ -147,7 +147,7 @@ export type NavBagsProps = {
   setSelectedBag: (selectedBag: string) => void;
 };
 
-export type DiscContainerProps = {
+export type DiscsContainerProps = {
   selectedBag: string;
 };
 

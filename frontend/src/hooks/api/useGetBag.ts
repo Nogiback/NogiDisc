@@ -4,12 +4,18 @@ import { Bag } from '@/types/types';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-export default function useGetBags(bagID: string) {
+export default function useGetBag({
+  selectedBag,
+  enabled,
+}: {
+  selectedBag: string;
+  enabled: boolean;
+}) {
   const api = useAxiosInstance();
 
-  async function getBag(bagID: string): Promise<Bag | undefined> {
+  async function getBag(selectedBag: string): Promise<Bag | undefined> {
     try {
-      const res = await api.get(`/api/bag/${bagID}`);
+      const res = await api.get(`/api/bag/${selectedBag}`);
       return res.data;
     } catch (err) {
       if (err instanceof AxiosError && err.response?.status === 401) {
@@ -23,7 +29,8 @@ export default function useGetBags(bagID: string) {
   }
 
   return useQuery({
-    queryKey: ['bag', bagID],
-    queryFn: () => getBag(bagID),
+    queryKey: ['bag', selectedBag],
+    queryFn: () => getBag(selectedBag),
+    enabled: enabled,
   });
 }
