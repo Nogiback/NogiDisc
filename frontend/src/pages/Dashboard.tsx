@@ -9,12 +9,12 @@ export default function Dashboard() {
   const [selectedBag, setSelectedBag] = useState<string>('all');
 
   return (
-    <SidebarProvider className='flex h-full w-screen max-w-full overflow-x-hidden'>
+    <SidebarProvider className='w-dvw overflow-y-auto overflow-x-hidden'>
       <AppSidebar setSelectedBag={setSelectedBag} />
       <SidebarInset>
         <DashboardHeader />
         <Separator orientation='horizontal' className='h-[1px] w-full' />
-        <div className='flex w-full flex-col gap-4 overflow-x-hidden'>
+        <div className='flex w-full flex-col gap-4 p-2'>
           <DiscsContainer selectedBag={selectedBag} />
         </div>
       </SidebarInset>
