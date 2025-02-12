@@ -14,7 +14,7 @@ export default function Dashboard() {
       <SidebarInset>
         <DashboardHeader />
         <Separator orientation='horizontal' className='h-[1px] w-full' />
-        <div className='flex w-full flex-col gap-4 p-2'>
+        <div className='flex w-full flex-col items-center justify-center gap-4 p-2'>
           <DiscsContainer selectedBag={selectedBag} />
         </div>
       </SidebarInset>

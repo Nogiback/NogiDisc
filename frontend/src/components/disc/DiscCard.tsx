@@ -11,7 +11,7 @@ import { DiscCardProps } from '@/types/types';
 
 export default function DiscCard({ disc }: DiscCardProps) {
   return (
-    <Card className='w-72'>
+    <Card className='w-64'>
       <CardHeader>
         <CardTitle className='text-lg'>{disc.name}</CardTitle>
         <CardDescription className='text-sm'>{`${disc.weight}g`}</CardDescription>
@@ -21,7 +21,12 @@ export default function DiscCard({ disc }: DiscCardProps) {
           className='flex h-36 w-36 items-center justify-center rounded-full'
           style={{ backgroundColor: disc.colour }}
         >
-          {disc.brand}
+          <p
+            className='bg-inherit bg-clip-text font-bold text-transparent'
+            style={{ filter: 'invert(1) grayscale(1) contrast(100)' }}
+          >
+            {disc.brand}
+          </p>
         </div>
       </CardContent>
       <CardFooter className='flex flex-col items-center justify-center'>

@@ -13,7 +13,7 @@ export default function DiscsContainer({ selectedBag }: DiscsContainerProps) {
   const discs = selectedBag === 'all' ? allDiscs : bag?.discs;
 
   return (
-    <div className='flex w-full flex-wrap gap-2'>
+    <div className='flex w-full flex-wrap items-center justify-center gap-2'>
       {discs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
     </div>
   );
