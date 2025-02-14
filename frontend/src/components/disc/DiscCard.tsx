@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
 import { DiscCardProps } from '@/types/types';
-import { Pencil, Trash } from 'lucide-react';
+import { Pencil } from 'lucide-react';
+import { DeleteDiscModal } from './deleteDiscModal';
 
 export default function DiscCard({ disc }: DiscCardProps) {
   return (
@@ -21,13 +22,7 @@ export default function DiscCard({ disc }: DiscCardProps) {
         >
           <Pencil />
         </Button>
-        <Button
-          size='sm'
-          className='h-6 w-6 rounded-l-none rounded-br-none'
-          variant='outline'
-        >
-          <Trash className='text-destructive' />
-        </Button>
+        <DeleteDiscModal discID={disc.id} />
       </div>
       <CardHeader>
         <div className='flex justify-between'>
@@ -43,7 +38,7 @@ export default function DiscCard({ disc }: DiscCardProps) {
           style={{ backgroundColor: disc.colour }}
         >
           <p
-            className='bg-inherit bg-clip-text font-bold text-transparent'
+            className='bg-inherit bg-clip-text text-center font-bold text-transparent'
             style={{ filter: 'invert(1) grayscale(1) contrast(100)' }}
           >
             {disc.brand}
