@@ -6,7 +6,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { AddBagModal } from '../bag/AddBagModal';
+import { AddBagModal } from '../modals/AddBagModal';
 import useGetBags from '@/hooks/api/useGetBags';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';

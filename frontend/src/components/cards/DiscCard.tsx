@@ -9,9 +9,12 @@ import {
 import { Button } from '../ui/button';
 import { DiscCardProps } from '@/types/types';
 import { Pencil } from 'lucide-react';
-import { DeleteDiscModal } from './deleteDiscModal';
+import { DeleteDiscModal } from '../modals/DeleteDiscModal';
+import { getBrandLogo } from '@/lib/getBrandLogo';
 
 export default function DiscCard({ disc }: DiscCardProps) {
+  const brandLogo = getBrandLogo(disc.brand);
+
   return (
     <Card className='relative w-60'>
       <div className='absolute right-0 top-0 flex gap-0 p-0'>
@@ -37,12 +40,15 @@ export default function DiscCard({ disc }: DiscCardProps) {
           className='flex h-32 w-32 items-center justify-center rounded-full'
           style={{ backgroundColor: disc.colour }}
         >
-          <p
-            className='bg-inherit bg-clip-text text-center font-bold text-transparent'
-            style={{ filter: 'invert(1) grayscale(1) contrast(100)' }}
-          >
-            {disc.brand}
-          </p>
+          {brandLogo && <img className='w-16 opacity-50' src={brandLogo}></img>}
+          {!brandLogo && (
+            <p
+              className='bg-inherit bg-clip-text text-center font-bold text-transparent'
+              style={{ filter: 'invert(1) grayscale(1) contrast(100)' }}
+            >
+              {disc.brand}
+            </p>
+          )}
         </div>
       </CardContent>
       <CardFooter className='flex flex-col items-center justify-center'>

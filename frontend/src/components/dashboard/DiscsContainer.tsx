@@ -1,4 +1,4 @@
-import DiscCard from '@/components/disc/DiscCard';
+import DiscCard from '@/components/cards/DiscCard';
 import useGetBag from '@/hooks/api/useGetBag';
 import useGetDiscs from '@/hooks/api/useGetDiscs';
 import { DiscsContainerProps } from '@/types/types';

@@ -1,7 +1,7 @@
 import { SidebarTrigger } from '../ui/sidebar';
 import { Separator } from '../ui/separator';
 import { DarkModeToggle } from '../DarkModeToggle';
-import { AddDiscModal } from '../disc/AddDiscModal';
+import { AddDiscModal } from '../modals/AddDiscModal';
 
 export default function DashboardHeader() {
   return (
