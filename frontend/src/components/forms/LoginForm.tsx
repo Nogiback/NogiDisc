@@ -73,7 +73,12 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit' disabled={isSubmitting}>
+        <Button
+          aria-label='login button'
+          className='w-full'
+          type='submit'
+          disabled={isSubmitting}
+        >
           Login
         </Button>
       </form>

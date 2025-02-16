@@ -287,7 +287,12 @@ export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
           )}
         />
         <DialogFooter>
-          <Button className='w-full' type='submit' disabled={isPending}>
+          <Button
+            aria-label='confirm add disc button'
+            className='w-full'
+            type='submit'
+            disabled={isPending}
+          >
             Add Disc
           </Button>
         </DialogFooter>

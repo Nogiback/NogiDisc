@@ -63,7 +63,12 @@ export function AddBagForm({ setOpen }: AddBagFormProps) {
           )}
         />
         <DialogFooter>
-          <Button className='w-full' type='submit' disabled={isPending}>
+          <Button
+            aria-label='confirm add bag button'
+            className='w-full'
+            type='submit'
+            disabled={isPending}
+          >
             Add Bag
           </Button>
         </DialogFooter>

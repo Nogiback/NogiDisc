@@ -40,7 +40,7 @@ export function AddDiscModal() {
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button
-                aria-label='add disc button'
+                aria-label='continue to disc details button'
                 className='flex w-full gap-1'
               >
                 Continue

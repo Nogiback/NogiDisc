@@ -4,12 +4,20 @@ import { useState, useContext } from 'react';
 import { LoaderPinwheel } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function Homepage() {
   const [formToggle, setFormToggle] = useState(true);
-  const { authUser } = useContext(AuthContext);
+  const { authUser, isLoading } = useContext(AuthContext);
 
   if (authUser) return <Navigate to='/dashboard' />;
+
+  if (isLoading)
+    return (
+      <div className='flex h-screen w-screen items-center justify-center'>
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className='flex h-screen w-screen items-center justify-center'>

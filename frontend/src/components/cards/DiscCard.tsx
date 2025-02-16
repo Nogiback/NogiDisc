@@ -19,6 +19,7 @@ export default function DiscCard({ disc }: DiscCardProps) {
     <Card className='relative w-60'>
       <div className='absolute right-0 top-0 flex gap-0 p-0'>
         <Button
+          aria-label='edit disc button'
           size='sm'
           className='h-6 w-6 rounded-r-none rounded-tl-none'
           variant='outline'
@@ -40,10 +41,17 @@ export default function DiscCard({ disc }: DiscCardProps) {
           className='flex h-32 w-32 items-center justify-center rounded-full'
           style={{ backgroundColor: disc.colour }}
         >
-          {brandLogo && <img className='w-16 opacity-50' src={brandLogo}></img>}
+          {brandLogo && (
+            <img
+              alt={`${brandLogo} brand logo`}
+              className='w-16 opacity-50'
+              src={brandLogo}
+            ></img>
+          )}
           {!brandLogo && (
             <p
-              className='bg-inherit bg-clip-text text-center font-bold text-transparent'
+              aria-label={`${disc.brand} brand logo`}
+              className='bg-inherit bg-clip-text text-center font-bold text-transparent opacity-50'
               style={{ filter: 'invert(1) grayscale(1) contrast(100)' }}
             >
               {disc.brand}

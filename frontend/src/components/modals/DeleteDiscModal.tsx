@@ -30,6 +30,7 @@ export function DeleteDiscModal({ discID }: { discID: string }) {
     <Dialog>
       <DialogTrigger asChild>
         <Button
+          aria-label='delete disc button'
           size='sm'
           className='h-6 w-6 rounded-l-none rounded-br-none'
           variant='outline'

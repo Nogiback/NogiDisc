@@ -122,7 +122,12 @@ export function SignupForm() {
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit' disabled={isSubmitting}>
+        <Button
+          aria-label='signup button'
+          className='w-full'
+          type='submit'
+          disabled={isSubmitting}
+        >
           Signup
         </Button>
       </form>
