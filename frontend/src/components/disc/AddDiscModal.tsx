@@ -23,7 +23,7 @@ export function AddDiscModal() {
       <DialogTrigger asChild>
         <Button
           aria-label='add disc button'
-          className='z-[99] flex h-9 w-28 cursor-pointer items-center justify-center bg-primary'
+          className='flex h-9 w-28 cursor-pointer items-center justify-center bg-primary'
         >
           <CirclePlus size={24} /> Add Disc
         </Button>
@@ -32,14 +32,17 @@ export function AddDiscModal() {
         <DialogHeader>
           <DialogTitle>Add a Disc</DialogTitle>
           <DialogDescription>
-            Add a disc to your inventory or bag here.
+            Search for a disc or continue with a custom one.
           </DialogDescription>
         </DialogHeader>
         <SearchDiscForm setSearchedDisc={setSearchedDisc} />
         <DialogFooter>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button aria-label='add disc button' className='w-full'>
+              <Button
+                aria-label='add disc button'
+                className='flex w-full gap-1'
+              >
                 Continue
                 <CircleArrowRight size={24} />
               </Button>
