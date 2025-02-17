@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AsyncSelect from 'react-select/async';
+// import AsyncSelect from 'react-select/async';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 import makeAnimated from 'react-select/animated';
 import { DiscOption, SearchDiscFormProps } from '@/types/types';
 import axios from 'axios';
@@ -57,14 +58,16 @@ export function SearchDiscForm({ setSearchedDisc }: SearchDiscFormProps) {
   );
 
   return (
-    <AsyncSelect<DiscOption>
-      cacheOptions
+    <AsyncCreatableSelect<DiscOption>
+      escapeClearsValue
       components={animatedComponents}
       loadOptions={debouncedLoadOptions}
-      getOptionLabel={(option) =>
-        `${option?.name} (${option.speed}/${option.glide}/${option.turn}/${option.fade})`
-      }
-      onChange={(option) => setSearchedDisc(option ? option : null)}
+      getOptionLabel={(option) => {
+        return option.name === undefined
+          ? `Create Custom Disc`
+          : `${option?.name} (${option.speed}/${option.glide}/${option.turn}/${option.fade})`;
+      }}
+      onChange={(option?) => setSearchedDisc(option ? option : null)}
       placeholder='Search for a disc...'
       styles={selectStyles}
       noOptionsMessage={() => 'No discs found'}
