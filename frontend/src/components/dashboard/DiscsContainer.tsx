@@ -12,6 +12,16 @@ export default function DiscsContainer({ selectedBag }: DiscsContainerProps) {
 
   const discs = selectedBag === 'all' ? allDiscs : bag?.discs;
 
+  // Sorting disc based on speed and then by name
+  const sortedDiscs = discs?.sort((disc1, disc2) => {
+    // Primary sorting by value
+    if (disc1.speed !== disc2.speed) {
+      return disc2.speed - disc1.speed;
+    }
+    // Secondary sorting by name (alphabetical order)
+    return disc1.name.localeCompare(disc2.name);
+  });
+
   if (!discs || discs.length === 0) {
     return (
       <div className='mt-80 flex h-full w-full items-center justify-center'>
@@ -22,7 +32,7 @@ export default function DiscsContainer({ selectedBag }: DiscsContainerProps) {
 
   return (
     <div className='flex w-full flex-wrap items-center justify-center gap-2'>
-      {discs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
+      {sortedDiscs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
     </div>
   );
 }

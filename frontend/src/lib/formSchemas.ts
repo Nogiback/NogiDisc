@@ -62,3 +62,30 @@ export const addDiscFormSchema = z.object({
 export const addBagFormSchema = z.object({
   name: z.string().min(1, { message: 'Bag name is required' }),
 });
+
+export const editDiscFormSchema = z.object({
+  id: z.string(),
+  brand: z.string().min(1, { message: 'Disc brand is required' }),
+  name: z.string().min(1, { message: 'Disc name is required' }),
+  weight: z.number().int(),
+  category: z.string().min(1, { message: 'Disc category is required' }),
+  plastic: z.string().min(1, { message: 'Disc plastic type is required' }),
+  colour: z.string().min(1, { message: 'Disc colour is required' }),
+  speed: z
+    .number()
+    .min(1, { message: 'Disc speed cannot be less than 1' })
+    .max(14.5, { message: 'Disc speed cannot be more than 14.5' }),
+  glide: z
+    .number()
+    .min(1, { message: 'Disc glide cannot be less than 1' })
+    .max(7, { message: 'Disc glide cannot be more than 7' }),
+  turn: z
+    .number()
+    .min(-7, { message: 'Disc turn cannot be less than -7' })
+    .max(1, { message: 'Disc turn cannot be greater than 1' }),
+  fade: z
+    .number()
+    .min(0, { message: 'Disc fade cannot be less than 0' })
+    .max(5, { message: 'Disc fade cannot be greater than 5' }),
+  bagID: z.string().optional(),
+});

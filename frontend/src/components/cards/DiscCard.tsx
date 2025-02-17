@@ -6,10 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '../ui/button';
 import { DiscCardProps } from '@/types/types';
-import { Pencil } from 'lucide-react';
-import { DeleteDiscModal } from '../modals/DeleteDiscModal';
+import { DeleteDiscModal } from '@/components/modals/DeleteDiscModal';
+import { EditDiscModal } from '@/components/modals/EditDiscModal';
 import { getBrandLogo } from '@/lib/getBrandLogo';
 
 export default function DiscCard({ disc }: DiscCardProps) {
@@ -18,14 +17,7 @@ export default function DiscCard({ disc }: DiscCardProps) {
   return (
     <Card className='relative w-60'>
       <div className='absolute right-0 top-0 flex gap-0 p-0'>
-        <Button
-          aria-label='edit disc button'
-          size='sm'
-          className='h-6 w-6 rounded-r-none rounded-tl-none'
-          variant='outline'
-        >
-          <Pencil />
-        </Button>
+        <EditDiscModal disc={disc} />
         <DeleteDiscModal discID={disc.id} />
       </div>
       <CardHeader>

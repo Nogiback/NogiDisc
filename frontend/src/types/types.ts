@@ -91,7 +91,27 @@ export type AddDiscFormProps = {
   setOpen: (open: boolean) => void;
 };
 
+export type EditDiscFormProps = {
+  disc: Disc;
+  setOpen: (open: boolean) => void;
+};
+
 export type AddDiscFormData = {
+  brand: string;
+  name: string;
+  weight: number;
+  category: string;
+  plastic: string;
+  colour: string;
+  speed: number;
+  glide: number;
+  turn: number;
+  fade: number;
+  bagID?: string;
+};
+
+export type EditDiscFormData = {
+  id: string;
   brand: string;
   name: string;
   weight: number;
