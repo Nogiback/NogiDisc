@@ -160,6 +160,7 @@ export type SearchedDisc = {
 };
 
 export type AppSidebarProps = {
+  selectedBag: string;
   setSelectedBag: (selectedBag: string) => void;
 };
 
@@ -173,4 +174,14 @@ export type DiscsContainerProps = {
 
 export type DiscCardProps = {
   disc: Disc;
+};
+
+export type DiscFilters = {
+  brand: string;
+  name: string;
+  category: string;
+  speed: number;
+  glide: number;
+  turn: number;
+  fade: number;
 };

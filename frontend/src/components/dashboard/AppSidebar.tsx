@@ -1,10 +1,4 @@
-import {
-  BookOpen,
-  Bot,
-  Settings2,
-  SquareTerminal,
-  LoaderPinwheel,
-} from 'lucide-react';
+import { LoaderPinwheel } from 'lucide-react';
 import { NavBags } from './NavBags';
 import { NavFilters } from '@/components/dashboard/NavFilters';
 import { NavUser } from '@/components/dashboard/NavUser';
@@ -21,102 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 import { AppSidebarProps } from '@/types/types';
 
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: 'Brand',
-      url: '#',
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: 'MVP',
-          url: '#',
-        },
-        {
-          title: 'Innova',
-          url: '#',
-        },
-        {
-          title: 'Discmania',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Molds',
-      url: '#',
-      icon: Bot,
-      items: [
-        {
-          title: 'Destroyer',
-          url: '#',
-        },
-        {
-          title: 'Hex',
-          url: '#',
-        },
-        {
-          title: 'Buzzz',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Category',
-      url: '#',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Putter',
-          url: '#',
-        },
-        {
-          title: 'Midrange',
-          url: '#',
-        },
-        {
-          title: 'Fairway Driver',
-          url: '#',
-        },
-        {
-          title: 'Distance Driver',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Speed',
-      url: '#',
-      icon: Settings2,
-      items: [
-        {
-          title: '1',
-          url: '#',
-        },
-        {
-          title: '2',
-          url: '#',
-        },
-        {
-          title: '3',
-          url: '#',
-        },
-        {
-          title: '4',
-          url: '#',
-        },
-        {
-          title: '5',
-          url: '#',
-        },
-      ],
-    },
-  ],
-};
-
-export function AppSidebar({ setSelectedBag }: AppSidebarProps) {
+export function AppSidebar({ selectedBag, setSelectedBag }: AppSidebarProps) {
   const { open } = useSidebar();
 
   return (
@@ -141,7 +40,7 @@ export function AppSidebar({ setSelectedBag }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <NavBags setSelectedBag={setSelectedBag} />
-        <NavFilters items={data.navMain} />
+        <NavFilters selectedBag={selectedBag} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

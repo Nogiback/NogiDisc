@@ -10,7 +10,7 @@ export default function Dashboard() {
 
   return (
     <SidebarProvider className='w-dvw'>
-      <AppSidebar setSelectedBag={setSelectedBag} />
+      <AppSidebar selectedBag={selectedBag} setSelectedBag={setSelectedBag} />
       <SidebarInset>
         <div className='sticky top-0 z-50 bg-inherit'>
           <DashboardHeader />
