@@ -86,6 +86,12 @@ export type SignupFormData = {
   confirmPassword: string;
 };
 
+export type ProfileFormData = {
+  email: string;
+  firstName: string;
+  lastName: string;
+};
+
 export type AddDiscFormProps = {
   searchedDisc: SearchedDisc | null;
   setOpen: (open: boolean) => void;

@@ -1,14 +1,12 @@
 import {
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog';
-import { Button } from '../ui/button';
-
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { ProfileForm } from '../forms/ProfileForm';
 
 export default function ProfileModal() {
   const { authUser: user } = useAuth();
@@ -30,15 +28,8 @@ export default function ProfileModal() {
           />
           <AvatarFallback className='rounded-lg'>{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
         </Avatar>
-        <div className='flex gap-1 text-lg font-bold'>
-          <span>{user?.firstName}</span>
-          <span>{user?.lastName}</span>
-        </div>
-        <p>{user?.email}</p>
+        <ProfileForm />
       </div>
-      <DialogFooter>
-        <Button type='submit'>Close</Button>
-      </DialogFooter>
     </DialogContent>
   );
 }

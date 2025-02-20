@@ -89,3 +89,12 @@ export const editDiscFormSchema = z.object({
     .max(5, { message: 'Disc fade cannot be greater than 5' }),
   bagID: z.string().optional(),
 });
+
+export const profileFormSchema = z.object({
+  firstName: z.string().min(1, { message: 'First name is required' }),
+  lastName: z.string().min(1, { message: 'Last name is required' }),
+  email: z
+    .string()
+    .min(1, { message: 'Email is required' })
+    .email('Invalid email address'),
+});
