@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/auth/useAuth';
 import useLogout from '@/hooks/auth/useLogout';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import ProfileModal from '../modals/ProfileModal';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -25,41 +27,18 @@ export function NavUser() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
-            >
-              <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarImage
-                  src={user?.profilePic}
-                  alt={`${user?.firstName} ${user?.lastName}`}
-                  referrerPolicy='no-referrer'
-                />
-                <AvatarFallback className='rounded-lg'>{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
-              </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>
-                  {user?.firstName}
-                </span>
-                <span className='truncate text-xs'>{user?.email}</span>
-              </div>
-              <ChevronsUpDown className='ml-auto size-4' />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
-            side={isMobile ? 'bottom' : 'right'}
-            align='end'
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className='p-0 font-normal'>
-              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+                size='lg'
+                className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+              >
                 <Avatar className='h-8 w-8 rounded-lg'>
                   <AvatarImage
                     src={user?.profilePic}
                     alt={`${user?.firstName} ${user?.lastName}`}
+                    referrerPolicy='no-referrer'
                   />
                   <AvatarFallback className='rounded-lg'>{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
                 </Avatar>
@@ -69,20 +48,48 @@ export function NavUser() {
                   </span>
                   <span className='truncate text-xs'>{user?.email}</span>
                 </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <CircleUser />
-              Account
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem disabled={isLoading} onClick={logout}>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+                <ChevronsUpDown className='ml-auto size-4' />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+              side={isMobile ? 'bottom' : 'right'}
+              align='end'
+              sideOffset={4}
+            >
+              <DropdownMenuLabel className='p-0 font-normal'>
+                <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                  <Avatar className='h-8 w-8 rounded-lg'>
+                    <AvatarImage
+                      src={user?.profilePic}
+                      alt={`${user?.firstName} ${user?.lastName}`}
+                    />
+                    <AvatarFallback className='rounded-lg'>{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
+                  </Avatar>
+                  <div className='grid flex-1 text-left text-sm leading-tight'>
+                    <span className='truncate font-semibold'>
+                      {user?.firstName}
+                    </span>
+                    <span className='truncate text-xs'>{user?.email}</span>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DialogTrigger asChild>
+                <DropdownMenuItem>
+                  <CircleUser />
+                  Account
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem disabled={isLoading} onClick={logout}>
+                <LogOut />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <ProfileModal />
+        </Dialog>
       </SidebarMenuItem>
     </SidebarMenu>
   );
