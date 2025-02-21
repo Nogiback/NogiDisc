@@ -8,6 +8,8 @@ import {
   generateRefreshToken,
 } from "../utils/generateTokens.js";
 
+// GET USER
+
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const currentUserID = req.userID;
@@ -22,6 +24,8 @@ export const getUser = asyncHandler(
     res.status(200).json(currentUser);
   }
 );
+
+// GET ALL USER'S DISCS
 
 export const getUserInventory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -49,6 +53,8 @@ export const getUserInventory = asyncHandler(
   }
 );
 
+// GET ALL USER'S BAGS
+
 export const getAllUserBags = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
@@ -74,6 +80,8 @@ export const getAllUserBags = asyncHandler(
     res.status(200).json(bags);
   }
 );
+
+// EDIT USER PROFILE
 
 export const updateUser = [
   body("email", "Email must not be empty.")
@@ -133,6 +141,8 @@ export const updateUser = [
     res.status(200).json(updatedUser);
   }),
 ];
+
+// UPDATE USER'S PASSWORD
 
 export const updatePassword = [
   body("currentPassword", "Current password must not be empty.")
