@@ -1,4 +1,4 @@
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts';
+import { Cell, Pie, PieChart } from 'recharts';
 import {
   Card,
   CardContent,
@@ -39,22 +39,43 @@ export function BrandsChart({ discs }: BrandChartProps) {
   const chartData = Object.keys(brandCount).map((brand) => ({
     brand,
     discs: brandCount[brand],
+    fill: generateColor(brand),
   }));
+
+  function generateColor(brand: string) {
+    let hash = 0;
+    for (let i = 0; i < brand.length; i++) {
+      hash = brand.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = `hsl(${hash % 360}, 70%, 50%)`;
+    return color;
+  }
 
   return (
     <Card>
       <CardHeader className='items-center pb-4'>
         <CardTitle>Brands</CardTitle>
-        <CardDescription>
+        <CardDescription className='hidden'>
           Showing the total number of discs for each brand in your bag
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className='mx-auto aspect-square max-h-[250px]'
+          className='mx-auto aspect-square max-h-[250px] min-w-[250px]'
         >
-          <RadarChart data={chartData}>
+          <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Pie data={chartData} dataKey='discs' nameKey='brand' label>
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.fill} />
+              ))}
+            </Pie>
+          </PieChart>
+          {/* <RadarChart data={chartData}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <PolarAngleAxis dataKey='brand' />
             <PolarGrid />
@@ -63,7 +84,7 @@ export function BrandsChart({ discs }: BrandChartProps) {
               fill='var(--color-discs)'
               fillOpacity={0.6}
             />
-          </RadarChart>
+          </RadarChart> */}
         </ChartContainer>
       </CardContent>
     </Card>

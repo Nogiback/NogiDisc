@@ -57,14 +57,14 @@ export function CategoryChart({ discs }: CategoryChartProps) {
     <Card>
       <CardHeader className='items-center pb-4'>
         <CardTitle>Categories</CardTitle>
-        <CardDescription>
+        <CardDescription className='hidden'>
           Showing the total number of discs for each category in your bag
         </CardDescription>
       </CardHeader>
       <CardContent className=''>
         <ChartContainer
           config={chartConfig}
-          className='mx-auto aspect-square max-h-[250px]'
+          className='mx-auto aspect-square max-h-[250px] min-w-[360px]'
         >
           <RadarChart data={chartData}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
