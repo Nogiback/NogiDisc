@@ -175,11 +175,24 @@ export type NavBagsProps = {
 };
 
 export type DiscsContainerProps = {
+  toggleView: string;
   selectedBag: string;
 };
 
 export type DiscCardProps = {
   disc: Disc;
+};
+
+export type DiscCardListProps = {
+  disc: Disc;
+};
+
+export type DashboardHeaderProps = {
+  setToggleView: (toggleView: string) => void;
+};
+
+export type ToggleViewButtonProps = {
+  setToggleView: (toggleView: string) => void;
 };
 
 export type DiscFilters = {

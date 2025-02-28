@@ -2,10 +2,14 @@ import DiscCard from '@/components/cards/DiscCard';
 import useGetBag from '@/hooks/api/useGetBag';
 import useGetDiscs from '@/hooks/api/useGetDiscs';
 import { DiscsContainerProps } from '@/types/types';
+import DiscCardList from '../cards/DiscCardList';
 // import { CategoryChart } from '../charts/CategoryChart';
 // import { BrandsChart } from '../charts/BrandsChart';
 
-export default function DiscsContainer({ selectedBag }: DiscsContainerProps) {
+export default function DiscsContainer({
+  toggleView,
+  selectedBag,
+}: DiscsContainerProps) {
   const { data: bag } = useGetBag({
     selectedBag,
     enabled: selectedBag !== 'all',
@@ -37,9 +41,18 @@ export default function DiscsContainer({ selectedBag }: DiscsContainerProps) {
       {/* TODO: Need to decide later if charts should be added to final version*/}
       {/* <CategoryChart discs={discs} />
       <BrandsChart discs={discs} /> */}
-      <div className='flex w-full flex-wrap items-center justify-center gap-2'>
-        {sortedDiscs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
-      </div>
+      {toggleView === 'grid' && (
+        <div className='flex w-full flex-wrap items-center justify-center gap-2'>
+          {sortedDiscs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
+        </div>
+      )}
+      {toggleView === 'list' && (
+        <div className='flex w-full flex-col flex-wrap items-center justify-center gap-2'>
+          {sortedDiscs?.map((disc) => (
+            <DiscCardList disc={disc} key={disc.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
