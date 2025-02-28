@@ -2,8 +2,8 @@ import DiscCard from '@/components/cards/DiscCard';
 import useGetBag from '@/hooks/api/useGetBag';
 import useGetDiscs from '@/hooks/api/useGetDiscs';
 import { DiscsContainerProps } from '@/types/types';
-import { CategoryChart } from '../charts/CategoryChart';
-import { BrandsChart } from '../charts/BrandsChart';
+// import { CategoryChart } from '../charts/CategoryChart';
+// import { BrandsChart } from '../charts/BrandsChart';
 
 export default function DiscsContainer({ selectedBag }: DiscsContainerProps) {
   const { data: bag } = useGetBag({
@@ -34,8 +34,9 @@ export default function DiscsContainer({ selectedBag }: DiscsContainerProps) {
 
   return (
     <div className='flex w-full flex-wrap items-center justify-center gap-2'>
-      <CategoryChart discs={discs} />
-      <BrandsChart discs={discs} />
+      {/* TODO: Need to decide later if charts should be added to final version*/}
+      {/* <CategoryChart discs={discs} />
+      <BrandsChart discs={discs} /> */}
       <div className='flex w-full flex-wrap items-center justify-center gap-2'>
         {sortedDiscs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
       </div>

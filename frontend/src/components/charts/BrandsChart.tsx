@@ -62,7 +62,7 @@ export function BrandsChart({ discs }: BrandChartProps) {
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className='mx-auto aspect-square max-h-[250px] min-w-[250px]'
+          className='mx-auto aspect-square max-h-[250px] min-w-[360px]'
         >
           <PieChart>
             <ChartTooltip
