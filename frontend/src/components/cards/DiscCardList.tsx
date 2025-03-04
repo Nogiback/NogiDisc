@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { DiscCardListProps } from '@/types/types';
 import { DeleteDiscModal } from '@/components/modals/DeleteDiscModal';
 import { EditDiscModal } from '@/components/modals/EditDiscModal';
@@ -18,20 +11,12 @@ export default function DiscCardList({ disc }: DiscCardListProps) {
   return (
     <GlowCapture className='w-full pr-4'>
       <Glow color='white'>
-        <Card className='glow:bg-primary-foreground glow:border-black dark:glow:border-white relative'>
-          <div className='absolute right-0 top-0 flex gap-0 p-0'>
+        <Card className='glow:bg-primary-foreground glow:border-black dark:glow:border-white relative flex items-center'>
+          <div className='absolute right-0 top-0 flex'>
             <EditDiscModal disc={disc} />
             <DeleteDiscModal discID={disc.id} />
           </div>
-          <CardHeader>
-            <div className='flex justify-between'>
-              <div className=''>
-                <CardTitle className='text-lg'>{disc.name}</CardTitle>
-                <CardDescription className='text-xs'>{`${disc.plastic}, ${disc.weight}g`}</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className='flex flex-col items-center justify-center'>
+          <CardContent className='flex w-full items-center justify-start gap-6 p-4'>
             <div
               className='flex h-28 w-28 items-center justify-center rounded-full'
               style={{ backgroundColor: disc.colour }}
@@ -53,12 +38,16 @@ export default function DiscCardList({ disc }: DiscCardListProps) {
                 </p>
               )}
             </div>
+            <div className='flex flex-col items-start justify-center'>
+              <h3 className='text-2xl font-bold'>{disc.name}</h3>
+              <span>
+                {disc.plastic}, {disc.weight}g
+              </span>
+              <span className='text-md mt-4 font-bold'>
+                {disc.speed} / {disc.glide} / {disc.turn} / {disc.fade}
+              </span>
+            </div>
           </CardContent>
-          <CardFooter className='flex flex-col items-center justify-center'>
-            <span className='text-md font-bold'>
-              {disc.speed} / {disc.glide} / {disc.turn} / {disc.fade}
-            </span>
-          </CardFooter>
         </Card>
       </Glow>
     </GlowCapture>
