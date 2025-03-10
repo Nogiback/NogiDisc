@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Disc } from '@prisma/client';
 
 export type AuthContextType = {
   authUser: AuthUser | null;
@@ -39,26 +40,6 @@ export type Bag = {
   updatedAt?: string;
   User: User;
   userID: string;
-};
-
-export type Disc = {
-  id: string;
-  user: User;
-  bag?: Bag;
-  brand: string;
-  name: string;
-  weight: number;
-  category: string;
-  plastic: string;
-  colour: string;
-  speed: number;
-  glide: number;
-  turn: number;
-  fade: number;
-  createdAt?: string;
-  updatedAt?: string;
-  userID: string;
-  bagID?: string;
 };
 
 export type AuthProviderProp = {
@@ -203,4 +184,35 @@ export type DiscFilters = {
   glide: number;
   turn: number;
   fade: number;
+};
+
+export type FilterOptions = {
+  brands: string[];
+  names: string[];
+  categories: string[];
+  speeds: number[];
+  glides: number[];
+  turns: number[];
+  fades: number[];
+};
+
+export type SelectedFilters = {
+  brands: string[];
+  names: string[];
+  categories: string[];
+  speeds: number[];
+  glides: number[];
+  turns: number[];
+  fades: number[];
+};
+
+export type FilterContextType = {
+  filterOptions: FilterOptions;
+  selectedFilters: SelectedFilters;
+  updateFilterOptions: (discs: Disc[]) => void;
+  toggleFilter: (
+    filterType: keyof SelectedFilters,
+    value: string | number,
+  ) => void;
+  clearFilters: () => void;
 };

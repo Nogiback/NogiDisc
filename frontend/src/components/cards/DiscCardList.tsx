@@ -11,7 +11,7 @@ export default function DiscCardList({ disc }: DiscCardListProps) {
   return (
     <GlowCapture className='w-full pr-4'>
       <Glow color='white'>
-        <Card className='glow:bg-primary-foreground glow:border-black dark:glow:border-white relative flex items-center'>
+        <Card className='relative flex items-center glow:border-black glow:bg-primary-foreground dark:glow:border-white'>
           <div className='absolute right-0 top-0 flex'>
             <EditDiscModal disc={disc} />
             <DeleteDiscModal discID={disc.id} />
@@ -19,7 +19,7 @@ export default function DiscCardList({ disc }: DiscCardListProps) {
           <CardContent className='flex w-full items-center justify-start gap-6 p-4'>
             <div
               className='flex h-28 w-28 items-center justify-center rounded-full'
-              style={{ backgroundColor: disc.colour }}
+              style={{ backgroundColor: disc.colour ? disc.colour : 'gray' }}
             >
               {brandLogo && (
                 <img

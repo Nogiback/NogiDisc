@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { ThemeProvider } from './components/ui/themeProvider';
+import { ThemeProvider } from '@/components/ui/themeProvider';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.tsx';
+import { AuthProvider } from '@/context/AuthContext.tsx';
+import { FilterProvider } from '@/context/FilterContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const googleClientID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <BrowserRouter>
           <GoogleOAuthProvider clientId={googleClientID}>
             <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
-              <App />
+              <FilterProvider>
+                <App />
+              </FilterProvider>
             </ThemeProvider>
           </GoogleOAuthProvider>
         </BrowserRouter>
