@@ -6,37 +6,6 @@ import {
   FilterContextType,
 } from '@/types/types';
 
-type FilterOptions = {
-  brands: string[];
-  names: string[];
-  categories: string[];
-  speeds: number[];
-  glides: number[];
-  turns: number[];
-  fades: number[];
-};
-
-type SelectedFilters = {
-  brands: string[];
-  names: string[];
-  categories: string[];
-  speeds: number[];
-  glides: number[];
-  turns: number[];
-  fades: number[];
-};
-
-type FilterContextType = {
-  filterOptions: FilterOptions;
-  selectedFilters: SelectedFilters;
-  updateFilterOptions: (discs: Disc[]) => void;
-  toggleFilter: (
-    filterType: keyof SelectedFilters,
-    value: string | number,
-  ) => void;
-  clearFilters: () => void;
-};
-
 export const FilterContext = createContext<FilterContextType | undefined>(
   undefined,
 );
