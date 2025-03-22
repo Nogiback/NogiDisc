@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode, useCallback } from 'react';
 import { Disc } from '@prisma/client';
 import {
   FilterOptions,
@@ -31,7 +31,9 @@ export function FilterProvider({ children }: { children: ReactNode }) {
     fades: [],
   });
 
-  const updateFilterOptions = (discs: Disc[]) => {
+  // Wrap with useCallback to maintain referential equality
+  const updateFilterOptions = useCallback((discs: Disc[]) => {
+    clearFilters();
     const options: FilterOptions = {
       brands: [...new Set(discs.map((disc) => disc.brand))],
       names: [...new Set(discs.map((disc) => disc.name))],
@@ -41,19 +43,8 @@ export function FilterProvider({ children }: { children: ReactNode }) {
       turns: [...new Set(discs.map((disc) => disc.turn))],
       fades: [...new Set(discs.map((disc) => disc.fade))],
     };
-
     setFilterOptions(options);
-    // Reset selected filters when options change
-    setSelectedFilters({
-      brands: [],
-      names: [],
-      categories: [],
-      speeds: [],
-      glides: [],
-      turns: [],
-      fades: [],
-    });
-  };
+  }, []);
 
   const toggleFilter = (
     filterType: keyof SelectedFilters,

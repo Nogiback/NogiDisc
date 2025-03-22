@@ -176,16 +176,6 @@ export type ToggleViewButtonProps = {
   setToggleView: (toggleView: string) => void;
 };
 
-export type DiscFilters = {
-  brand: string;
-  name: string;
-  category: string;
-  speed: number;
-  glide: number;
-  turn: number;
-  fade: number;
-};
-
 export type FilterOptions = {
   brands: string[];
   names: string[];
