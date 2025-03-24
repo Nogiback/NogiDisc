@@ -14,7 +14,10 @@ export default function Dashboard() {
       <AppSidebar selectedBag={selectedBag} setSelectedBag={setSelectedBag} />
       <SidebarInset>
         <div className='sticky top-0 z-50 bg-inherit'>
-          <DashboardHeader setToggleView={setToggleView} />
+          <DashboardHeader
+            toggleView={toggleView}
+            setToggleView={setToggleView}
+          />
           <Separator orientation='horizontal' className='h-[1px] w-full' />
         </div>
         <div className='flex w-full flex-col items-center justify-center gap-4 p-2'>

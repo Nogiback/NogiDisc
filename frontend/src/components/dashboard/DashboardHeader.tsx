@@ -6,6 +6,7 @@ import { DashboardHeaderProps } from '@/types/types';
 import ViewToggleButton from './ViewToggleButton';
 
 export default function DashboardHeader({
+  toggleView,
   setToggleView,
 }: DashboardHeaderProps) {
   return (
@@ -18,7 +19,10 @@ export default function DashboardHeader({
         </div>
         <div className='mr-2 flex items-center gap-2'>
           <AddDiscModal />
-          <ViewToggleButton setToggleView={setToggleView} />
+          <ViewToggleButton
+            toggleView={toggleView}
+            setToggleView={setToggleView}
+          />
           <DarkModeToggle />
         </div>
       </div>

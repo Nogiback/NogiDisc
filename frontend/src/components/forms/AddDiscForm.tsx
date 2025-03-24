@@ -54,6 +54,7 @@ export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
     mutationFn: addDisc,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['discs'] });
+      queryClient.invalidateQueries({ queryKey: ['bag'] });
       setOpen(false);
     },
   });

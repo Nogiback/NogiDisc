@@ -3,6 +3,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { List, LayoutGrid } from 'lucide-react';
 
 export default function ToggleViewButton({
+  toggleView,
   setToggleView,
 }: ToggleViewButtonProps) {
   return (
@@ -19,6 +20,7 @@ export default function ToggleViewButton({
         value='list'
         aria-label='Toggle list view'
         className='rounded-r-none'
+        disabled={toggleView === 'list'}
       >
         <List className='h-4 w-4' />
       </ToggleGroupItem>
@@ -26,6 +28,7 @@ export default function ToggleViewButton({
         value='grid'
         aria-label='Toggle grid view'
         className='rounded-l-none'
+        disabled={toggleView === 'grid'}
       >
         <LayoutGrid className='h-4 w-4' />
       </ToggleGroupItem>

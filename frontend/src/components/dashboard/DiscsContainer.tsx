@@ -1,8 +1,12 @@
+import { useEffect, useState } from 'react';
 import DiscCard from '@/components/cards/DiscCard';
 import useGetBag from '@/hooks/api/useGetBag';
 import useGetDiscs from '@/hooks/api/useGetDiscs';
 import { DiscsContainerProps } from '@/types/types';
 import DiscCardList from '../cards/DiscCardList';
+import { useFilters } from '@/hooks/filtering/useFilters';
+import { Disc } from '@prisma/client';
+import { filterDiscs } from '@/lib/filterDiscs';
 // import { CategoryChart } from '../charts/CategoryChart';
 // import { BrandsChart } from '../charts/BrandsChart';
 
@@ -15,11 +19,29 @@ export default function DiscsContainer({
     enabled: selectedBag !== 'all',
   });
   const { data: allDiscs } = useGetDiscs({ enabled: selectedBag === 'all' });
+  const { selectedFilters, updateFilterOptions } = useFilters();
+  const [filteredDiscs, setFilteredDiscs] = useState<Disc[]>([]);
 
   const discs = selectedBag === 'all' ? allDiscs : bag?.discs;
 
+  // Update filter options when bag changes
+  useEffect(() => {
+    if (discs) {
+      updateFilterOptions(discs);
+      setFilteredDiscs(discs);
+    }
+  }, [discs, updateFilterOptions]);
+
+  // Apply filters when selections change
+  useEffect(() => {
+    if (discs) {
+      const filtered = filterDiscs(discs, selectedFilters);
+      setFilteredDiscs(filtered);
+    }
+  }, [selectedFilters, discs]);
+
   // Sorting disc based on speed and then by name
-  const sortedDiscs = discs?.sort((disc1, disc2) => {
+  const sortedDiscs = filteredDiscs?.sort((disc1, disc2) => {
     // Primary sorting by value
     if (disc1.speed !== disc2.speed) {
       return disc2.speed - disc1.speed;
@@ -38,7 +60,7 @@ export default function DiscsContainer({
 
   return (
     <div className='flex w-full flex-wrap items-center justify-center gap-2'>
-      {/* TODO: Need to decide later if charts should be added to final version*/}
+      {/* TODO: Need to decide later if charts should be added to final version */}
       {/* <CategoryChart discs={discs} />
       <BrandsChart discs={discs} /> */}
       {toggleView === 'grid' && (

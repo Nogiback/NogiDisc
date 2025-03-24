@@ -169,10 +169,12 @@ export type DiscCardListProps = {
 };
 
 export type DashboardHeaderProps = {
+  toggleView: string;
   setToggleView: (toggleView: string) => void;
 };
 
 export type ToggleViewButtonProps = {
+  toggleView: string;
   setToggleView: (toggleView: string) => void;
 };
 

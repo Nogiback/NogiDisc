@@ -1,7 +1,7 @@
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/auth/useAuth';
-import { Disc } from '@/types/types';
+import { Disc } from '@prisma/client';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 

@@ -45,7 +45,6 @@ export function NavFilters({ selectedBag }: { selectedBag: string }) {
 
   const discs = selectedBag === 'all' ? allDiscs : bag?.discs;
 
-  // Update filter options when selectedBag changes
   useEffect(() => {
     if (discs && discs.length > 0) {
       updateFilterOptions(discs);
@@ -142,7 +141,7 @@ export function NavFilters({ selectedBag }: { selectedBag: string }) {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub className='space-y-2'>
-                {filterOptions.categories.map((category) => (
+                {[...filterOptions.categories].sort().map((category) => (
                   <SidebarMenuSubItem key={category}>
                     <div className='items-top flex space-x-2'>
                       <Checkbox
@@ -180,25 +179,27 @@ export function NavFilters({ selectedBag }: { selectedBag: string }) {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub className='space-y-2'>
-                {filterOptions.speeds.map((speed) => (
-                  <SidebarMenuSubItem key={speed}>
-                    <div className='items-top flex space-x-2'>
-                      <Checkbox
-                        id={speed.toString()}
-                        checked={selectedFilters.speeds.includes(speed)}
-                        onCheckedChange={() => toggleFilter('speeds', speed)}
-                      />
-                      <div className='leading-none'>
-                        <label
-                          htmlFor={speed.toString()}
-                          className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                        >
-                          {speed}
-                        </label>
+                {[...filterOptions.speeds]
+                  .sort((a, b) => a - b)
+                  .map((speed) => (
+                    <SidebarMenuSubItem key={speed}>
+                      <div className='items-top flex space-x-2'>
+                        <Checkbox
+                          id={speed.toString()}
+                          checked={selectedFilters.speeds.includes(speed)}
+                          onCheckedChange={() => toggleFilter('speeds', speed)}
+                        />
+                        <div className='leading-none'>
+                          <label
+                            htmlFor={speed.toString()}
+                            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+                          >
+                            {speed}
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                  </SidebarMenuSubItem>
-                ))}
+                    </SidebarMenuSubItem>
+                  ))}
               </SidebarMenuSub>
             </CollapsibleContent>
           </SidebarMenuItem>
@@ -216,25 +217,27 @@ export function NavFilters({ selectedBag }: { selectedBag: string }) {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub className='space-y-2'>
-                {filterOptions.glides.map((glide) => (
-                  <SidebarMenuSubItem key={glide}>
-                    <div className='items-top flex space-x-2'>
-                      <Checkbox
-                        id={glide.toString()}
-                        checked={selectedFilters.glides.includes(glide)}
-                        onCheckedChange={() => toggleFilter('glides', glide)}
-                      />
-                      <div className='leading-none'>
-                        <label
-                          htmlFor={glide.toString()}
-                          className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                        >
-                          {glide}
-                        </label>
+                {[...filterOptions.glides]
+                  .sort((a, b) => a - b)
+                  .map((glide) => (
+                    <SidebarMenuSubItem key={glide}>
+                      <div className='items-top flex space-x-2'>
+                        <Checkbox
+                          id={glide.toString()}
+                          checked={selectedFilters.glides.includes(glide)}
+                          onCheckedChange={() => toggleFilter('glides', glide)}
+                        />
+                        <div className='leading-none'>
+                          <label
+                            htmlFor={glide.toString()}
+                            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+                          >
+                            {glide}
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                  </SidebarMenuSubItem>
-                ))}
+                    </SidebarMenuSubItem>
+                  ))}
               </SidebarMenuSub>
             </CollapsibleContent>
           </SidebarMenuItem>
@@ -252,25 +255,27 @@ export function NavFilters({ selectedBag }: { selectedBag: string }) {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub className='space-y-2'>
-                {filterOptions.turns.map((turn) => (
-                  <SidebarMenuSubItem key={turn}>
-                    <div className='items-top flex space-x-2'>
-                      <Checkbox
-                        id={turn.toString()}
-                        checked={selectedFilters.turns.includes(turn)}
-                        onCheckedChange={() => toggleFilter('turns', turn)}
-                      />
-                      <div className='leading-none'>
-                        <label
-                          htmlFor={turn.toString()}
-                          className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                        >
-                          {turn}
-                        </label>
+                {[...filterOptions.turns]
+                  .sort((a, b) => a - b)
+                  .map((turn) => (
+                    <SidebarMenuSubItem key={turn}>
+                      <div className='items-top flex space-x-2'>
+                        <Checkbox
+                          id={turn.toString()}
+                          checked={selectedFilters.turns.includes(turn)}
+                          onCheckedChange={() => toggleFilter('turns', turn)}
+                        />
+                        <div className='leading-none'>
+                          <label
+                            htmlFor={turn.toString()}
+                            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+                          >
+                            {turn}
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                  </SidebarMenuSubItem>
-                ))}
+                    </SidebarMenuSubItem>
+                  ))}
               </SidebarMenuSub>
             </CollapsibleContent>
           </SidebarMenuItem>
@@ -288,25 +293,27 @@ export function NavFilters({ selectedBag }: { selectedBag: string }) {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub className='space-y-2'>
-                {filterOptions.fades.map((fade) => (
-                  <SidebarMenuSubItem key={fade}>
-                    <div className='items-top flex space-x-2'>
-                      <Checkbox
-                        id={fade.toString()}
-                        checked={selectedFilters.fades.includes(fade)}
-                        onCheckedChange={() => toggleFilter('fades', fade)}
-                      />
-                      <div className='leading-none'>
-                        <label
-                          htmlFor={fade.toString()}
-                          className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                        >
-                          {fade}
-                        </label>
+                {[...filterOptions.fades]
+                  .sort((a, b) => a - b)
+                  .map((fade) => (
+                    <SidebarMenuSubItem key={fade}>
+                      <div className='items-top flex space-x-2'>
+                        <Checkbox
+                          id={fade.toString()}
+                          checked={selectedFilters.fades.includes(fade)}
+                          onCheckedChange={() => toggleFilter('fades', fade)}
+                        />
+                        <div className='leading-none'>
+                          <label
+                            htmlFor={fade.toString()}
+                            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+                          >
+                            {fade}
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                  </SidebarMenuSubItem>
-                ))}
+                    </SidebarMenuSubItem>
+                  ))}
               </SidebarMenuSub>
             </CollapsibleContent>
           </SidebarMenuItem>
