@@ -52,12 +52,12 @@ export function FilterProvider({ children }: { children: ReactNode }) {
   ) => {
     setSelectedFilters((prev) => {
       const currentFilters = [...prev[filterType]];
-      const valueIndex = currentFilters.indexOf(value as never);
+      const valueIndex = currentFilters.indexOf(value);
 
       if (valueIndex >= 0) {
         currentFilters.splice(valueIndex, 1);
       } else {
-        currentFilters.push(value as never);
+        currentFilters.push(value);
       }
 
       return {

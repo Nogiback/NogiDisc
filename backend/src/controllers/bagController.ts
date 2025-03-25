@@ -135,6 +135,26 @@ export const deleteBag = asyncHandler(
       return;
     }
 
+    // check if bag has discs, if so, remove bagID from discs
+    const discsToUpdate = await prisma.disc.findMany({
+      where: {
+        bagID: req.params.bagID,
+      },
+    });
+
+    if (discsToUpdate) {
+      for (const disc of discsToUpdate) {
+        await prisma.disc.update({
+          where: {
+            id: disc.id,
+          },
+          data: {
+            bagID: null,
+          },
+        });
+      }
+    }
+
     // delete bag
     await prisma.bag.delete({
       where: { id: bagToDelete.id },

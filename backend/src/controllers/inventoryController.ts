@@ -163,6 +163,8 @@ export const editDisc = [
   }),
 ];
 
+// DELETE DISC BY ID
+
 export const deleteDisc = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // check if disc exists

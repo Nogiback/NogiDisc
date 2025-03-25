@@ -17,6 +17,7 @@ import {
 } from '../ui/collapsible';
 import { ChevronRight, Backpack } from 'lucide-react';
 import { NavBagsProps } from '@/types/types';
+import { DeleteBagModal } from '../modals/DeleteBagModal';
 
 export function NavBags({ setSelectedBag }: NavBagsProps) {
   const { data: bags } = useGetBags();
@@ -43,8 +44,11 @@ export function NavBags({ setSelectedBag }: NavBagsProps) {
                     </div>
                   </SidebarMenuSubItem>
                   {bags?.map((bag) => (
-                    <SidebarMenuSubItem key={bag.id}>
-                      <div className='flex items-center space-x-2 space-y-2'>
+                    <SidebarMenuSubItem
+                      key={bag.id}
+                      className='flex items-center justify-between'
+                    >
+                      <div className='flex items-center justify-between space-x-2 space-y-2'>
                         <RadioGroupItem value={bag.id} id={bag.name} />
                         <Label
                           htmlFor={bag.name}
@@ -53,6 +57,7 @@ export function NavBags({ setSelectedBag }: NavBagsProps) {
                           {bag.name}
                         </Label>
                       </div>
+                      <DeleteBagModal bagID={bag.id} />
                     </SidebarMenuSubItem>
                   ))}
                 </RadioGroup>

@@ -25,11 +25,16 @@ import { Slider } from '@/components/ui/slider';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { EditDiscFormProps } from '@/types/types';
 import useGetBags from '@/hooks/api/useGetBags';
+import useGetBag from '@/hooks/api/useGetBag';
 
 export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
   const { editDisc } = useEditDisc();
   const queryClient = useQueryClient();
   const { data: bags } = useGetBags();
+  const { data: bag } = useGetBag({
+    selectedBag: disc.bagID ? disc.bagID : '',
+    enabled: disc.bagID ? true : false,
+  });
 
   const form = useForm<z.infer<typeof editDiscFormSchema>>({
     resolver: zodResolver(editDiscFormSchema),
@@ -161,7 +166,7 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
           <FormField
             control={form.control}
             name='bagID'
-            defaultValue={disc.bag ? disc.bag.name : ''}
+            defaultValue={disc.bagID === bag?.id ? bag?.name : ''}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Bag</FormLabel>
@@ -291,12 +296,12 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
         />
         <DialogFooter>
           <Button
-            aria-label='confirm edit disc button'
+            aria-label='save changes disc button'
             className='w-full'
             type='submit'
             disabled={isPending}
           >
-            Edit Disc
+            Save Changes
           </Button>
         </DialogFooter>
       </form>
