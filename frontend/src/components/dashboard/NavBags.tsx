@@ -35,12 +35,17 @@ export function NavBags({ setSelectedBag }: NavBagsProps) {
               </SidebarMenuButton>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <SidebarMenuSub className='space-y-2'>
+              <SidebarMenuSub>
                 <RadioGroup defaultValue='all' onValueChange={setSelectedBag}>
-                  <SidebarMenuSubItem>
-                    <div className='flex items-center space-x-2 space-y-2'>
+                  <SidebarMenuSubItem className='my-1 flex items-center justify-between'>
+                    <div className='flex items-center space-x-2'>
                       <RadioGroupItem value='all' id='All Discs' />
-                      <Label htmlFor='All Discs'>All Discs</Label>
+                      <Label
+                        htmlFor='All Discs'
+                        className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+                      >
+                        All Discs
+                      </Label>
                     </div>
                   </SidebarMenuSubItem>
                   {bags?.map((bag) => (
@@ -48,7 +53,7 @@ export function NavBags({ setSelectedBag }: NavBagsProps) {
                       key={bag.id}
                       className='flex items-center justify-between'
                     >
-                      <div className='flex items-center justify-between space-x-2 space-y-2'>
+                      <div className='flex items-center justify-between space-x-2'>
                         <RadioGroupItem value={bag.id} id={bag.name} />
                         <Label
                           htmlFor={bag.name}
