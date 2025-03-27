@@ -6,18 +6,18 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { AddBagModal } from '../modals/AddBagModal';
-import useGetBags from '@/hooks/api/useGetBags';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import { Label } from '../ui/label';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '../ui/collapsible';
+} from '@/components/ui/collapsible';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { ChevronRight, Backpack } from 'lucide-react';
-import { NavBagsProps } from '@/types/types';
 import { DeleteBagModal } from '../modals/DeleteBagModal';
+import { AddBagModal } from '../modals/AddBagModal';
+import useGetBags from '@/hooks/api/useGetBags';
+import { NavBagsProps } from '@/types/types';
 
 export function NavBags({ setSelectedBag }: NavBagsProps) {
   const { data: bags } = useGetBags();

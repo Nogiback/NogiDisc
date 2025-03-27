@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import AsyncSelect from 'react-select/async';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import makeAnimated from 'react-select/animated';
 import { DiscOption, SearchDiscFormProps } from '@/types/types';

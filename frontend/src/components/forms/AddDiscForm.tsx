@@ -1,11 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import useAddDisc from '@/hooks/api/useAddDisc';
-import { addDiscFormSchema } from '@/lib/formSchemas';
-import { DialogFooter } from '../ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -22,9 +14,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { DialogFooter } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { AddDiscFormProps } from '@/types/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import useAddDisc from '@/hooks/api/useAddDisc';
 import useGetBags from '@/hooks/api/useGetBags';
+import { addDiscFormSchema } from '@/lib/formSchemas';
+import { AddDiscFormProps } from '@/types/types';
 
 export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
   const { addDisc } = useAddDisc();

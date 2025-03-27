@@ -1,7 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -10,11 +6,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { GoogleSignupButton } from '../google/GoogleSignupButton';
-import { signupFormSchema } from '@/lib/formSchemas';
+import { GoogleSignupButton } from '@/components/google/GoogleSignupButton';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import useSignup from '@/hooks/auth/useSignup';
 import { useLoginContext } from '@/hooks/auth/useLoginContext';
+import { signupFormSchema } from '@/lib/formSchemas';
 
 export function SignupForm() {
   const { signup } = useSignup();
@@ -49,7 +49,11 @@ export function SignupForm() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder='John' {...field} />
+                  <Input
+                    placeholder='John'
+                    {...field}
+                    disabled={isSubmitting}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -62,7 +66,7 @@ export function SignupForm() {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder='Doe' {...field} />
+                  <Input placeholder='Doe' {...field} disabled={isSubmitting} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -79,6 +83,7 @@ export function SignupForm() {
                 <Input
                   placeholder='johndoe@mail.com'
                   autoComplete='email'
+                  disabled={isSubmitting}
                   {...field}
                 />
               </FormControl>
@@ -97,6 +102,7 @@ export function SignupForm() {
                   type='password'
                   placeholder=''
                   autoComplete='new-password'
+                  disabled={isSubmitting}
                   {...field}
                 />
               </FormControl>
@@ -115,6 +121,7 @@ export function SignupForm() {
                   type='password'
                   placeholder=''
                   autoComplete='new-password'
+                  disabled={isSubmitting}
                   {...field}
                 />
               </FormControl>

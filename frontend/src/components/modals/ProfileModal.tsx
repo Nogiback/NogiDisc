@@ -3,10 +3,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+} from '@/components/ui/dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/auth/useAuth';
-import { ProfileForm } from '../forms/ProfileForm';
+import { ProfileForm } from '@/components/forms/ProfileForm';
 
 export default function ProfileModal() {
   const { authUser: user } = useAuth();

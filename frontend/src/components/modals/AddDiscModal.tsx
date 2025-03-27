@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,10 +7,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import { CirclePlus, CircleArrowRight } from 'lucide-react';
-import { SearchDiscForm } from '../forms/SearchDiscForm';
+import { SearchDiscForm } from '@/components/forms/SearchDiscForm';
+import { AddDiscForm } from '@/components/forms/AddDiscForm';
 import { SearchedDisc } from '@/types/types';
-import { AddDiscForm } from '../forms/AddDiscForm';
 
 export function AddDiscModal() {
   const [searchedDisc, setSearchedDisc] = useState<SearchedDisc | null>(null);

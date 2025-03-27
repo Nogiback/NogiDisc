@@ -1,7 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -11,7 +7,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { GoogleLoginButton } from '../google/GoogleLoginButton';
+import { Button } from '@/components/ui/button';
+import { GoogleLoginButton } from '@/components/google/GoogleLoginButton';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import useLogin from '@/hooks/auth/useLogin';
 import { loginFormSchema } from '@/lib/formSchemas';
 import { useLoginContext } from '@/hooks/auth/useLoginContext';
@@ -48,6 +48,7 @@ export function LoginForm() {
                 <Input
                   placeholder='johndoe@mail.com'
                   autoComplete='email'
+                  disabled={isSubmitting}
                   {...field}
                 />
               </FormControl>
@@ -66,6 +67,7 @@ export function LoginForm() {
                   type='password'
                   placeholder=''
                   autoComplete='current-password'
+                  disabled={isSubmitting}
                   {...field}
                 />
               </FormControl>

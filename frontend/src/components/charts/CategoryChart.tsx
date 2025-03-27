@@ -12,7 +12,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Disc } from '@/types/types';
+import { Disc } from '@prisma/client';
 
 type CategoryChartProps = {
   discs: Disc[];

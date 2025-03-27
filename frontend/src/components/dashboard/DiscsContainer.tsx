@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import DiscCard from '@/components/cards/DiscCard';
 import useGetBag from '@/hooks/api/useGetBag';
 import useGetDiscs from '@/hooks/api/useGetDiscs';
-import { DiscsContainerProps } from '@/types/types';
-import DiscCardList from '../cards/DiscCardList';
 import { useFilters } from '@/hooks/filtering/useFilters';
 import { Disc } from '@prisma/client';
 import { filterDiscs } from '@/lib/filterDiscs';
+import { DiscsContainerProps } from '@/types/types';
+import DiscCardList from '../cards/DiscCardList';
 // import { CategoryChart } from '../charts/CategoryChart';
 // import { BrandsChart } from '../charts/BrandsChart';
 

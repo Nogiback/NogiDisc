@@ -1,11 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import useEditDisc from '@/hooks/api/useEditDisc';
-import { editDiscFormSchema } from '@/lib/formSchemas';
-import { DialogFooter } from '../ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -21,11 +13,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { DialogFooter } from '../ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { EditDiscFormProps } from '@/types/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import useEditDisc from '@/hooks/api/useEditDisc';
 import useGetBags from '@/hooks/api/useGetBags';
 import useGetBag from '@/hooks/api/useGetBag';
+import { editDiscFormSchema } from '@/lib/formSchemas';
+import { EditDiscFormProps } from '@/types/types';
 
 export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
   const { editDisc } = useEditDisc();

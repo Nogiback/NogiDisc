@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -8,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DialogDescription } from '@radix-ui/react-dialog';

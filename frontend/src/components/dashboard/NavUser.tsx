@@ -1,5 +1,3 @@
-import { ChevronsUpDown, LogOut, CircleUser } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +12,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { ChevronsUpDown, LogOut, CircleUser } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
 import useLogout from '@/hooks/auth/useLogout';
-import { Dialog, DialogTrigger } from '../ui/dialog';
 import ProfileModal from '../modals/ProfileModal';
 
 export function NavUser() {

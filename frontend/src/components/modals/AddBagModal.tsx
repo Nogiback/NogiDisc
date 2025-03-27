@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,9 +6,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { SidebarMenuButton } from '@/components/ui/sidebar';
+import { AddBagForm } from '@/components/forms/AddBagForm';
+import { useState } from 'react';
 import { CirclePlus } from 'lucide-react';
-import { AddBagForm } from '../forms/AddBagForm';
-import { SidebarMenuButton } from '../ui/sidebar';
 
 export function AddBagModal() {
   const [open, setOpen] = useState(false);

@@ -1,11 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import useAddBag from '@/hooks/api/useAddBag';
-import { addBagFormSchema } from '@/lib/formSchemas';
-import { DialogFooter } from '../ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -14,8 +6,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { AddBagFormProps } from '@/types/types';
+import { DialogFooter } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import useAddBag from '@/hooks/api/useAddBag';
+import { addBagFormSchema } from '@/lib/formSchemas';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { AddBagFormProps } from '@/types/types';
 
 export function AddBagForm({ setOpen }: AddBagFormProps) {
   const { addBag } = useAddBag();

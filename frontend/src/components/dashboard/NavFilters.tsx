@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
   ChevronRight,
   Building,
@@ -24,7 +23,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { Checkbox } from '../ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useEffect } from 'react';
 import useGetBag from '@/hooks/api/useGetBag';
 import useGetDiscs from '@/hooks/api/useGetDiscs';
 import { useFilters } from '@/hooks/filtering/useFilters';

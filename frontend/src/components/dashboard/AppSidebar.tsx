@@ -1,7 +1,3 @@
-import { LoaderPinwheel } from 'lucide-react';
-import { NavBags } from './NavBags';
-import { NavFilters } from '@/components/dashboard/NavFilters';
-import { NavUser } from '@/components/dashboard/NavUser';
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +9,10 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Link } from 'react-router-dom';
+import { LoaderPinwheel } from 'lucide-react';
+import { NavBags } from './NavBags';
+import { NavFilters } from '@/components/dashboard/NavFilters';
+import { NavUser } from '@/components/dashboard/NavUser';
 import { AppSidebarProps } from '@/types/types';
 
 export function AppSidebar({ selectedBag, setSelectedBag }: AppSidebarProps) {
