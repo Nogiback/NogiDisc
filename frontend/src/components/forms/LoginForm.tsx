@@ -36,7 +36,7 @@ export function LoginForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='flex w-full flex-col gap-6'
+        className='mb-4 flex w-full flex-col gap-6'
       >
         <FormField
           control={form.control}

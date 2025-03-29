@@ -14,7 +14,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProp) {
     );
 
   if (!authUser && !isLoading) {
-    return <Navigate to='/' replace />; // Redirect to homepage if not logged in
+    return <Navigate to='/' replace />;
   }
 
   return children;
