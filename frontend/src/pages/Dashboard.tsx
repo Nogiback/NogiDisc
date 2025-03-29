@@ -20,7 +20,7 @@ export default function Dashboard() {
           />
           <Separator orientation='horizontal' className='h-[1px] w-full' />
         </div>
-        <div className='flex w-full flex-col items-center justify-center gap-4 p-2'>
+        <div className='flex w-full flex-col items-center justify-center gap-4 py-4'>
           <DiscsContainer toggleView={toggleView} selectedBag={selectedBag} />
         </div>
       </SidebarInset>
