@@ -12,7 +12,7 @@ export default function LoginPage({
         <div className='flex justify-center gap-2 md:justify-start'>
           <a
             href='/'
-            className='flex items-center gap-2 font-medium text-inherit hover:text-inherit'
+            className='flex items-center gap-2 text-xl font-bold text-inherit hover:text-inherit'
           >
             <div className='flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground'>
               <LoaderPinwheel className='size-4' />

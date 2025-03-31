@@ -58,6 +58,16 @@ export default function DiscsContainer({
     );
   }
 
+  if (sortedDiscs.length === 0) {
+    return (
+      <div className='mt-80 flex h-full w-full items-center justify-center'>
+        <p className='text-2xl font-bold'>
+          No discs found with the current filters...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className='flex w-full flex-wrap items-center justify-center gap-2'>
       {/* TODO: Need to decide later if charts should be added to final version */}
