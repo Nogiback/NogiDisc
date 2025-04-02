@@ -87,6 +87,7 @@ export type AddDiscFormData = {
   brand: string;
   name: string;
   weight: number;
+  image: string;
   category: string;
   plastic: string;
   colour: string;
@@ -102,6 +103,7 @@ export type EditDiscFormData = {
   brand: string;
   name: string;
   weight: number;
+  image: string;
   category: string;
   plastic: string;
   colour: string;

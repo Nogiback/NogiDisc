@@ -91,6 +91,7 @@ export const updateUser = [
     .escape(),
   body("firstName", "First Name must not be empty.").trim().escape(),
   body("lastName", "Last Name must not be empty.").trim().escape(),
+  body("profilePic").trim().optional(),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     // lookup user
@@ -135,6 +136,9 @@ export const updateUser = [
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        profilePic: req.body.profilePic
+          ? req.body.profilePic
+          : currentUser.profilePic,
       },
     });
 

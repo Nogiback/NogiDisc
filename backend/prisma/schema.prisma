@@ -35,6 +35,7 @@ model Disc {
   bag       Bag?      @relation(fields: [bagID], references: [id])
   brand     String
   name      String
+  image     String?
   weight    Int
   category  String
   plastic   String
