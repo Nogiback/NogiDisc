@@ -28,6 +28,7 @@ import useGetBags from '@/hooks/api/useGetBags';
 import { addDiscFormSchema } from '@/lib/formSchemas';
 import { AddDiscFormProps } from '@/types/types';
 import { useRef, useState } from 'react';
+import { Separator } from '../ui/separator';
 
 export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
   const { addDisc } = useAddDisc();
@@ -206,6 +207,7 @@ export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
             )}
           />
         </div>
+        <Separator className='my-2' />
         <div className='col-span-2 flex flex-col gap-4'>
           <RadioGroup
             defaultValue='colour'
