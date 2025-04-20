@@ -39,7 +39,7 @@ export function SignupForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='mb-4 flex w-full flex-col gap-6'
+        className='mb-4 flex w-full flex-col gap-4'
       >
         <div className='grid grid-flow-col gap-4'>
           <FormField
