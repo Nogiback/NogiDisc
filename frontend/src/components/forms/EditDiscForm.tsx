@@ -254,7 +254,12 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
                 <FormItem>
                   <FormLabel>Image</FormLabel>
                   <FormControl>
-                    <Input type='file' {...field} />
+                    <Input
+                      type='file'
+                      accept='image/*'
+                      capture='environment'
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

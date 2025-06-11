@@ -87,7 +87,7 @@ export type AddDiscFormData = {
   brand: string;
   name: string;
   weight: number;
-  image: string;
+  image?: File;
   category: string;
   plastic: string;
   colour: string;
@@ -210,3 +210,9 @@ export type FilterContextType = {
   ) => void;
   clearFilters: () => void;
 };
+
+export interface ImageCropperProps {
+  imageSrc: string;
+  onCropComplete: (croppedImageUrl: string, croppedImageFile: File) => void;
+  onCancel: () => void;
+}

@@ -37,7 +37,7 @@ export const addDiscFormSchema = z.object({
   brand: z.string().min(1, { message: 'Disc brand is required' }),
   name: z.string().min(1, { message: 'Disc name is required' }),
   weight: z.number().int(),
-  image: z.string().optional(),
+  image: z.instanceof(File).optional(),
   category: z.string().min(1, { message: 'Disc category is required' }),
   plastic: z.string().min(1, { message: 'Disc plastic type is required' }),
   colour: z.string().min(1, { message: 'Disc colour is required' }),
