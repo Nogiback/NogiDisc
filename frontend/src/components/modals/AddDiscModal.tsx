@@ -24,9 +24,14 @@ export function AddDiscModal() {
         <Button
           variant='default'
           aria-label='add disc button'
-          className='flex w-28 cursor-pointer items-center justify-center bg-primary'
+          className='cursor-pointer bg-primary'
         >
-          <CirclePlus size={24} /> Add Disc
+          <span className='flex items-center sm:hidden'>
+            <CirclePlus />
+          </span>
+          <span className='hidden items-center gap-1 sm:flex'>
+            <CirclePlus /> Add Disc
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent>

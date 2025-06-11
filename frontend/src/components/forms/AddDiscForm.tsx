@@ -131,13 +131,14 @@ export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
       />
     );
   }
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className='flex w-full flex-col gap-4'
       >
-        <div className='mb-2 grid grid-flow-col grid-cols-2 grid-rows-2 gap-4'>
+        <div className='mb-2 grid w-full grid-cols-3 gap-4'>
           <FormField
             control={form.control}
             defaultValue={searchedDisc?.brand ? searchedDisc.brand : ''}
@@ -152,12 +153,14 @@ export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name='plastic'
+            defaultValue={searchedDisc?.name ? searchedDisc.name : ''}
+            name='name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Plastic Type</FormLabel>
+                <FormLabel>Disc Name</FormLabel>
                 <FormControl>
                   <Input placeholder='' {...field} />
                 </FormControl>
@@ -167,11 +170,28 @@ export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
           />
           <FormField
             control={form.control}
-            defaultValue={searchedDisc?.name ? searchedDisc.name : ''}
-            name='name'
+            defaultValue={175}
+            name='weight'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Disc Name</FormLabel>
+                <FormLabel>{`Weight (g)`}</FormLabel>
+                <FormControl>
+                  <Input
+                    type='number'
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='plastic'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Plastic Type</FormLabel>
                 <FormControl>
                   <Input placeholder='' {...field} />
                 </FormControl>
@@ -208,20 +228,6 @@ export function AddDiscForm({ searchedDisc, setOpen }: AddDiscFormProps) {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            defaultValue={175}
-            name='weight'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{`Weight (g)`}</FormLabel>
-                <FormControl>
-                  <Input placeholder='' {...field} />
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

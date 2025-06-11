@@ -103,7 +103,7 @@ export type EditDiscFormData = {
   brand: string;
   name: string;
   weight: number;
-  image: string;
+  image?: File;
   category: string;
   plastic: string;
   colour: string;
@@ -112,6 +112,7 @@ export type EditDiscFormData = {
   turn: number;
   fade: number;
   bagID?: string;
+  previousImage?: string;
 };
 
 export type AddBagFormData = {
