@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Trash } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import useDeleteDisc from '@/hooks/api/useDeleteDisc';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DialogDescription } from '@radix-ui/react-dialog';
@@ -32,10 +32,10 @@ export function DeleteDiscModal({ discID }: { discID: string }) {
         <Button
           aria-label='delete disc button'
           size='sm'
-          className='h-6 w-6 rounded-l-none rounded-br-none'
+          className='h-8 w-8 rounded-br-none rounded-tl-none'
           variant='outline'
         >
-          <Trash className='text-destructive' />
+          <Trash2 className='!size-5 text-destructive' />
         </Button>
       </DialogTrigger>
       <DialogContent className='w-96'>

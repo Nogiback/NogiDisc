@@ -69,7 +69,7 @@ export default function DiscsContainer({
   }
 
   return (
-    <div className='flex w-full flex-wrap items-center justify-center gap-2'>
+    <div className='flex w-full flex-wrap items-center justify-center gap-2 pr-3'>
       {/* TODO: Need to decide later if charts should be added to final version */}
       {/* <CategoryChart discs={discs} />
       <BrandsChart discs={discs} /> */}

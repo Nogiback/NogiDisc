@@ -24,10 +24,10 @@ export function AddDiscModal() {
         <Button
           variant='default'
           aria-label='add disc button'
-          className='cursor-pointer bg-primary'
+          className='cursor-pointer bg-primary p-3'
         >
           <span className='flex items-center sm:hidden'>
-            <CirclePlus />
+            <CirclePlus className='!size-5' />
           </span>
           <span className='hidden items-center gap-1 sm:flex'>
             <CirclePlus /> Add Disc
