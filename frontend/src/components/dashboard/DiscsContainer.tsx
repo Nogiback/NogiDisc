@@ -9,6 +9,7 @@ import { DiscsContainerProps } from '@/types/types';
 import DiscCardList from '../cards/DiscCardList';
 // import { CategoryChart } from '../charts/CategoryChart';
 // import { BrandsChart } from '../charts/BrandsChart';
+import { FlightChart } from '../charts/FlightChart';
 
 export default function DiscsContainer({
   toggleView,
@@ -73,6 +74,7 @@ export default function DiscsContainer({
       {/* TODO: Need to decide later if charts should be added to final version */}
       {/* <CategoryChart discs={discs} />
       <BrandsChart discs={discs} /> */}
+      <FlightChart />
       {toggleView === 'grid' && (
         <div className='flex w-full flex-wrap items-center justify-center gap-2'>
           {sortedDiscs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
