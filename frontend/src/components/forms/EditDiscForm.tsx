@@ -13,10 +13,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
 import { DialogFooter } from '../ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
+import { useRef, useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -26,6 +29,8 @@ import useGetBags from '@/hooks/api/useGetBags';
 import useGetBag from '@/hooks/api/useGetBag';
 import { editDiscFormSchema } from '@/lib/formSchemas';
 import { EditDiscFormProps } from '@/types/types';
+import { Separator } from '../ui/separator';
+import { ImageCropper } from '@/components/ImageCropper';
 
 export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
   const { editDisc } = useEditDisc();
@@ -35,6 +40,15 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
     selectedBag: disc.bagID ? disc.bagID : '',
     enabled: disc.bagID ? true : false,
   });
+  const [imageToggle, setImageToggle] = useState(
+    disc.image ? 'image' : 'colour',
+  );
+  const [croppedPreview, setCroppedPreview] = useState<string>(
+    disc.image || '',
+  );
+  const [showCropper, setShowCropper] = useState(false);
+  const [originalImageSrc, setOriginalImageSrc] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof editDiscFormSchema>>({
     resolver: zodResolver(editDiscFormSchema),
@@ -44,13 +58,14 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
       name: disc.name || '',
       category: disc.category || '',
       plastic: disc.plastic || '',
-      colour: disc.colour || '',
+      colour: disc.colour || '#ffffff',
       weight: disc.weight || 175,
       speed: disc.speed || 0,
       glide: disc.glide || 0,
       turn: disc.turn || 0,
       fade: disc.fade || 0,
       bagID: disc.bagID || '',
+      image: undefined,
     },
   });
 
@@ -63,9 +78,70 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
     },
   });
 
+  // Function to handle image toggle
+  function handleImageToggle(value: 'colour' | 'image') {
+    setImageToggle(value);
+    if (value === 'colour') {
+      form.setValue('image', undefined);
+      setOriginalImageSrc('');
+      setCroppedPreview('');
+      setShowCropper(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  }
+
+  // Handle file selection and show cropper
+  function handleFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageSrc = e.target?.result as string;
+        setOriginalImageSrc(imageSrc);
+        setShowCropper(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Handle crop completion
+  function handleCropComplete(croppedImageUrl: string, croppedImageFile: File) {
+    form.setValue('image', croppedImageFile);
+    setCroppedPreview(croppedImageUrl);
+    setShowCropper(false);
+  }
+
+  // Handle crop cancellation
+  function handleCropCancel() {
+    setShowCropper(false);
+    setOriginalImageSrc('');
+    setCroppedPreview('');
+    form.setValue('image', undefined);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }
+
   // Function to handle form submission
   function onSubmit(values: z.infer<typeof editDiscFormSchema>) {
-    mutate(values);
+    mutate({
+      ...values,
+      image: values.image || undefined,
+      previousImage: disc.image ? disc.image : undefined,
+    });
+  }
+
+  // If showing cropper, render only the cropper
+  if (showCropper) {
+    return (
+      <ImageCropper
+        imageSrc={originalImageSrc}
+        onCropComplete={handleCropComplete}
+        onCancel={handleCropCancel}
+      />
+    );
   }
 
   return (
@@ -74,7 +150,7 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className='flex w-full flex-col gap-4'
       >
-        <div className='grid grid-flow-col grid-cols-2 grid-rows-3 gap-4'>
+        <div className='mb-2 grid w-full grid-cols-3 gap-4'>
           <FormField
             control={form.control}
             defaultValue={disc?.brand ? disc.brand : ''}
@@ -82,19 +158,6 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Brand</FormLabel>
-                <FormControl>
-                  <Input placeholder='' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='plastic'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Plastic Type</FormLabel>
                 <FormControl>
                   <Input placeholder='' {...field} />
                 </FormControl>
@@ -118,13 +181,17 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
           />
           <FormField
             control={form.control}
-            defaultValue={disc?.colour ? disc.colour : ''}
-            name='colour'
+            defaultValue={disc.weight ? disc.weight : 175}
+            name='weight'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Colour</FormLabel>
+                <FormLabel>{`Weight (g)`}</FormLabel>
                 <FormControl>
-                  <Input type='color' {...field} />
+                  <Input
+                    type='number'
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -132,8 +199,23 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
           />
           <FormField
             control={form.control}
+            defaultValue={disc?.plastic ? disc.plastic : ''}
+            name='plastic'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Plastic Type</FormLabel>
+                <FormControl>
+                  <Input placeholder='' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name='category'
-            defaultValue={disc.category ? disc.category : ''}
+            defaultValue={disc?.category ? disc.category : ''}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
@@ -165,8 +247,8 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
           />
           <FormField
             control={form.control}
-            name='bagID'
             defaultValue={disc.bagID === bag?.id ? bag?.name : ''}
+            name='bagID'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Bag</FormLabel>
@@ -194,26 +276,63 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name='weight'
-          defaultValue={disc.weight ? disc.weight : 175}
-          render={({ field: { value, onChange } }) => (
-            <FormItem>
-              <FormLabel>{`Weight (${value}g)`}</FormLabel>
-              <FormControl>
-                <Slider
-                  min={0}
-                  max={200}
-                  step={1}
-                  defaultValue={[value]}
-                  onValueChange={(v) => onChange(v[0])}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+        <Separator className='my-2' />
+        <div className='col-span-2 flex flex-col gap-4'>
+          <RadioGroup
+            defaultValue={imageToggle}
+            className='flex items-center gap-4'
+            onValueChange={handleImageToggle}
+          >
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='colour' id='colour' />
+              <Label htmlFor='colour'>Pick a colour</Label>
+            </div>
+            <div className='flex items-center space-x-2'>
+              <RadioGroupItem value='image' id='image' />
+              <Label htmlFor='image'>Upload an image</Label>
+            </div>
+          </RadioGroup>
+          {imageToggle === 'colour' && (
+            <FormField
+              control={form.control}
+              defaultValue={disc?.colour ? disc.colour : ''}
+              name='colour'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Colour</FormLabel>
+                  <FormControl>
+                    <Input type='color' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
-        />
+          {imageToggle === 'image' && (
+            <div className='flex flex-col gap-2'>
+              <Label>Image</Label>
+              <Input
+                ref={fileInputRef}
+                type='file'
+                accept='image/*'
+                capture='environment'
+                onChange={handleFileSelect}
+              />
+              {croppedPreview && (
+                <div className='flex items-center gap-2'>
+                  <img
+                    src={croppedPreview}
+                    alt='Cropped preview'
+                    className='h-16 w-16 rounded-full border object-cover'
+                  />
+                  <span className='text-sm text-green-600'>
+                    ✓ Image Preview
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         <FormField
           control={form.control}
           defaultValue={disc?.speed ? disc.speed : 1}
@@ -276,7 +395,7 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
         />
         <FormField
           control={form.control}
-          defaultValue={disc.turn ? disc.turn : 0}
+          defaultValue={disc.fade ? disc.fade : 0}
           name='fade'
           render={({ field: { value, onChange } }) => (
             <FormItem className='mb-6'>

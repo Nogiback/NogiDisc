@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Trash } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import useDeleteBag from '@/hooks/api/useDeleteBag';
@@ -34,7 +34,7 @@ export function DeleteBagModal({ bagID }: { bagID: string }) {
           className='h-6 w-6 bg-inherit'
           variant='outline'
         >
-          <Trash className='text-destructive' />
+          <Trash2 className='text-destructive' />
         </Button>
       </DialogTrigger>
       <DialogContent className=''>

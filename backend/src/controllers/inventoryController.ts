@@ -38,6 +38,7 @@ export const createDisc = [
   body("turn", "Turn cannot be empty.").notEmpty().isFloat({ min: -7, max: 1 }),
   body("fade", "Fade cannot be empty.").notEmpty().isFloat({ min: 0, max: 5 }),
   body("bagID").isString().optional({ values: "falsy" }),
+  body("image").trim().optional(),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -61,12 +62,14 @@ export const createDisc = [
     const turn = req.body.turn;
     const fade = req.body.fade;
     const bagID = req.body.bagID;
+    const image = req.body.image;
 
     const newDisc = await prisma.disc.create({
       data: {
         brand,
         name,
         weight,
+        image,
         category,
         plastic,
         colour,
@@ -101,6 +104,7 @@ export const editDisc = [
   body("turn", "Turn cannot be empty.").notEmpty().isFloat({ min: -7, max: 1 }),
   body("fade", "Fade cannot be empty.").notEmpty().isFloat({ min: 0, max: 5 }),
   body("bagID").isString().optional({ values: "falsy" }),
+  body("image").trim().optional(),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -137,6 +141,7 @@ export const editDisc = [
     const turn = req.body.turn;
     const fade = req.body.fade;
     const bagID = req.body.bagID;
+    const image = req.body.image ? req.body.image : null;
 
     // if no errors, update disc
     const updatedDisc = await prisma.disc.update({
@@ -147,6 +152,7 @@ export const editDisc = [
         brand,
         name,
         weight,
+        image,
         category,
         plastic,
         colour,
