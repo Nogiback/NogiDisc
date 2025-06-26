@@ -217,3 +217,13 @@ export interface ImageCropperProps {
   onCropComplete: (croppedImageUrl: string, croppedImageFile: File) => void;
   onCancel: () => void;
 }
+
+export type FlightChartProps = {
+  discs: Disc[];
+};
+
+export type FlightData = {
+  name: string;
+  colour: string;
+  data: { x: number; y: number }[];
+};
