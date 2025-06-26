@@ -227,3 +227,10 @@ export type FlightData = {
   colour: string;
   data: { x: number; y: number }[];
 };
+
+export type StabilityData = {
+  name: string;
+  colour: string;
+  speed: number;
+  stability: number;
+};

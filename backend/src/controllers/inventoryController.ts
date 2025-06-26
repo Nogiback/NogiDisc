@@ -36,7 +36,7 @@ export const createDisc = [
     .notEmpty()
     .isFloat({ min: 1, max: 7 }),
   body("turn", "Turn cannot be empty.").notEmpty().isFloat({ min: -7, max: 1 }),
-  body("fade", "Fade cannot be empty.").notEmpty().isFloat({ min: 0, max: 5 }),
+  body("fade", "Fade cannot be empty.").notEmpty().isFloat({ min: 0, max: 6 }),
   body("bagID").isString().optional({ values: "falsy" }),
   body("image").trim().optional(),
 
@@ -102,7 +102,7 @@ export const editDisc = [
     .notEmpty()
     .isFloat({ min: 1, max: 7 }),
   body("turn", "Turn cannot be empty.").notEmpty().isFloat({ min: -7, max: 1 }),
-  body("fade", "Fade cannot be empty.").notEmpty().isFloat({ min: 0, max: 5 }),
+  body("fade", "Fade cannot be empty.").notEmpty().isFloat({ min: 0, max: 6 }),
   body("bagID").isString().optional({ values: "falsy" }),
   body("image").trim().optional(),
 

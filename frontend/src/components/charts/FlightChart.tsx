@@ -42,10 +42,10 @@ export function FlightChart({ discs }: FlightChartProps) {
       { dp: 0, fI: 0, tI: 0 },
       { dp: 0.3, fI: 0, tI: 0 },
       { dp: 0.5, fI: 0, tI: 0 },
-      { dp: 0.7, fI: -0.5, tI: -5 },
-      { dp: 0.83, fI: -1, tI: -4 },
-      { dp: 0.93, fI: -2, tI: -3 },
-      { dp: 1, fI: -7.6, tI: -2 },
+      { dp: 0.7, fI: 0, tI: -5 },
+      { dp: 0.81, fI: -2, tI: -4 },
+      { dp: 0.91, fI: -3, tI: -3 },
+      { dp: 1, fI: -7.9, tI: -2 },
     ];
 
     // Calculate the distance factor based on speed and glide
@@ -111,58 +111,61 @@ export function FlightChart({ discs }: FlightChartProps) {
   }
 
   return (
-    <LineChart
-      width={500}
-      height={750}
-      layout='vertical'
-      margin={{
-        top: 20,
-        right: 50,
-        left: 20,
-        bottom: 20,
-      }}
-    >
-      <CartesianGrid strokeDasharray='3 3' />
-      <XAxis
-        dataKey='x'
-        type='number'
-        domain={[-70, 70]}
-        allowDataOverflow
-        reversed={false}
-        hide
-      />
-      <YAxis
-        dataKey='y'
-        type='number'
-        domain={[0, 500]}
-        tickCount={11}
-        label={{
-          value: 'Distance (ft)',
-          angle: -90,
-          position: 'insideLeft',
-          offset: 10,
+    <div className='w-full flex-col items-center justify-center text-center'>
+      <h2 className='text-2xl font-bold'>Flight Chart</h2>
+      <LineChart
+        width={500}
+        height={750}
+        layout='vertical'
+        margin={{
+          top: 20,
+          right: 50,
+          left: 20,
+          bottom: 20,
         }}
-        width={70}
-        reversed
-        allowDataOverflow
-      />
-
-      {discsFlightData.map((s) => (
-        <Line
-          type='basis'
+      >
+        <CartesianGrid strokeDasharray='3 3' />
+        <XAxis
           dataKey='x'
-          data={s.data}
-          name={s.name}
-          key={s.name}
-          stroke={s.colour}
-          strokeWidth={5}
-          dot={false}
-        >
-          <LabelList
-            content={(props) => renderCustomLabel(props, s.name, s.colour)}
-          />
-        </Line>
-      ))}
-    </LineChart>
+          type='number'
+          domain={[-70, 70]}
+          allowDataOverflow
+          reversed={false}
+          hide
+        />
+        <YAxis
+          dataKey='y'
+          type='number'
+          domain={[0, 500]}
+          tickCount={11}
+          label={{
+            value: 'Distance (ft)',
+            angle: -90,
+            position: 'insideLeft',
+            offset: 10,
+          }}
+          width={70}
+          reversed
+          allowDataOverflow
+        />
+
+        {discsFlightData.map((s) => (
+          <Line
+            type='basis'
+            dataKey='x'
+            data={s.data}
+            name={s.name}
+            key={s.name}
+            stroke={s.colour}
+            strokeWidth={5}
+            dot={false}
+          >
+            <LabelList
+              content={(props) => renderCustomLabel(props, s.name, s.colour)}
+            />
+          </Line>
+        ))}
+      </LineChart>
+    </div>
   );
 }

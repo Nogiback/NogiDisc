@@ -403,7 +403,7 @@ export function EditDiscForm({ disc, setOpen }: EditDiscFormProps) {
               <FormControl>
                 <Slider
                   min={0}
-                  max={5}
+                  max={6}
                   step={0.5}
                   defaultValue={[value]}
                   onValueChange={(v) => onChange(v[0])}
