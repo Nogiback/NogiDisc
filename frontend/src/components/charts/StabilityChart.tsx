@@ -27,6 +27,11 @@ export function StabilityChart({ discs }: FlightChartProps) {
     setDiscsStabilityData(stabilityData);
   }, [discs]);
 
+  // If no discs are provided, return null to avoid rendering the chart
+  if (!discs || discs.length === 0) {
+    return null;
+  }
+
   return (
     <div className='w-full flex-col items-center justify-center text-center'>
       <h2 className='text-2xl font-bold'>Stability Chart</h2>
@@ -46,7 +51,7 @@ export function StabilityChart({ discs }: FlightChartProps) {
           type='number'
           dataKey='stability'
           name='stability'
-          domain={[-7, 7]}
+          domain={[-6, 6]}
           label={{
             value: 'Turn + Fade (Stability)',
             position: 'insideBottom',

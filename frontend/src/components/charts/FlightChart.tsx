@@ -42,10 +42,10 @@ export function FlightChart({ discs }: FlightChartProps) {
       { dp: 0, fI: 0, tI: 0 },
       { dp: 0.3, fI: 0, tI: 0 },
       { dp: 0.5, fI: 0, tI: 0 },
-      { dp: 0.7, fI: 0, tI: -5 },
+      { dp: 0.7, fI: 0, tI: -7 },
       { dp: 0.81, fI: -2, tI: -4 },
       { dp: 0.91, fI: -3, tI: -3 },
-      { dp: 1, fI: -7.9, tI: -2 },
+      { dp: 1, fI: -7.5, tI: -2 },
     ];
 
     // Calculate the distance factor based on speed and glide
