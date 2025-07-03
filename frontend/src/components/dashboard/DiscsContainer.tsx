@@ -11,6 +11,8 @@ import DiscCardList from '../cards/DiscCardList';
 // import { BrandsChart } from '../charts/BrandsChart';
 import { FlightChart } from '../charts/FlightChart';
 import { StabilityChart } from '../charts/StabilityChart';
+import { Separator } from '@/components/ui/separator';
+import { Spinner } from '../ui/spinner';
 
 export default function DiscsContainer({
   toggleView,
@@ -20,9 +22,12 @@ export default function DiscsContainer({
     selectedBag,
     enabled: selectedBag !== 'all',
   });
-  const { data: allDiscs } = useGetDiscs({ enabled: selectedBag === 'all' });
+  const { data: allDiscs } = useGetDiscs({
+    enabled: selectedBag === 'all',
+  });
   const { selectedFilters, updateFilterOptions } = useFilters();
   const [filteredDiscs, setFilteredDiscs] = useState<Disc[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const discs = selectedBag === 'all' ? allDiscs : bag?.discs;
 
@@ -36,9 +41,11 @@ export default function DiscsContainer({
 
   // Apply filters when selections change
   useEffect(() => {
+    setIsLoading(true);
     if (discs) {
       const filtered = filterDiscs(discs, selectedFilters);
       setFilteredDiscs(filtered);
+      setIsLoading(false);
     }
   }, [selectedFilters, discs]);
 
@@ -51,6 +58,14 @@ export default function DiscsContainer({
     // Secondary sorting by name (alphabetical order)
     return disc1.name.localeCompare(disc2.name);
   });
+
+  if (isLoading) {
+    return (
+      <div className='mt-80 flex h-full w-full items-center justify-center'>
+        <Spinner />
+      </div>
+    );
+  }
 
   if (!discs || discs.length === 0) {
     return (
@@ -71,7 +86,7 @@ export default function DiscsContainer({
   }
 
   return (
-    <div className='flex w-full flex-wrap items-center justify-center gap-2 pr-3'>
+    <div className='flex w-full flex-wrap items-center justify-center gap-4 pr-3'>
       {toggleView === 'grid' && (
         <div className='flex w-full flex-wrap items-center justify-center gap-2'>
           {sortedDiscs?.map((disc) => <DiscCard disc={disc} key={disc.id} />)}
@@ -84,6 +99,7 @@ export default function DiscsContainer({
           ))}
         </div>
       )}
+      <Separator className='m-8 w-[96%]' />
       <div className='grid grid-cols-1 items-center justify-center gap-4 xl:grid-cols-2'>
         {/* TODO: Need to decide later if charts should be added to final version */}
         {/* <CategoryChart discs={discs} />

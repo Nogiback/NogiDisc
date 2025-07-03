@@ -128,7 +128,7 @@ export function FlightChart({ discs }: FlightChartProps) {
         <XAxis
           dataKey='x'
           type='number'
-          domain={[-70, 70]}
+          domain={[-80, 80]}
           allowDataOverflow
           reversed={false}
           hide
