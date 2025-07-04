@@ -51,6 +51,11 @@ export function BrandsChart({ discs }: BrandChartProps) {
     return color;
   }
 
+  // Custom label function to show brand name
+  function renderCustomLabel({ brand }: { brand: string }) {
+    return brand;
+  }
+
   return (
     <Card>
       <CardHeader className='items-center pb-4'>
@@ -60,31 +65,24 @@ export function BrandsChart({ discs }: BrandChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer
-          config={chartConfig}
-          className='mx-auto aspect-square max-h-[250px] min-w-[360px]'
-        >
+        <ChartContainer config={chartConfig}>
           <PieChart>
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Pie data={chartData} dataKey='discs' nameKey='brand' label>
+            <Pie
+              data={chartData}
+              dataKey='discs'
+              nameKey='brand'
+              label={renderCustomLabel}
+              fontSize={14}
+            >
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
             </Pie>
           </PieChart>
-          {/* <RadarChart data={chartData}>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <PolarAngleAxis dataKey='brand' />
-            <PolarGrid />
-            <Radar
-              dataKey='discs'
-              fill='var(--color-discs)'
-              fillOpacity={0.6}
-            />
-          </RadarChart> */}
         </ChartContainer>
       </CardContent>
     </Card>

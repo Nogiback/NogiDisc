@@ -10,28 +10,40 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      res.status(401).json({ message: "Error: No token found." });
-      return;
+      return res.status(401).json({ message: "Error: No token found." });
     }
 
     const token = authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "Error: No token found." });
+    }
 
     const decodedToken = jwt.verify(
       token,
       process.env.JWT_SECRET!
     ) as DecodedToken;
 
-    if (!decodedToken) {
-      res.status(401).json({ message: "Error: Token expired or invalid." });
-      return;
-    }
-
     req.userID = decodedToken.userID;
-
     next();
   } catch (err: any) {
-    console.log("Error in verifyUser: ", err.message);
-    res.status(500).json({ message: "Internal server error." });
+    if (err instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({
+        message: "Token expired",
+        code: "TOKEN_EXPIRED",
+      });
+    }
+
+    if (err instanceof jwt.JsonWebTokenError) {
+      console.log("Invalid token in verifyUser: ", err.message);
+      return res.status(401).json({
+        message: "Invalid token",
+        code: "INVALID_TOKEN",
+      });
+    }
+
+    console.log("Unexpected error in verifyUser: ", err.message);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 
