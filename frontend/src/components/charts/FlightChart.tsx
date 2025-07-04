@@ -8,14 +8,15 @@ import {
   CartesianGrid,
   LabelList,
 } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { FlightData } from '@/types/types';
 import { FlightChartProps } from '@/types/types';
-
-// const labelStyle = {
-//   fontSize: '12px',
-//   fontWeight: 'bold',
-//   color: '#333',
-// };
 
 export function FlightChart({ discs }: FlightChartProps) {
   const [discsFlightData, setDiscsFlightData] = useState<FlightData[]>([]);
@@ -111,61 +112,68 @@ export function FlightChart({ discs }: FlightChartProps) {
   }
 
   return (
-    <div className='w-full flex-col items-center justify-center text-center'>
-      <h2 className='text-2xl font-bold'>Flight Chart</h2>
-      <LineChart
-        width={500}
-        height={750}
-        layout='vertical'
-        margin={{
-          top: 20,
-          right: 50,
-          left: 20,
-          bottom: 20,
-        }}
-      >
-        <CartesianGrid strokeDasharray='3 3' />
-        <XAxis
-          dataKey='x'
-          type='number'
-          domain={[-80, 80]}
-          allowDataOverflow
-          reversed={false}
-          hide
-        />
-        <YAxis
-          dataKey='y'
-          type='number'
-          domain={[0, 500]}
-          tickCount={11}
-          label={{
-            value: 'Distance (ft)',
-            angle: -90,
-            position: 'insideLeft',
-            offset: 10,
+    <Card>
+      <CardHeader className='items-center pb-4'>
+        <CardTitle>Flight Chart</CardTitle>
+        <CardDescription className='hidden'>
+          Showing the flight paths for each of your discs in the bag
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <LineChart
+          width={500}
+          height={750}
+          layout='vertical'
+          margin={{
+            top: 20,
+            right: 50,
+            left: 20,
+            bottom: 20,
           }}
-          width={70}
-          reversed
-          allowDataOverflow
-        />
-
-        {discsFlightData.map((s) => (
-          <Line
-            type='basis'
+        >
+          <CartesianGrid strokeDasharray='3 3' />
+          <XAxis
             dataKey='x'
-            data={s.data}
-            name={s.name}
-            key={s.name}
-            stroke={s.colour}
-            strokeWidth={5}
-            dot={false}
-          >
-            <LabelList
-              content={(props) => renderCustomLabel(props, s.name, s.colour)}
-            />
-          </Line>
-        ))}
-      </LineChart>
-    </div>
+            type='number'
+            domain={[-80, 80]}
+            allowDataOverflow
+            reversed={false}
+            hide
+          />
+          <YAxis
+            dataKey='y'
+            type='number'
+            domain={[0, 500]}
+            tickCount={11}
+            label={{
+              value: 'Distance (ft)',
+              angle: -90,
+              position: 'insideLeft',
+              offset: 10,
+            }}
+            width={70}
+            reversed
+            allowDataOverflow
+          />
+
+          {discsFlightData.map((s) => (
+            <Line
+              type='basis'
+              dataKey='x'
+              data={s.data}
+              name={s.name}
+              key={s.name}
+              stroke={s.colour}
+              strokeWidth={5}
+              dot={false}
+            >
+              <LabelList
+                content={(props) => renderCustomLabel(props, s.name, s.colour)}
+              />
+            </Line>
+          ))}
+        </LineChart>
+      </CardContent>
+    </Card>
   );
 }

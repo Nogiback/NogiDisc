@@ -231,6 +231,7 @@ export type FlightData = {
 export type StabilityData = {
   name: string;
   colour: string;
+  image: string | null;
   speed: number;
   stability: number;
 };

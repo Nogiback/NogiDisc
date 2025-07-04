@@ -62,13 +62,10 @@ export function CategoryChart({ discs }: CategoryChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className=''>
-        <ChartContainer
-          config={chartConfig}
-          className='mx-auto aspect-square max-h-[250px] min-w-[360px]'
-        >
+        <ChartContainer config={chartConfig} className=''>
           <RadarChart data={chartData}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <PolarAngleAxis dataKey='category' />
+            <PolarAngleAxis dataKey='category' fontSize={14} />
             <PolarGrid />
             <Radar
               dataKey='discs'

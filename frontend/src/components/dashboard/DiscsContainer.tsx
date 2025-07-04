@@ -7,8 +7,8 @@ import { Disc } from '@prisma/client';
 import { filterDiscs } from '@/lib/filterDiscs';
 import { DiscsContainerProps } from '@/types/types';
 import DiscCardList from '../cards/DiscCardList';
-// import { CategoryChart } from '../charts/CategoryChart';
-// import { BrandsChart } from '../charts/BrandsChart';
+import { CategoryChart } from '../charts/CategoryChart';
+import { BrandsChart } from '../charts/BrandsChart';
 import { FlightChart } from '../charts/FlightChart';
 import { StabilityChart } from '../charts/StabilityChart';
 import { Separator } from '@/components/ui/separator';
@@ -61,7 +61,7 @@ export default function DiscsContainer({
 
   if (isLoading) {
     return (
-      <div className='mt-80 flex h-full w-full items-center justify-center'>
+      <div className='absolute inset-0 flex items-center justify-center'>
         <Spinner />
       </div>
     );
@@ -69,7 +69,7 @@ export default function DiscsContainer({
 
   if (!discs || discs.length === 0) {
     return (
-      <div className='mt-80 flex h-full w-full items-center justify-center'>
+      <div className='absolute inset-0 flex items-center justify-center'>
         <p className='text-2xl font-bold'>No discs here...</p>
       </div>
     );
@@ -77,7 +77,7 @@ export default function DiscsContainer({
 
   if (sortedDiscs.length === 0) {
     return (
-      <div className='mt-80 flex h-full w-full items-center justify-center'>
+      <div className='absolute inset-0 flex items-center justify-center'>
         <p className='text-2xl font-bold'>
           No discs found with the current filters...
         </p>
@@ -102,8 +102,8 @@ export default function DiscsContainer({
       <Separator className='m-8 w-[96%]' />
       <div className='grid grid-cols-1 items-center justify-center gap-4 xl:grid-cols-2'>
         {/* TODO: Need to decide later if charts should be added to final version */}
-        {/* <CategoryChart discs={discs} />
-        <BrandsChart discs={discs} /> */}
+        <CategoryChart discs={discs} />
+        <BrandsChart discs={discs} />
         <StabilityChart discs={filteredDiscs} />
         <FlightChart discs={filteredDiscs} />
       </div>
