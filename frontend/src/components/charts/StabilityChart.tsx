@@ -20,13 +20,16 @@ import { useEffect, useState } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomDot = (props: any) => {
   const { cx, cy, payload } = props;
-  const size = 15; // Size of the dot
+  const size = 20;
+  const sanitizedName = payload.name
+    .replace(/\s+/g, '-')
+    .replace(/[^a-zA-Z0-9-]/g, '');
 
   if (payload.image) {
     return (
       <g>
         <defs>
-          <clipPath id={`clip-${payload.name}`}>
+          <clipPath id={`clip-${sanitizedName}`}>
             <circle cx={cx} cy={cy} r={size} />
           </clipPath>
         </defs>
@@ -36,7 +39,7 @@ const CustomDot = (props: any) => {
           y={cy - size}
           width={size * 2}
           height={size * 2}
-          clipPath={`url(#clip-${payload.name})`}
+          clipPath={`url(#clip-${sanitizedName})`}
           preserveAspectRatio='xMidYMid meet'
         />
       </g>
@@ -141,7 +144,7 @@ export function StabilityChart({ discs }: FlightChartProps) {
                   typeof index === 'number' ? discsStabilityData[index] : null;
                 // Type guard for x and y coordinates
                 const xPos = typeof x === 'number' ? x + 4 : 0;
-                const yPos = typeof y === 'number' ? y - 20 : 0;
+                const yPos = typeof y === 'number' ? y - 22 : 0;
                 return (
                   <text
                     x={xPos}
