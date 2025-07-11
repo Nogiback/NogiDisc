@@ -42,7 +42,6 @@ export default function useAxiosInstance() {
         } catch (refreshError) {
           console.error('Token refresh failed:', refreshError);
           toast.error('Session expired. Please log in again.');
-          // Optionally, you can redirect to login page or clear user state
           setAccessToken(null);
           return Promise.reject(refreshError);
         }

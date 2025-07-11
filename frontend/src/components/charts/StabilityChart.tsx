@@ -107,7 +107,7 @@ export function StabilityChart({ discs }: FlightChartProps) {
             type='number'
             dataKey='stability'
             name='stability'
-            domain={[-6, 6]}
+            domain={[-4, 6]}
             label={{
               value: 'Turn + Fade (Stability)',
               position: 'insideBottom',
@@ -142,7 +142,6 @@ export function StabilityChart({ discs }: FlightChartProps) {
                 const { x, y, value, index } = props;
                 const discData =
                   typeof index === 'number' ? discsStabilityData[index] : null;
-                // Type guard for x and y coordinates
                 const xPos = typeof x === 'number' ? x + 4 : 0;
                 const yPos = typeof y === 'number' ? y - 22 : 0;
                 return (

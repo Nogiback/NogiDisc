@@ -59,7 +59,7 @@ export function BrandsChart({ discs }: BrandChartProps) {
   return (
     <Card>
       <CardHeader className='items-center pb-4'>
-        <CardTitle>Brands</CardTitle>
+        <CardTitle>Bag Brands</CardTitle>
         <CardDescription className='hidden'>
           Showing the total number of discs for each brand in your bag
         </CardDescription>

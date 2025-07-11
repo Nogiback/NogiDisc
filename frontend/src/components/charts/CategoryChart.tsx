@@ -56,7 +56,7 @@ export function CategoryChart({ discs }: CategoryChartProps) {
   return (
     <Card>
       <CardHeader className='items-center pb-4'>
-        <CardTitle>Categories</CardTitle>
+        <CardTitle>Bag Categories</CardTitle>
         <CardDescription className='hidden'>
           Showing the total number of discs for each category in your bag
         </CardDescription>
