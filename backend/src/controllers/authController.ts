@@ -142,6 +142,7 @@ export const login = [
       return;
     }
     const { email } = req.body;
+
     const user = await prisma.user.findUnique({
       where: { email },
       select: {
@@ -172,6 +173,17 @@ export const login = [
     if (!isValidPassword) {
       res.status(401).json({ message: "Error: Incorrect password." });
       return;
+    }
+
+    // Checking if old refresh token exists, if so, delete it
+    const existingToken = await prisma.refreshToken.findMany({
+      where: { userID: user.id },
+    });
+
+    if (existingToken) {
+      await prisma.refreshToken.deleteMany({
+        where: { userID: user.id },
+      });
     }
 
     // Generating tokens for auth
@@ -410,6 +422,17 @@ export const googleAuth = asyncHandler(
         });
       });
       return;
+    }
+
+    // Checking if old refresh token exists, if so, delete it
+    const existingToken = await prisma.refreshToken.findMany({
+      where: { userID: user.id },
+    });
+
+    if (existingToken) {
+      await prisma.refreshToken.deleteMany({
+        where: { userID: user.id },
+      });
     }
 
     // If a user is found, generate tokens and return user
