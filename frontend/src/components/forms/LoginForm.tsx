@@ -12,6 +12,7 @@ import { GoogleLoginButton } from '@/components/google/GoogleLoginButton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Link } from 'react-router-dom';
 import useLogin from '@/hooks/auth/useLogin';
 import { loginFormSchema } from '@/lib/formSchemas';
 import { useLoginContext } from '@/hooks/auth/useLoginContext';
@@ -75,6 +76,14 @@ export function LoginForm() {
             </FormItem>
           )}
         />
+        <div className='mb-2 mt-[-10px] flex justify-end'>
+          <Link
+            to='/forgot-password'
+            className='text-sm text-muted-foreground hover:underline'
+          >
+            Forgot Password?
+          </Link>
+        </div>
         <Button
           aria-label='login button'
           className='w-full'

@@ -190,6 +190,11 @@ export const updatePassword = [
       return;
     }
 
+    if (!user.password) {
+      res.status(400).json({ message: "This account uses Google Login and does not have a manual password." });
+      return;
+    }
+
     // check if the current password is valid
     const isValidPassword = await bcrypt.compare(
       req.body.currentPassword,

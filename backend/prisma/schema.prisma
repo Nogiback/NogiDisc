@@ -18,14 +18,17 @@ model User {
   firstName    String
   lastName     String
   profilePic   String?        @default("https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868853.jpg")
-  password     String
+  password     String?
   email        String         @unique
   googleID     String?        @unique
+  isEmailVerified Boolean     @default(false)
   inventory    Disc[]
   bags         Bag[]
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @default(now()) @updatedAt
   RefreshToken RefreshToken[]
+  EmailVerificationCode EmailVerificationCode[]
+  PasswordResetToken PasswordResetToken[]
 }
 
 model Disc {
@@ -65,4 +68,22 @@ model RefreshToken {
   userID    String
   user      User     @relation(fields: [userID], references: [id])
   expiresAt DateTime
+}
+
+model EmailVerificationCode {
+  id        String   @id @default(cuid())
+  code      String   
+  userID    String
+  user      User     @relation(fields: [userID], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userID    String
+  user      User     @relation(fields: [userID], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }

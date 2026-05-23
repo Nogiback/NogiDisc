@@ -1,6 +1,7 @@
 import { LoaderPinwheel } from 'lucide-react';
 import { LoginForm } from '@/components/forms/LoginForm';
 import loginPhoto from '@/assets/discgolfbasket.jpg';
+
 export default function LoginPage({
   setFormToggle,
 }: {

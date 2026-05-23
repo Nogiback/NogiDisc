@@ -4,11 +4,13 @@ import { LoginFormData } from '@/types/types';
 import { useAuth } from '@/hooks/auth/useAuth';
 import useAxiosInstance from '@/hooks/api/useAxiosInstance';
 import { useLoginContext } from '@/hooks/auth/useLoginContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function useLogin() {
   const api = useAxiosInstance();
   const { setAuthUser, setAccessToken } = useAuth();
   const { setIsSubmitting } = useLoginContext();
+  const navigate = useNavigate();
 
   async function login(formData: LoginFormData) {
     const isValid = handleInputErrors(formData);
@@ -24,12 +26,19 @@ export default function useLogin() {
       setAccessToken(res.data.accessToken);
       api.defaults.headers.Authorization = `Bearer ${res.data.accessToken}`;
     } catch (err) {
+      if (err instanceof AxiosError && err.response?.status === 403) {
+        toast.error(err.response.data.message);
+        if (err.response.data.isEmailVerified === false) {
+          navigate('/verify-email', { state: { email: err.response.data.email || formData.email } });
+        }
+        return;
+      }
       if (err instanceof AxiosError && err.response?.status === 401) {
         toast.error('Incorrect username or password.');
         return;
       }
       if (err instanceof AxiosError) {
-        toast.error(err.message);
+        toast.error(err.response?.data?.message || err.message);
       }
     } finally {
       setIsSubmitting(false);

@@ -6,12 +6,14 @@ import { body, validationResult } from "express-validator";
 import prisma from "../db/prisma.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
 import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/generateTokens.js";
 import { JwtPayloadWithUserID } from "../types/types.js";
+import { sendVerificationEmail, sendPasswordResetEmail } from "../utils/sendEmail.js";
 
 const googleClient = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -20,7 +22,6 @@ const googleClient = new OAuth2Client(
 );
 
 // SIGN UP FUNCTION
-
 export const signup = [
   body("email", "Invalid email.")
     .trim()
@@ -66,8 +67,6 @@ export const signup = [
       return;
     }
 
-    // Hashing Password
-
     bcrypt.hash(password, 10, async (err, hashedPassword) => {
       if (err) {
         res.status(500).json({ err });
@@ -79,47 +78,137 @@ export const signup = [
             firstName,
             lastName,
             password: hashedPassword,
+            isEmailVerified: false,
           },
         });
 
-        // Generating tokens for auth
-        const accessToken = generateAccessToken(newUser.id);
-        const refreshToken = generateRefreshToken(newUser.id);
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-        await prisma.refreshToken.create({
+        await prisma.emailVerificationCode.create({
           data: {
-            token: refreshToken,
+            code,
             userID: newUser.id,
-            expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+            expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
           },
         });
 
-        res.cookie("refreshToken", refreshToken, {
-          maxAge: 15 * 24 * 60 * 60 * 1000, // in milliseconds
-          httpOnly: true, // prevent XSS attacks cross-site scripting attacks,
-          sameSite: "strict", // CSRF attacks cross-site request forgery attacks
-          secure: process.env.NODE_ENV !== "development",
-        });
+        await sendVerificationEmail(newUser.email, code);
 
         res.status(200).json({
-          id: newUser.id,
+          message: "User created. Please check your email for the verification code.",
           email: newUser.email,
-          firstName: newUser.firstName,
-          lastName: newUser.lastName,
-          profilePic: newUser.profilePic,
-          googleID: newUser.googleID,
-          createdAt: newUser.createdAt,
-          updatedAt: newUser.updatedAt,
-          accessToken: accessToken,
-          message: "New user created successfully.",
         });
       }
     });
   }),
 ];
 
-// LOGIN FUNCTION
+// VERIFY EMAIL FUNCTION
+export const verifyEmail = [
+  body("email", "Invalid email.").isEmail(),
+  body("code", "Code is required").isLength({ min: 6, max: 6 }),
 
+  asyncHandler(async (req, res, next) => {
+    const { email, code } = req.body;
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    const verificationRecord = await prisma.emailVerificationCode.findFirst({
+      where: { userID: user.id, code },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (!verificationRecord) {
+      res.status(400).json({ message: "Invalid verification code." });
+      return;
+    }
+
+    if (verificationRecord.expiresAt < new Date()) {
+      res.status(400).json({ message: "Verification code has expired." });
+      return;
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { isEmailVerified: true },
+    });
+
+    await prisma.emailVerificationCode.deleteMany({
+      where: { userID: user.id },
+    });
+
+    // Logging the user in immediately after verification
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userID: user.id,
+        expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+      },
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV !== "development",
+    });
+
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      profilePic: user.profilePic,
+      googleID: user.googleID,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      accessToken,
+      message: "Email verified successfully.",
+    });
+  }),
+];
+
+// RESEND VERIFICATION CODE
+export const resendVerificationCode = [
+  body("email", "Invalid email.").isEmail(),
+  asyncHandler(async (req, res, next) => {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+    
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+    
+    if (user.isEmailVerified) {
+      res.status(400).json({ message: "Email is already verified." });
+      return;
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+    await prisma.emailVerificationCode.create({
+      data: {
+        code,
+        userID: user.id,
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+      },
+    });
+
+    await sendVerificationEmail(user.email, code);
+
+    res.status(200).json({ message: "Verification code sent." });
+  })
+];
+
+// LOGIN FUNCTION
 export const login = [
   body("email", "Email must not be empty.")
     .trim()
@@ -157,11 +246,17 @@ export const login = [
         updatedAt: true,
         bags: true,
         inventory: true,
+        isEmailVerified: true,
       },
     });
 
     if (!user) {
       res.status(401).json({ message: "Error: No user found." });
+      return;
+    }
+
+    if (!user.password) {
+      res.status(403).json({ message: "This account was created via Google. Please log in with Google, or use 'Forgot Password' to set a manual password." });
       return;
     }
 
@@ -175,7 +270,15 @@ export const login = [
       return;
     }
 
-    // Checking if old refresh token exists, if so, delete it
+    if (!user.isEmailVerified) {
+      res.status(403).json({ 
+        message: "Please verify your email before logging in.",
+        isEmailVerified: false,
+        email: user.email
+      });
+      return;
+    }
+
     const existingToken = await prisma.refreshToken.findMany({
       where: { userID: user.id },
     });
@@ -186,7 +289,6 @@ export const login = [
       });
     }
 
-    // Generating tokens for auth
     const accessToken = generateAccessToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
 
@@ -199,9 +301,9 @@ export const login = [
     });
 
     res.cookie("refreshToken", refreshToken, {
-      maxAge: 15 * 24 * 60 * 60 * 1000, // in milliseconds
-      httpOnly: true, // prevent XSS attacks cross-site scripting attacks,
-      sameSite: "strict", // CSRF attacks cross-site request forgery attacks
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "strict",
       secure: process.env.NODE_ENV !== "development",
     });
 
@@ -223,19 +325,8 @@ export const login = [
 ];
 
 // LOGOUT FUNCTION
-
 export const logout = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      res.status(400).json({
-        errors: errors.array(),
-        message: "Error: Logout Failure.",
-      });
-      return;
-    }
-
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
@@ -243,7 +334,7 @@ export const logout = asyncHandler(
       return;
     }
 
-    await prisma.refreshToken.delete({
+    await prisma.refreshToken.deleteMany({
       where: {
         token: refreshToken,
       },
@@ -260,7 +351,6 @@ export const logout = asyncHandler(
 );
 
 // GET USER FUNCTION
-
 export const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await prisma.user.findUnique({
@@ -284,35 +374,13 @@ export const getUser = asyncHandler(
       return;
     }
 
-    res.status(200).json({
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profilePic: user.profilePic,
-      googleID: user.googleID,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      bags: user.bags,
-      inventory: user.inventory,
-    });
+    res.status(200).json(user);
   }
 );
 
 // GOOGLE LOGIN / SIGNUP FUNCTION
-
 export const googleAuth = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      res.status(400).json({
-        errors: errors.array(),
-        message: "Error: Google sign up failure.",
-      });
-      return;
-    }
-
     const { tokens } = await googleClient.getToken(req.body.code);
 
     if (!tokens.id_token) {
@@ -342,8 +410,7 @@ export const googleAuth = asyncHandler(
 
     if (!email || !firstName || !lastName) {
       res.status(401).json({
-        message:
-          "Error: Email and full name is required for Google authentication.",
+        message: "Error: Email and full name is required for Google authentication.",
       });
       return;
     }
@@ -351,80 +418,55 @@ export const googleAuth = asyncHandler(
     const user = await prisma.user.findUnique({
       where: { email },
       select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        googleID: true,
-        profilePic: true,
-        createdAt: true,
-        updatedAt: true,
-        bags: true,
-        inventory: true,
+        id: true, email: true, firstName: true, lastName: true, googleID: true,
+        profilePic: true, createdAt: true, updatedAt: true, bags: true, inventory: true,
       },
     });
 
-    // if no user is found on db, hash a password and create a new user and login
     if (!user) {
-      const generatedPassword = Math.random().toString(36).slice(2);
-      bcrypt.hash(generatedPassword, 10, async (err, hashedPassword) => {
-        if (err) {
-          res.status(500).json({ err });
-          return;
-        }
+      let cleanURL;
+      if (profilePic?.includes("=")) {
+        cleanURL = profilePic.split("=")[0];
+      }
 
-        // Removing Google's profile picture sizing constraint
-        let cleanURL;
-        if (profilePic?.includes("=")) {
-          cleanURL = profilePic.split("=")[0];
-        }
+      const newUser = await prisma.user.create({
+        data: {
+          email,
+          firstName,
+          lastName,
+          profilePic: cleanURL,
+          googleID,
+          password: null, // Left empty for Google users
+          isEmailVerified: true, // Google verifies emails
+        },
+      });
 
-        const newUser = await prisma.user.create({
-          data: {
-            email,
-            firstName,
-            lastName,
-            profilePic: cleanURL,
-            googleID,
-            password: hashedPassword,
-          },
-        });
+      const accessToken = generateAccessToken(newUser.id);
+      const refreshToken = generateRefreshToken(newUser.id);
 
-        const accessToken = generateAccessToken(newUser.id);
-        const refreshToken = generateRefreshToken(newUser.id);
+      await prisma.refreshToken.create({
+        data: {
+          token: refreshToken,
+          userID: newUser.id,
+          expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+        },
+      });
 
-        await prisma.refreshToken.create({
-          data: {
-            token: refreshToken,
-            userID: newUser.id,
-            expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
-          },
-        });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+        sameSite: "strict",
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+      });
 
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
-          maxAge: 15 * 24 * 60 * 60 * 1000,
-        });
-
-        res.status(200).json({
-          id: newUser.id,
-          email: newUser.email,
-          firstName: newUser.firstName,
-          lastName: newUser.lastName,
-          profilePic: newUser.profilePic,
-          googleID: newUser.googleID,
-          createdAt: newUser.createdAt,
-          updatedAt: newUser.updatedAt,
-          accessToken: accessToken,
-          message: "User successfully signed up via Google.",
-        });
+      res.status(200).json({
+        ...newUser,
+        accessToken,
+        message: "User successfully signed up via Google.",
       });
       return;
     }
 
-    // Checking if old refresh token exists, if so, delete it
     const existingToken = await prisma.refreshToken.findMany({
       where: { userID: user.id },
     });
@@ -435,14 +477,13 @@ export const googleAuth = asyncHandler(
       });
     }
 
-    // If a user is found, generate tokens and return user
-    const accessToken = generateAccessToken(user!.id);
-    const refreshToken = generateRefreshToken(user!.id);
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
 
     await prisma.refreshToken.create({
       data: {
         token: refreshToken,
-        userID: user!.id,
+        userID: user.id,
         expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
       },
     });
@@ -455,24 +496,14 @@ export const googleAuth = asyncHandler(
     });
 
     res.status(200).json({
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profilePic: user.profilePic,
-      googleID: user.googleID,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      bags: user.bags,
-      inventory: user.inventory,
-      accessToken: accessToken,
+      ...user,
+      accessToken,
       message: "User successfully logged in via Google.",
     });
   }
 );
 
-// GET NEW ACCESS TOKEN FROM REFRESH TOKEN
-
+// REFRESH TOKEN FUNCTION
 export const getRefreshToken = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken;
@@ -501,3 +532,63 @@ export const getRefreshToken = asyncHandler(
     res.status(200).json({ accessToken: newAccessToken });
   }
 );
+
+// FORGOT PASSWORD
+export const forgotPassword = [
+  body("email", "Invalid email.").isEmail(),
+  asyncHandler(async (req, res, next) => {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+
+    await prisma.passwordResetToken.create({
+      data: {
+        token,
+        userID: user.id,
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 mins
+      },
+    });
+
+    await sendPasswordResetEmail(user.email, token);
+
+    res.status(200).json({ message: "Password reset link sent to email." });
+  })
+];
+
+// RESET PASSWORD
+export const resetPassword = [
+  body("token", "Token is required.").notEmpty(),
+  body("password", "Password must be at least 6 characters.").isLength({ min: 6 }),
+  asyncHandler(async (req, res, next) => {
+    const { token, password } = req.body;
+
+    const resetRecord = await prisma.passwordResetToken.findUnique({
+      where: { token },
+      include: { user: true }
+    });
+
+    if (!resetRecord || resetRecord.expiresAt < new Date()) {
+      res.status(400).json({ message: "Invalid or expired reset token." });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.update({
+      where: { id: resetRecord.userID },
+      data: { password: hashedPassword }
+    });
+
+    await prisma.passwordResetToken.deleteMany({
+      where: { userID: resetRecord.userID },
+    });
+
+    res.status(200).json({ message: "Password has been successfully reset. You can now log in." });
+  })
+];

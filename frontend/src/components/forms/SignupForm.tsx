@@ -135,7 +135,7 @@ export function SignupForm() {
           type='submit'
           disabled={isSubmitting}
         >
-          Signup
+          Sign Up
         </Button>
       </form>
       <GoogleSignupButton />
